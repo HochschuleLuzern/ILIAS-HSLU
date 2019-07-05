@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="../../../Customizing/clients/hslu/webdav_resources/styles.css" type="text/css">
+
+<ul id="menu">
+	<li [IF_WINDOWS]class="selected"[/IF_WINDOWS]><a title="Windows" href="tabs-win">Windows</a></li>
+	<li [IF_MAC]class="selected"[/IF_MAC]><a title="Mac" href="tabs-mac">Mac</a></li>
+	<li [IF_LINUX]class="selected"[/IF_LINUX]><a title="Linux" href="tabs-linux">Linux</a></li>
+	<li><a title="Tipps" href="tabs-tipps">Tipps &amp; Support</a></li>
+</ul>
+<div id="tabs">
+	<div id="tabs-win" class="tab">
+		<h3>Anleitung f&uuml;r Windows</h3>
+		<b>Automatische Verbindung mit Windows</b><br />
+		<ol>
+			<li>Laden Sie das <a
+				href="/ilias/Customizing/clients/hslu/webdav_resources/IliasWebDAV.exe">Webordner
+					Tool</a> herunter und starten sie es.
+			</li>
+			<li>Geben Sie die ILIAS-RefId <span
+				style="font-weight: bold; font-size: 22px;">[WEBFOLDER_ID]</span>
+				ein.
+			</li>
+			<li>Klicken Sie auf "Verbinden".</li>
+		</ol>
+		<br /> <b>Manuelle Verbindung mit Windows 10 und Windows 8</b><br />
+		<br />
+		<ol style="margin-top: 0px;">
+			<li>&Ouml;ffnen Sie den Windows-Explorer (z.B. mittels
+				Tastenkombination WindowsLogo + E).</li>
+			<li>Klicken Sie mit der rechten Maustaste auf "Dieser PC".</li>
+			<li>W&auml;hlen Sie "Netzlaufwerk verbinden".</li>
+			<li>Geben Sie im Feld "Ordner" folgende Adresse ein (Adresse
+				kopieren und einf&uuml;gen):<br /> <b>[WEBFOLDER_URI]</b>
+			</li>
+			<li>Klicken Sie auf "Fertig stellen".</li>
+			<li>Geben Sie Ihre Anmeldedaten f&uuml;r ILIAS ein und klicken
+				Sie auf "OK".</li>
+			<li>Bei erfolgreichem Login wird der Webordner ge&ouml;ffnet und
+				steht im Windows-Explorer zur Verf&uuml;gung.</li>
+		</ol>
+		<br /> <b>Manuelle Verbindung mit Windows 7 und Windows Vista</b><br />
+		<br />
+		<ol style="margin-top: 0px;">
+			<li>&ouml;ffnen Sie den Windows-Explorer (z.B. mittels
+				Tastenkombination WindowsLogo + E).</li>
+			<li>Dr&uuml;cken Sie die Alt-Taste. Das Men&uuml; wird
+				eingeblendet.</li>
+			<li>W&auml;hlen Sie "Extras" - "Netzlaufwerk verbinden".</li>
+			<li>Geben Sie im Feld "Ordner" folgende Adresse ein (Adresse
+				kopieren und einf&uuml;gen):<br /> <b>[WEBFOLDER_URI]</b>
+			</li>
+			<li>Klicken Sie auf "Fertig stellen".</li>
+			<li>Geben Sie Ihre Anmeldedaten f&uuml;r ILIAS ein und klicken
+				Sie auf "OK".</li>
+			<li>Bei erfolgreichem Login wird der Webordner ge&ouml;ffnet und
+				steht im Windows-Explorer zur Verf&uuml;gung.</li>
+		</ol>
+		<br /> Die verlangten Anmeldedaten sind identisch mit Ihrem ILIAS Login.
+	</div>
+	<div id="tabs-mac" class="tab">
+		<h3>Anleitung f&uuml;r Mac OS X</h3>
+		<ol>
+			<li>Aktivieren Sie den Finder.</li>
+			<li>W&auml;hlen Sie das Men&uuml; 'Gehe zu &gt; Mit Server
+				verbinden...'.<br />Dies &ouml;ffnet das Dialogfenster 'Mit Server
+				verbinden'.
+			</li>
+			<li>Geben Sie folgende Addresse in das Feld 'Serveradresse' ein:<br />
+			<b>[WEBFOLDER_URI]</b><br /> und klicken Sie auf 'Verbinden'.
+			</li>
+			<li>Geben Sie Benutzername und Passwort ein, und klicken Sie auf
+				'OK'.</li>
+		</ol>
+		<br /> Die verlangten Anmeldedaten sind identisch mit Ihrem ILIAS Login.
+	</div>
+	<div id="tabs-linux" class="tab">
+		<h3>Anleitung f&uuml;r Linux mit Konqueror</h3>
+		<ol>
+			<li>Starten Sie den Konqueror Browser.</li>
+			<li>Geben Sie folgende Adresse in das Adressfeld ein:<br /> <b>[WEBFOLDER_URI_KONQUEROR]</b><br />und
+				dr&uuml;cken Sie die Eingabetaste.
+			</li>
+			<li>Geben Sie Benutzernamen und Passwort ein, und klicken Sie
+				auf 'OK'.</li>
+		</ol>
+		<h3>Anleitung f&uuml;r Linux mit Nautilus</h3>
+		<ol>
+			<li>Starten Sie den Nautilus Browser.</li>
+			<li>Geben Sie folgende Adresse in das Adressfeld ein:<br /> <b>[WEBFOLDER_URI_NAUTILUS]</b><br />und
+				dr&uuml;cken Sie die Eingabetaste.
+			</li>
+			<li>Geben Sie Benutzernamen und Passwort ein, und klicken Sie
+				auf 'OK'.</li>
+		</ol>
+		<br />  Die verlangten Anmeldedaten sind identisch mit Ihrem ILIAS Login.
+	</div>
+	<div id="tabs-tipps" class="tab">
+		<h3>Tipps &amp; Support</h3>
+		<ul>
+			<li>Diese Schritte m&uuml;ssen f&uuml;r einen bestimmten
+				Webordner <b>nur einmalig</b> ausgef&uuml;hrt werden. Sie
+				k&ouml;nnen sp&auml;ter erneut auf die angelegte Verbindung
+				zur&uuml;ckgreifen.
+			</li>
+		</ul>
+		<ul>
+			<li>Legen Sie Ihre Webordner-Verbindung auf einer
+				&uuml;bergeordneten Kategorie an. Sie k&ouml;nnen immer nach "Unten"
+				navigieren, nicht jedoch in h&ouml;here Hierarchiestrukturen als Ihr
+				Verbindungspunkt.</li>
+		</ul>
+		<ul>
+			<li>Falls Ihr Computer den Webordner nicht &ouml;ffnen kann, finden
+				Sie in der <a
+				href="https://elearning.hslu.ch/ilias/goto.php?target=wiki_1731338_Was_ist_ein_Webordner%3F&amp;client_id=hslu">ILIAS
+					Hilfe</a> weitere Hinweise; im Problemfall wenden sich an unseren <a
+				href="https://elearning.hslu.ch/?showSupport=true#tabs-2">Support</a>
+			</li>
+		</ul>
+	
+	</div>
+</div>
+<script src="../../../Customizing/clients/hslu/webdav_resources/script.js" type="text/javascript"></script>

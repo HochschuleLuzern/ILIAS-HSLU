@@ -142,7 +142,9 @@ class ilColumnGUI
             "ilPDCalendarBlockGUI" => IL_COL_RIGHT,
             "ilPDPortfolioBlockGUI" => IL_COL_RIGHT,
             "ilPDSysMessageBlockGUI" => IL_COL_LEFT,
-            "ilPDNewsBlockGUI" => IL_COL_LEFT,
+// BEGIN PATCH HSLU: Move News Block to the right
+            "ilPDNewsBlockGUI" => IL_COL_RIGHT,
+// END PATCH HSLU: Move News Block to the right
             "ilPDStudyProgrammeSimpleListGUI" => IL_COL_CENTER,
             "ilPDStudyProgrammeExpandableListGUI" => IL_COL_CENTER,
             "ilPDSelectedItemsBlockGUI" => IL_COL_CENTER,

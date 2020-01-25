@@ -1460,6 +1460,9 @@ class ilObjMediaObject extends ilObject
                 
             // Media Pool
             case "mep":
+// BEGIN PATCH HSLU Make Interactive Video work with Access Checker
+            case "xvid":
+// END PATCH HSLU Make Interactive Video work with Access Checker
                 $obj_id = $id;
                 break;
 

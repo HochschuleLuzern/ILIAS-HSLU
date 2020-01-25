@@ -82,7 +82,22 @@ class ilTabsGUI
         $this->back_target = $a_target;
         $this->back_frame = $a_frame;
     }
-
+    
+//BEGIN PATCH HSLU Backlink
+    /**
+     * Checks if there is already a backlink
+     * @return boolean
+     */
+    function hasBackTarget()
+    {
+        if (empty($this->back_target) && empty($this->back_2_target)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+//END PATCH HSLU Backlink
+    
     /**
     * back target for tow level upper context
     */

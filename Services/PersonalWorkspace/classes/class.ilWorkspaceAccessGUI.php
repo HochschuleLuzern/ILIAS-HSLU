@@ -231,9 +231,12 @@ class ilWorkspaceAccessGUI
             $options["course"] = $this->lng->txt("wsp_set_permission_course");
         }
         
-        if (!$this->getAccessHandler()->hasRegisteredPermission($this->node_id)) {
-            $options["registered"] = $this->lng->txt("wsp_set_permission_registered");
-        }
+//BEGIN PATCH HSLU Disable share with registered: Disable the option to share a file from the personal workspace with everyone
+        /*if(!$this->getAccessHandler()->hasRegisteredPermission($this->node_id))
+         {
+         $options["registered"] = $this->lng->txt("wsp_set_permission_registered");
+         }*/
+//END PATCH HSLU Disable share with registered: Disable the option to share a file from the personal workspace with everyone
         
         if ($ilSetting->get("enable_global_profiles")) {
             if (!$this->getAccessHandler()->hasGlobalPasswordPermission($this->node_id)) {

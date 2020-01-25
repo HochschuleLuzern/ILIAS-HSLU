@@ -219,6 +219,9 @@ class ilObjMediaCastGUI extends ilObjectGUI
         
         if ($ilAccess->checkAccess("write", "", $_GET["ref_id"]) && !$a_presentation_mode) {
             $ilToolbar->addButton($lng->txt("add"), $this->ctrl->getLinkTarget($this, "addCastItem"));
+// BEGIN PATCH HSLU: Allow a multifile upload in MediaCast
+            $ilToolbar->addButton($lng->txt("mcst_add_multiple_items"), $this->ctrl->getLinkTarget($this, "addCastItems"));
+// BEGIN PATCH HSLU: Allow a multifile upload in MediaCast
             
             $table_gui->addMultiCommand("confirmDeletionItems", $lng->txt("delete"));
             $table_gui->setSelectAllCheckbox("item_id");
@@ -327,6 +330,23 @@ class ilObjMediaCastGUI extends ilObjectGUI
         $tpl->setContent($this->form_gui->getHTML());
     }
 
+// HSLU Patch to allow a multifile upload
+    /**
+     * Add multiple media cast items at once
+     */
+    function addCastItemsObject()
+    {
+        global $tpl;
+        
+        $this->checkPermission("write");
+        
+        $this->initAddCastItemsForm();
+        $tpl->setContent($this->form_gui->getHTML());
+        $tpl->addJavascript("./Modules/MediaCast/js/MediaCastMultiupload.js");
+        $tpl->addOnLoadCode("$('[id^=ilFileUploadInput_]').fileupload({submit: mc.submitFile});");
+    }
+// END HSLU Patch to allow a multifile upload
+    
     /**
     * Edit media cast item
     */
@@ -523,6 +543,210 @@ class ilObjMediaCastGUI extends ilObjectGUI
         $this->form_gui->setFormAction($ilCtrl->getFormAction($this, "saveCastItem"));
     }
     
+// HSLU Patch to allow a multifile upload
+    /**
+     * Init add casts items form to upload multiple files
+     */
+    function initAddCastItemsForm()
+    {
+        $lng = $this->lng;
+        $ilTabs = $this->tabs;
+        
+        $this->checkPermission("write");
+        $ilTabs->activateTab("edit_content");
+        
+        $lng->loadLanguageModule("mcst");
+        
+        $news_set = new ilSetting("news");
+        $enable_internal_rss = $news_set->get("enable_rss_for_internal");
+        
+        include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
+        $this->form_gui = new ilPropertyFormGUI();
+        $this->form_gui->setMultipart(true);
+        $this->form_gui->setHideLabels();
+        
+        // file input
+        include_once("Modules/MediaCast/classes/class.ilMediaCastFileInputGUI.php");
+        $dnd_input = new ilMediaCastFileInputGUI($this->lng->txt("files"), "upload_files");
+        
+        $dnd_input->setSuffixes($this->purposeSuffixes['Standard']);
+        $dnd_input->setCommandButtonNames("uploadFiles", "cancel");
+        $this->form_gui->addItem($dnd_input);
+        
+        // add commands
+        $this->form_gui->addCommandButton("uploadFiles", $this->lng->txt("upload_files"));
+        $this->form_gui->addCommandButton("cancel", $this->lng->txt("cancel"));
+        
+        $this->form_gui->setTableWidth("100%");
+        $this->form_gui->setTarget($this->getTargetFrame("save"));
+        $this->form_gui->setTitle($this->lng->txt("upload_files_title"));
+        $this->form_gui->setTitleIcon(ilUtil::getImagePath('icon_file.gif'), $this->lng->txt('obj_file'));
+        
+        $this->form_gui->setFormAction($this->ctrl->getFormAction($this, "uploadFiles"));
+    }
+    
+    /**
+     * Upload Files and check
+     */
+    public function uploadFilesObject() {
+        $log = $this->log;
+        
+        $response = new stdClass();
+        $response->error = null;
+        $response->debug = null;
+        
+        // #14249 - race conditions because of concurrent uploads
+        $after_creation_callback = (int)$_REQUEST["crtcb"];
+        if($after_creation_callback)
+        {
+            $this->after_creation_callback_objects = array();
+            unset($_REQUEST["crtcb"]);
+        }
+        
+        // load form
+        $this->initAddCastItemsForm();
+        if ($this->form_gui->checkInput())
+        {
+            try
+            {
+                if (!$this->checkPermissionBool("write"))
+                {
+                    $response->error = $this->lng->txt("permission_denied");
+                }
+                else
+                {
+                    // handle the file
+                    $inp = $this->form_gui->getInput("upload_files");
+                    $log->debug("ilObjFileGUI::uploadFiles ".print_r($_POST, true));
+                    $log->debug("ilObjFileGUI::uploadFiles ".print_r($_FILES, true));
+                    $fileresult = $this->handleFileUpload($inp);
+                    if ($fileresult)
+                        $response = (object)array_merge((array)$response, (array)$fileresult);
+                }
+            }
+            catch (Exception $ex)
+            {
+                $response->error = $ex->getMessage() . " ## " . $ex->getTraceAsString();
+            }
+        }
+        else
+        {
+            $dnd_input = $this->form_gui->getItemByPostVar("upload_files");
+            $response->error = $dnd_input->getAlert();
+        }
+        
+        if($after_creation_callback &&
+            sizeof($this->after_creation_callback_objects))
+        {
+            foreach($this->after_creation_callback_objects as $new_file_obj)
+            {
+                ilObject2GUI::handleAfterSaveCallback($new_file_obj, $after_creation_callback);
+            }
+            unset($this->after_creation_callback_objects);
+        }
+        
+        // send response object (don't use 'application/json' as IE wants to download it!)
+        header('Vary: Accept');
+        header('Content-type: text/plain');
+        echo json_encode($response);
+        
+        // no further processing!
+        exit;
+    }
+    
+    private function handleFileUpload($input) {
+        $log = $this->log;
+        $ilUser = $this->user;
+        
+        $file = $_FILES['upload_files'];
+        
+        $filename = ilUtil::stripSlashes($file["name"]);
+        $size = ilUtil::stripSlashes($file["size"]);
+        $temp_name = $file["tmp_name"];
+        
+        // additional params
+        $title = pathinfo(ilUtil::stripSlashes($input["title"]), PATHINFO_FILENAME);
+        $type = ilUtil::stripSlashes($file["type"]);
+        $description = ilUtil::stripSlashes($input["description"]);
+        $visibility = ilUtil::stripSlashes($input["visibility"]);
+        
+        // create answer object
+        $response = new stdClass();
+        $response->fileName = $filename;
+        $response->fileSize = intval($size);
+        $response->fileType = $type;
+        $response->error = null;
+        
+        include_once("./Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php");
+        try {
+            $mob = new ilObjMediaObject();
+            $mob->create();
+            $mediaItem = new ilMediaItem();
+            $mob->addMediaItem($mediaItem);
+            $mediaItem->setPurpose("Standard");
+            
+            $mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
+            
+            if (!is_dir($mob_dir))
+                $mob->createDirectory();
+                
+                $filedir = $mob_dir."/".$filename;
+                $locationType = "LocalFile";
+                $location = $filename;
+                ilUtil::moveUploadedFile($temp_name, $filename, $filedir);
+                ilUtil::renameExecutables($mob_dir);
+                
+                $this->setMimetype($type, $mediaItem, $filedir);
+                
+                $mediaItem->setLocation($location);
+                $mediaItem->setLocationType($locationType);
+                $mediaItem->setHAlign("Left");
+                $mediaItem->setHeight(self::isAudio($format)?0:180);
+                
+                $duration = $this->getDuration($filedir);
+                
+                // set title and description
+                // set title to basename of file if left empty
+                $mob->setTitle($title);
+                $mob->setDescription($description);
+                $mob->update();
+                
+                $news_set = new ilSetting("news");
+                $enable_internal_rss = $news_set->get("enable_rss_for_internal");
+                
+                // create new media cast item
+                include_once("./Services/News/classes/class.ilNewsItem.php");
+                $mc_item = new ilNewsItem();
+                $mc_item->setMobId($mob->getId());
+                $mc_item->setContentType(NEWS_AUDIO);
+                $mc_item->setContextObjId($this->object->getId());
+                $mc_item->setContextObjType($this->object->getType());
+                $mc_item->setUserId($ilUser->getId());
+                $mc_item->setPlaytime($duration);
+                $mc_item->setTitle($title);
+                $mc_item->setContent($description);
+                $mc_item->setLimitation(false);
+                
+                
+                if ($enable_internal_rss)
+                {
+                    $mc_item->setVisibility($visibility);
+                }
+                else
+                {
+                    $mc_item->setVisibility("users");
+                }
+                $mc_item->create();
+        }
+        catch (Exception $e) {
+            $log->debug("ilObjMediaCastGUI::handleFileUpload: ".$e->getMessage());
+            $response->error = $e->getMessage();
+        }
+        
+        return $response;
+    }
+// END HSLU Patch to allow a multifile upload
+
     /**
     * Get cast item values into form.
     */
@@ -743,6 +967,11 @@ class ilObjMediaCastGUI extends ilObjectGUI
             ilUtil::renameExecutables($mob_dir);
         }
         
+// BEGIN PATCH HSLU to allow a multifile upload: Created function to allow reuse
+        $mimetype = $_POST["mimetype_".$purpose];
+        $this->setMimetype($mimetype, $mediaItem, $file);
+// END PATCH HSLU to allow a multifile upload: Created function to allow reuse
+        
         // check if not automatic mimetype detection
         if ($_POST["mimetype_" . $purpose] != "") {
             $mediaItem->setFormat($_POST["mimetype_" . $purpose]);
@@ -776,6 +1005,40 @@ class ilObjMediaCastGUI extends ilObjectGUI
 
         return $file;
     }
+    
+// BEGIN PATCH HSLU to allow a multifile upload: Created function to allow reuse
+    /**
+     * Checks if mimetype is set manually and detects it, if wanted
+     * @param string $mimetype The manually set mimetype or an already extracted mimetype
+     * @param ilMediaItem $mediaItem The media item
+     * @param string $file The url to the file
+     */
+    private function setMimetype($mimetype, & $mediaItem, & $file) {
+        // check if not automatic mimetype detection
+        if ($mimetype != "")
+        {
+            $format = $mimetype;
+            $mediaItem->setFormat($mimetype);
+        }
+        else if ($mediaItem->getLocation () != "")
+        {
+            $format = ilObjMediaObject::getMimeType($mediaItem->getLocation());
+            $mediaItem->setFormat($format);
+        }
+        
+        if (isset($file))
+        {
+            // get mime type, if not already set!
+            if (!isset($format))
+            {
+                $format = ilObjMediaObject::getMimeType($file);
+            }
+            
+            // set real meta and object data
+            $mediaItem->setFormat($format);
+        }
+    }
+// END PATCH HSLU to allow a multifile upload: Created function to allow reuse
     
     /**
     * Update cast item

@@ -5790,6 +5790,7 @@ maps#:#maps_zoom_level#:#Zoom Level
 maps#:#maps_google_maps#:#Google Maps
 maps#:#maps_open_layers_maps#:#Open Layers Maps
 maps#:#maps_map_type#:#Typ
+mcst#:#mcst_add_multiple_items#:#Upload Multiple Files
 mcst#:#mcst_add_new_item#:#Add New Mediacast Item
 mcst#:#mcst_audioportable_settings_info#:#Comma separated list of file suffixes
 mcst#:#mcst_audioportable_settings_title#:#File Extensions for Audio Format

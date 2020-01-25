@@ -9766,6 +9766,7 @@ mathjax#:#mathjax_server_timeout_info#:#Maximale Wartezeit auf eine Antwort des 
 mathjax#:#mathjax_settings#:#MathJax-Einstellungen
 mathjax#:#mathjax_test_expression#:#Test-Ausdruck
 mathjax#:#mathjax_test_expression_info#:#Dieser LaTeX-Ausdruck wird mit den gespeicherten MathJax-Einstellungen dargestellt.
+mcst#:#mcst_add_multiple_items#:#Mehrere Dateien hochladen
 mcst#:#mcst_add_new_item#:#Neuen Mediacast-Beitrag hinzufügen
 mcst#:#mcst_audioportable_settings_info#:#Kommagetrennte Liste von Dateiendungen
 mcst#:#mcst_audioportable_settings_title#:#Dateiendungen für das Audio-Format

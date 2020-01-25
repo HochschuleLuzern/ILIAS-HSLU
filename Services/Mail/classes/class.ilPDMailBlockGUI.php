@@ -70,7 +70,11 @@ class ilPDMailBlockGUI extends ilBlockGUI
 
         $this->setLimit(5);
         $this->setImage(ilUtil::getImagePath('icon_mail.svg'));
-        $this->setTitle($this->lng->txt('mail'));
+// BEGIN PATCH HSLU: Add links to the titles of the enabled desktop-boxes
+        $mail_link = $this->ctrl->getLinkTargetByClass('ilMailGUI');
+        $this->setTitle("<a href='$mail_link'>".$this->lng->txt('mail').'</a>');
+        //$this->setTitle($lng->txt('mail'));
+// END PATCH HSLU: Add links to the titles of the enabled desktop-boxes        
         $this->setAvailableDetailLevels(3);
     }
 

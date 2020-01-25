@@ -75,7 +75,11 @@ class ilPDNewsBlockGUI extends ilNewsForContextBlockGUI
             $data = array();
         }
         
-        $this->setTitle($lng->txt("news_internal_news"));
+// BEGIN PATCH HSLU: Add links to the titles of the enabled desktop-boxes
+        $news_link = $DIC->ctrl()->getLinkTargetByClass('ilPersonalDesktopGUI', 'jumpToNews');
+        $this->setTitle('<a href="'.$news_link.'">'.$lng->txt("news_internal_news") . '</a>');
+        //$this->setTitle($lng->txt("news_internal_news"));
+// END PATCH HSLU: Add links to the titles of the enabled desktop-boxes        
         $this->setRowTemplate("tpl.block_row_news_for_context.html", "Services/News");
         
         $this->setData($data);

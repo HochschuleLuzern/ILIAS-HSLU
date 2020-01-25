@@ -94,7 +94,12 @@ class ilCalendarBlockGUI extends ilBlockGUI
         //	$title = $lng->txt("cal_consultation_hours_for")." ".ilObjUser::_lookupFullname($_GET["bkid"]);
         //}
                 
-        $this->setTitle($title);
+// BEGIN PATCH HSLU: Add links to the titles of the enabled desktop-boxes
+        $calendar_link = $this->ctrl->getLinkTargetByClass('ilPersonalDesktopGUI', 'jumpToCalendar');
+        $this->setTitle('<a href="'.$calendar_link.'">'.$title.'</a');
+        //$this->setTitle($title);
+// END PATCH HSLU: Add links to the titles of the enabled desktop-boxes
+        
         //$this->setData($data);
         $this->allow_moving = false;
         //$this->handleView();

@@ -3613,7 +3613,10 @@ class ilObjUser extends ilObject
         // For compatibility, check for login (no ext_account entry given)
         $res = $db->queryF(
             "SELECT login FROM usr_data " .
-            "WHERE login = %s AND auth_mode = %s AND (ext_account IS NULL OR ext_account = '') ",
+//BEGIN PATCH HSLU Shibboleth Auth shall not overwrite Campus AD Users
+            //"WHERE login = %s AND auth_mode = %s AND (ext_account IS NULL OR ext_account = '') ",
+            "WHERE login = %s AND auth_mode = %s",
+//END PATCH HSLU Shibboleth Auth shall not overwrite Campus AD Users
             array("text", "text"),
             array($a_account, $a_auth)
         );

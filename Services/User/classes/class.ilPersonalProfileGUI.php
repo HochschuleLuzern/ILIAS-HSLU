@@ -1029,13 +1029,18 @@ class ilPersonalProfileGUI
             // Activate public profile
             $radg = new ilRadioGroupInputGUI($lng->txt("user_activate_public_profile"), "public_profile");
             $info = $this->lng->txt("user_activate_public_profile_info");
+// BEGIN PATCH HSLU Public Profile: Always set the profile to public
+            /*
             $pub_prof = in_array($ilUser->prefs["public_profile"], array("y", "n", "g"))
                 ? $ilUser->prefs["public_profile"]
                 : "n";
             if (!$ilSetting->get('enable_global_profiles') && $pub_prof == "g") {
                 $pub_prof = "y";
             }
-            $radg->setValue($pub_prof);
+            */
+			
+			$radg->setValue("y");
+// END PATCH HSLU Public Profile: Always set the profile to public
             $op1 = new ilRadioOption($lng->txt("usr_public_profile_disabled"), "n", $lng->txt("usr_public_profile_disabled_info"));
             $radg->addOption($op1);
             $op2 = new ilRadioOption($lng->txt("usr_public_profile_logged_in"), "y");
@@ -1045,6 +1050,10 @@ class ilPersonalProfileGUI
                 $radg->addOption($op3);
             }
             $this->form->addItem($radg);
+            
+// BEGIN PATCH HSLU Public Profile: Disable formelements for hiding the profile, mail or profile picture
+            $radg->setDisabled(true);
+// END PATCH HSLU Public Profile: Disable formelements for hiding the profile, mail or profile picture
             
             // #11773
             if ($ilSetting->get('user_portfolios')) {
@@ -1163,6 +1172,13 @@ class ilPersonalProfileGUI
                 }
                 //$cb->setInfo($value);
                 $cb->setOptionTitle($value);
+// BEGIN PATCH HSLU Public Profile: Disable formelements for hiding mail or profile picture and set checkbox to true
+                if($caption == "personal_picture" || $caption == "email")
+                {
+                    $cb->setDisabled(true);
+                    $cb->setChecked(true);
+                }
+// END PATCH HSLU Public Profile: Public Profile: Disable formelements for hiding mail or profile picture and set checkbox to true
 
                 if (!$parent) {
                     $form->addItem($cb);
@@ -1260,6 +1276,13 @@ class ilPersonalProfileGUI
                 }
             }
     
+// BEGIN PATCH HSLU Public Profile: Set profile picture and email everytime on public
+            if($value == "upload" || $value == "email")
+            {
+                $ilUser->setPref("public_".$value,"y");
+            }
+// END PATCH HSLU Public Profile: Set profile picture and email everytime on public
+            
             // additional defined user data fields
             foreach ($this->user_defined_fields->getVisibleDefinitions() as $field_id => $definition) {
                 if (($_POST["chk_udf_" . $definition["field_id"]])) {

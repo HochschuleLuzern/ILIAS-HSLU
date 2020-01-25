@@ -534,6 +534,12 @@ class ilContainerGUI extends ilObjectGUI implements ilDesktopItemHandling
     
             // set tile icon
             $icon = ilObject::_getIcon($this->object->getId(), "big", $this->object->getType());
+// BEGIN PATCH HSLU Postbox: Change icon for didactic templates
+            require_once './Services/DidacticTemplate/classes/class.ilDidacticTemplateObjSettings.php';
+            if ($this->object->getType() == 'fold' && !ilContainer::_lookupContainerSetting($this->object->getId(), "icon_custom")) {
+                $icon = ilUtil::getImagePath('icon_'.ilDidacticTemplateObjSettings::checkAndGetIconForDTPL($this->object->getRefId(), 'fold') . '.svg');
+            }
+// END PATCH HSLU Postbox: Change icon for didactic templates
             $this->tpl->setTitleIcon($icon, $this->lng->txt("obj_" . $this->object->getType()));
                         
             include_once './Services/Object/classes/class.ilObjectListGUIFactory.php';

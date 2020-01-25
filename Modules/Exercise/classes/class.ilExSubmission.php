@@ -944,7 +944,10 @@ class ilExSubmission
                         $newFilename = substr($newFilename, $pos + 1);
                     }
                     // #11070
-                    $chkName = strtolower($newFilename);
+// BEGIN PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
+                    //$chkName = strtolower($newFilename);
+                    $chkName = strtolower(str_replace(" ", "_", $newFilename));
+// END PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
                     if (array_key_exists($chkName, $duplicates)) {
                         $suffix = strrpos($newFilename, ".");
                         $newFilename = substr($newFilename, 0, $suffix) .
@@ -959,8 +962,10 @@ class ilExSubmission
                             $newFilename;
                     }
                 }
-                
-                $newFilename = ilUtil::getASCIIFilename($newFilename);
+// BEGIN PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
+                //$newFilename = ilUtil::getASCIIFilename($newFilename);
+                $newFilename = ilUtil::getASCIIFilename(str_replace(" ", "_", $newFilename));
+// END PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
                 $newFilename = $tmpdir . DIRECTORY_SEPARATOR . $deliverFilename . DIRECTORY_SEPARATOR . $newFilename;
                 // copy to temporal directory
                 $oldFilename = $pathname . DIRECTORY_SEPARATOR . $filename;
@@ -1099,14 +1104,17 @@ class ilExSubmission
 
                 
                 // #14536
-                if (array_key_exists($targetfile, $duplicates)) {
+// BEGIN PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
+                $chkfile = strtolower(str_replace(" ", "_", $targetfile));
+                if (array_key_exists($chkfile, $duplicates)) {
                     $suffix = strrpos($targetfile, ".");
                     $targetfile = substr($targetfile, 0, $suffix) .
-                        " (" . (++$duplicates[$targetfile]) . ")" .
+                        " (" . (++$duplicates[$chkfile]) . ")" .
                         substr($targetfile, $suffix);
                 } else {
-                    $duplicates[$targetfile] = 1;
+                    $duplicates[$chkfile] = 1;
                 }
+// END PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
                 
                 // late submission?
                 if (is_array($user_files)) {	// see #23900
@@ -1121,7 +1129,10 @@ class ilExSubmission
                     }
                 }
                 
-                $targetfile = ilUtil::getASCIIFilename($targetfile);
+// BEGIN PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
+                //$targetfile = ilUtil::getASCIIFilename($targetfile);
+                $targetfile = ilUtil::getASCIIFilename(str_replace(" ", "_", $targetfile));
+// END PATCH HSLU: PATCH HSLU Avoid Spaces in Filenames when Downloading Excercises
                 $targetfile = $targetdir . DIRECTORY_SEPARATOR . $targetfile;
                 $sourcefile = $sourcedir . DIRECTORY_SEPARATOR . $sourcefile;
 

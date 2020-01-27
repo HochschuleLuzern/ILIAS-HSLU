@@ -170,6 +170,38 @@ class ilExternalMediaAnalyzer
 
         return $par;
     }
+    
+//BEGIN PATCH HSLU To allow SWITCHtube in Mediaelements
+    /**
+     * Identify SWITCHtube links
+     */
+    static function isSwitchtube($a_location)
+    {
+        if (strpos($a_location, "tube.switch.ch") > 0) {
+            return true;
+        }
+            return false;
+        }
+    
+    /**
+     * Extract SWITCHtube Parameter
+     */
+    static function extractSwitchtubeParameters($a_location)
+    {
+        $par = array();
+        $pos1 = strrpos($a_location, "/");
+        $pos2 = strpos($a_location, "?");
+        if ($pos1 > 0)
+        {
+            $len = ($pos2 > 0)
+            ? $pos2-$pos1
+            : (strlen($a_location)-$pos1);
+            $par["v"] = substr($a_location, $pos1+1, $len);
+        }
+        
+        return $par;
+    }
+// END PATCH HSLU To allow SWITCHtube in Mediaelements
 
     /**
     * Identify Google Document links
@@ -236,6 +268,14 @@ class ilExternalMediaAnalyzer
             $ext_par = ilExternalMediaAnalyzer::extractVimeoParameters($a_location);
             $a_parameter = array();
         }
+
+// BEGIN PATCH HSLU To allow SWITCHtube in Mediaelements
+        // SWITCHtube
+        if (ilExternalMediaAnalyzer::isSwitchtube($a_location)) {
+            $ext_par = ilExternalMediaAnalyzer::extractSwitchtubeParameters($a_location);
+            $a_parameter = array();
+        }
+// END PATCH HSLU To allow SWITCHtube in Mediaelements
 
         // Flickr
         if (ilExternalMediaAnalyzer::isFlickr($a_location)) {

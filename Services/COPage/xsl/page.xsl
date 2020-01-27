@@ -2867,6 +2867,23 @@
 			</object>
 		</xsl:when>
 		
+		<!--BEGIN PATCH HSLU To allow Vimeo in Page Editor-->
+		<!-- Vimeo -->
+		<xsl:when test = "not(substring-after($data,'vimeo.com') = '')">
+			<iframe>
+				<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				<xsl:attribute name="src">
+					<xsl:value-of select="$httpprefix"/>//player.vimeo.com/video/<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='id']/@Value" />
+				</xsl:attribute>
+				<xsl:attribute name="allowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="webkitallowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="mozallowfullscreen">true</xsl:attribute>
+				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
+			</iframe>
+		</xsl:when>
+		<!--END PATCH HSLU To allow Vimeo in Page Editor-->
+		
 		<!-- Flickr -->
 		<xsl:when test = "substring-after($data,'flickr.com') != ''">
 			<xsl:variable name="flickr_tags"><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value != ''">&amp;tags=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value"/></xsl:if></xsl:variable>

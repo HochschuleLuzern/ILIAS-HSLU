@@ -335,6 +335,18 @@ class ilMediaPlayerGUI
 
             return $html;
         }
+        
+// BEGIN PATCH HSLU To allow SWITCHtube in Mediaelements
+        // switch tube
+        if (ilExternalMediaAnalyzer::isSwitchtube($this->getFile())) {
+            $p = ilExternalMediaAnalyzer::extractSwitchtubeParameters($this->getFile());
+
+            $html = "<iframe src='https://tube.switch.ch/embed/".$p['v'].
+            "' width='320' height='240' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
+        
+            return $html;
+        }
+// END PATCH HSLU To allow SWITCHtube in Mediaelements
 
         $mimeType = $this->mimeType == "" ? ilObjMediaObject::getMimeType(basename($this->getFile())) : $this->mimeType;
         include_once("./Services/MediaObjects/classes/class.ilPlayerUtil.php");

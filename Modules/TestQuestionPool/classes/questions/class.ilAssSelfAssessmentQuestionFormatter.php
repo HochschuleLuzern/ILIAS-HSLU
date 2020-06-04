@@ -126,11 +126,17 @@ class ilAssSelfAssessmentQuestionFormatter implements ilAssSelfAssessmentMigrato
         // we allow these tags, since they are typically used in the Tiny Assessment editor
         // and should not be deleted, if questions are copied from pools to learning modules
         $not_supported = array("img", "p");
+        
+        // BEGIN PATCH HSLU Allow tables and line breaks in Questions in LMs
+        /*
         $tags = array();
         
         /// BH 01-03-2018: added P tag to allowed tags due to missing newline problems
         $tags[] = 'p';
         /// BH 01-03-2018: added P tag to allowed tags due to missing newline problems
+        */
+        $tags = ['p', 'table', 'td', 'tr', 'th'];
+        // END PATCH HSLU Allow tables and line breaks in Questions in LMs
         
         foreach ($st as $s) {
             if (!in_array($s, $not_supported)) {

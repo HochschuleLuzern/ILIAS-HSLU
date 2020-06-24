@@ -38,6 +38,9 @@ class ilObjGlossary extends ilObject implements ilAdvancedMetaDataSubItems
     {
         global $DIC;
         $this->error = $DIC["ilErr"];
+        // BEGIN PATCH HSLU Fix Empty Trash Cron
+        if (isset($DIC['tpl']))
+        // END PATCH HSLU Fix Empty Trash Cron
         $this->tpl = $DIC["tpl"];
 
         $this->db = $DIC->database();

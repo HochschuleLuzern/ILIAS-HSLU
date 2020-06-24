@@ -293,6 +293,9 @@ abstract class assQuestion
         global $DIC;
         $ilias = $DIC['ilias'];
         $lng = $DIC['lng'];
+        // BEGIN PATCH HSLU Fix Empty Trash Cron
+        if (isset($DIC['tpl']))
+        // END PATCH HSLU Fix Empty Trash Cron
         $tpl = $DIC['tpl'];
         $ilDB = $DIC['ilDB'];
 

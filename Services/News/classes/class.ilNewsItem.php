@@ -875,24 +875,39 @@ class ilNewsItem
 
         // get starting date
         $starting_date = "";
+
         if ($obj_type == "grp" || $obj_type == "crs") {
-            if (!ilContainer::_lookupContainerSetting(
-                $obj_id,
-                'cont_use_news',
-                true
-            ) || (
-                !ilContainer::_lookupContainerSetting(
+
+            // HSLU Temporary Patch to show news of courses even if the settings are not activated
+            /** Why this patch? With ILIAS 6, courses and groups have to enable the news in the container settings to publish the news to the members (before, it didn't matter)
+             * Most courses and groups which were created before October 2021 do not have this setting enabled.
+             * This patch ensures that every new course (younger than a year) will display the news. The time span of a year is for all the active CAS courses
+            */
+            try{
+                $obj_date = new DateTime(ilObject::_lookupCreationDate($obj_id));
+                $now_date = new DateTime();
+                // Object older than 1 year?
+                $older_than_1_year = (($obj_date->diff($now_date)->y) >= 1);
+            } catch(Exception $e) {
+                $older_than_1_year = true;
+            }
+            if ((!ilContainer::_lookupContainerSetting(
                     $obj_id,
-                    'cont_show_news',
-                    true
-                ) && !ilContainer::_lookupContainerSetting(
-                    $obj_id,
-                    'news_timeline'
-                )
-            )) {
+                    'cont_use_news',
+                    true)
+                    || (
+                        !ilContainer::_lookupContainerSetting(
+                            $obj_id,
+                            'cont_show_news',
+                            true
+                        ) && !ilContainer::_lookupContainerSetting(
+                            $obj_id,
+                            'news_timeline')
+                    )
+                ) && $older_than_1_year) {
                 return [];
             }
-
+            // HSLU Temporary Patch to show news of courses even if the settings are not activated
             include_once("./Services/Block/classes/class.ilBlockSetting.php");
             $hide_news_per_date = ilBlockSetting::_lookup(
                 "news",

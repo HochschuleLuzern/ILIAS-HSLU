@@ -82,6 +82,10 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
      */
     protected $manager;
     /**
+     * @var \ILIAS\ResourceStorage\Consumer\Consumers
+     */
+    protected $consumer;
+    /**
      * @var \ILIAS\FileUpload\FileUpload
      */
     protected $upload;
@@ -102,6 +106,7 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
          * @var $DIC Container
          */
         $this->manager = $DIC->resourceStorage()->manage();
+        $this->consumer = $DIC->resourceStorage()->consume();
         $this->stakeholder = new ilObjFileStakeholder();
         $this->upload = $DIC->upload();
         $this->version = 0;
@@ -147,6 +152,13 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
             $this->setResourceId($i->serialize());
             $this->initImplementation();
         }
+        
+        if ($revision->getInformation()->getSize() == 0) {
+            $info = $revision->getInformation();
+            $info->setSize($this->consumer->stream($i)->getStream()->getSize());
+            $revision->setInformation($info);
+        }
+        
         $this->updateObjectFromRevision($revision);
 
         return $revision->getVersionNumber();

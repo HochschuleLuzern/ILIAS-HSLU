@@ -1,8 +1,9 @@
 <?php
 use Sabre\DAV\Exception;
 use Sabre\DAV\Exception\Forbidden;
-use ILIAS\DI\Container;
 use ILIAS\Filesystem\Stream\Streams;
+use ILIAS\ResourceStorage\Manager\Manager;
+use ILIAS\ResourceStorage\Consumer\Consumers;
 
 /**
  * Class ilObjFileDAV
@@ -23,13 +24,17 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
      * @var $obj ilObjFile
      */
     protected $obj;
+    
+    protected Manager $resource_manager;
+    
+    protected Consumers $resource_consumer;
 
     /**
      * We need to keep track of versioning.
      *
      * @var $versioning_enabled boolean
      */
-    protected $versioning_enabled;
+    protected bool $versioning_enabled;
 
     /**
      * ilObjFileDAV represents the WebDAV-Interface to an ILIAS-Object
@@ -43,7 +48,10 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
      */
     public function __construct(ilObjFile $a_obj, ilWebDAVRepositoryHelper $repo_helper, ilWebDAVObjDAVHelper $dav_helper)
     {
+        global $DIC;
         $settings = new ilSetting('webdav');
+        $this->resource_manager = $DIC->resourceStorage()->manage();
+        $this->resource_consumer = $DIC->resourceStorage()->consume();
         $this->versioning_enabled = (bool) $settings->get('webdav_versioning_enabled', true);
         parent::__construct($a_obj, $repo_helper, $dav_helper);
     }
@@ -96,14 +104,21 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
      */
     public function get()
     {
-        if ($this->repo_helper->checkAccess("read", $this->obj->getRefId())) {
-            $file = $this->getPathToFile();
-
-            if (file_exists($file)) {
+        if ($this->repo_helper->checkAccess("read", $this->obj->getRefId())) {            
+            /*
+             * @todo: This is legacy and should be removed with ILIAS 8
+             */
+            if (file_exists($file = $this->getPathToFile())) {
                 return fopen($file, 'r');
-            } else {
-                throw new Exception\NotFound("File not found");
             }
+            
+            $r_id = $this->obj->getResourceId();
+            $identification = $this->resource_manager->find($r_id);
+            if ($this->resource_consumer->stream($identification)->getStream()->getSize() > 0) {
+                return $this->resource_consumer->stream($identification)->getStream()->getContents();
+            }
+            
+            throw new Exception\NotFound("File not found");
         }
 
         throw new Exception\Forbidden("Permission denied. No read access for this file");
@@ -154,6 +169,15 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
                 filemtime($path)
             ) . '"';
         }
+        
+        $r_id = $this->obj->getResourceId();
+        $identification = $this->resource_manager->find($r_id);
+        if ($this->resource_consumer->stream($identification)->getStream()->getSize() > 0) {
+            return '"' . sha1($this->resource_consumer->stream($identification)->getStream()->getSize() .
+                $this->resource_consumer->stream($identification)->getStream()->getSize() .
+                $this->obj->getCreateDate()
+            ) .'"';
+        }
 
         return null;
     }
@@ -168,7 +192,10 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
         if (file_exists($this->getPathToFile())) {
             return $this->obj->getFileSize();
         }
-        return 0;
+        
+        $r_id = $this->obj->getResourceId();
+        $identification = $this->resource_manager->find($r_id);
+        return $this->resource_consumer->stream($identification)->getStream()->getSize();
     }
 
     /**
@@ -195,9 +222,6 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
      */
     public function handleFileUpload($a_data, $a_file_action)
     {
-        // Set name for uploaded file because due to the versioning, the title can change for different versions. This setter-call here
-        // ensures that the uploaded file is saved with the title of the object. This obj->setFileName() has to be called
-        // before $this->getPathToFile(). Otherwise, the file could be saved under the wrong filename.
         if ($a_file_action === 'replace') {
             $this->obj->deleteVersions();
             $this->obj->clearDataDirectory();
@@ -220,10 +244,9 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
     }
 
     /**
-     * This method is called in 2 use cases:
+     * This method only exists for legacy reasons
      *
-     * Use case 1: Get the path to an already existing file to download it -> read operation
-     * Use case 2: Get the path to save a new file into or overwrite an existing one -> write operation
+     * @deprecated
      *
      * @throws ilFileUtilsException
      * @return string
@@ -236,6 +259,7 @@ class ilObjFileDAV extends ilObjectDAV implements Sabre\DAV\IFile
 
         // For the case of forbidden file-extensions, ::getValidFilename($path) returns the path with the .sec extension
         return ilFileUtils::getValidFilename($path);
+        
     }
 
     protected function checkForVirus(string $file_dest_path)

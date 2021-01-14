@@ -24,6 +24,7 @@ declare(strict_types=1);
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjFileBasedLMGUI
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjSAHSLearningModuleGUI
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjContentPageGUI
+ * @ilCtrl_Calls ilObjLearningSequenceGUI: ilContentPagePageGUI
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjExerciseGUI
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjFileGUI
  * @ilCtrl_Calls ilObjLearningSequenceGUI: ilObjIndividualAssessmentGUI

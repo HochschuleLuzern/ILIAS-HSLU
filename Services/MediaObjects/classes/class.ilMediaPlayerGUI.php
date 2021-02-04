@@ -338,11 +338,21 @@ class ilMediaPlayerGUI
         
 // BEGIN PATCH HSLU To allow SWITCHtube in Mediaelements
         // switch tube
-        if (ilExternalMediaAnalyzer::isSwitchtube($this->getFile())) {
-            $p = ilExternalMediaAnalyzer::extractSwitchtubeParameters($this->getFile());
+        if (ilExternalMediaAnalyzer::isSrf($this->getFile())) {
+            $p = ilExternalMediaAnalyzer::extractSrfParameters($this->getFile());
+            
+            if (isset($p['t'])) {
+                $p['v'] .= '&startTime='.$p['t'];
+            }
+            
+            if ($p['m'] == 'audio') {
+                $domain = 'tp.srgssr.ch/p/srf/';
+            } else {
+                $domain = 'srf.ch/pla/';
+            }
 
-            $html = "<iframe src='https://tube.switch.ch/embed/".$p['v'].
-            "' width='320' height='240' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
+            $html = "<iframe src='".$domain."embed?urn=urn:srf:".$p['m'].":".$p['v'].
+            "' width='320' height='280' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen allow='geolocation *; autoplay; encrypted-media'></iframe>";
         
             return $html;
         }

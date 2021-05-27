@@ -21,16 +21,7 @@ class ilObjCourseDAV extends ilObjContainerDAV
      */
     public function __construct(ilObjCourse $a_obj, ilWebDAVRepositoryHelper $repo_helper, ilWebDAVObjDAVHelper $dav_helper)
     {
+        $this->child_collection_type = 'fold';
         parent::__construct($a_obj, $repo_helper, $dav_helper);
-    }
-
-    /**
-     * All children of a courses will be also folders
-     *
-     * @return string
-     */
-    public function getChildCollectionType()
-    {
-        return 'fold';
     }
 }

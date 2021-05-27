@@ -92,7 +92,7 @@ class ilWebDAVAuthentication
             $status,
             $credentials,
             $providers
-            );
+        );
 
         $frontend->authenticate();
         

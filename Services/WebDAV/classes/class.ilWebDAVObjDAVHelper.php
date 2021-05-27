@@ -38,7 +38,7 @@ class ilWebDAVObjDAVHelper
         $type = $this->repo_helper->getObjectTypeFromObjId($obj_id);
         $title = $this->repo_helper->getObjectTitleFromObjId($obj_id);
 
-        if($do_name_check) {
+        if ($do_name_check) {
             $is_davable = $this->isDAVableObjType($type) && $this->isDAVableObjTitle($title);
         } else {
             $is_davable = $this->isDAVableObjType($type);
@@ -61,6 +61,7 @@ class ilWebDAVObjDAVHelper
             case 'grp':
             case 'fold':
             case 'file':
+            case 'exc':
                 return true;
 
             default:
@@ -121,7 +122,7 @@ class ilWebDAVObjDAVHelper
      * @param string $type
      * @return ilObjectDAV
      */
-    public function createDAVObjectForRefId(int $ref_id, string $type = '') : ilObjectDAV
+    public function createDAVObjectForRefId(int $ref_id, string $type = '', array $data = []) : ilObjectDAV
     {
         if ($type == '') {
             $type = $this->repo_helper->getObjectTypeFromRefId($ref_id);
@@ -143,6 +144,24 @@ class ilWebDAVObjDAVHelper
 
                 case 'file':
                     return new ilObjFileDAV(new ilObjFile($ref_id, true), $this->repo_helper, $this);
+                
+                case 'exc':
+                    return new ilObjExerciseDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this);
+                    
+                case 'exc_by_assignment':
+                    return new ilObjExerciseByAssignmentDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this, $data);
+                    
+                case 'exc_by_user':
+                    return new ilObjExerciseByUserDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this, $data);
+                    
+                case 'exc_file':
+                    return new ilObjExerciseFileDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this, $data);
+                    
+                case 'exc_feedback':
+                    return new ilObjExerciseFeedbackDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this, $data);
+                    
+                case 'exc_feedback_file':
+                    return new ilObjExerciseFeedbackFileDAV(new ilObjExercise($ref_id, true), $this->repo_helper, $this, $data);
             }
         }
         throw new BadRequest('Unknown filetype');

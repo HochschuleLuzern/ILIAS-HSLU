@@ -20,47 +20,16 @@ use Sabre\DAV\Exception\Forbidden;
  */
 abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\ICollection
 {
-    /**
-     * Check if given object has valid type and calls parent constructor
-     *
-     * @param ilContainer $a_obj
-     */
-    public function __construct(ilContainer $a_obj, ilWebDAVRepositoryHelper $repo_helper, ilWebDAVObjDAVHelper $dav_helper)
+    protected string $child_collection_type = "none";
+    
+    public function __construct(ilObject $a_obj, ilWebDAVRepositoryHelper $repo_helper, ilWebDAVObjDAVHelper $dav_helper)
     {
         parent::__construct($a_obj, $repo_helper, $dav_helper);
     }
 
-    /**
-     * Creates a new file in the directory
-     *
-     * Data will either be supplied as a stream resource, or in certain cases
-     * as a string. Keep in mind that you may have to support either.
-     *
-     * After successful creation of the file, you may choose to return the ETag
-     * of the new file here.
-     *
-     * The returned ETag must be surrounded by double-quotes (The quotes should
-     * be part of the actual string).
-     *
-     * If you cannot accurately determine the ETag, you should not return it.
-     * If you don't store the file exactly as-is (you're transforming it
-     * somehow) you should also not return an ETag.
-     *
-     * This means that if a subsequent GET to this new file does not exactly
-     * return the same contents of what was submitted here, you are strongly
-     * recommended to omit the ETag.
-     *
-     * @param string $name Name of the file
-     * @param resource|string $data Initial payload
-     * @return null|string
-     * @throws Exception\BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
     public function createFile($name, $data = null)
     {
         if ($this->repo_helper->checkCreateAccessForType($this->obj->getRefId(), 'file')) {
-            // Check if file has valid extension
             if ($this->dav_helper->isValidFileNameWithValidFileExtension($name)) {
                 if ($this->childExists($name)) {
                     $file_dav = $this->getChild($name);
@@ -83,8 +52,6 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
                     return $file_dav->handleFileUpload($data, "create");
                 }
             } else {
-                // Throw forbidden if invalid extension or filename. As far as we know, it is sadly not
-                // possible to inform the user why his upload was "forbidden".
                 throw new Forbidden('Invalid file name or file extension');
             }
         } else {
@@ -92,18 +59,11 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
         }
     }
 
-    /**
-     * Creates a new subdirectory
-     *
-     * @param string $name
-     * @return void
-     * @throws NotImplemented
-     */
     public function createDirectory($name)
     {
         global $DIC;
 
-        $type = $this->getChildCollectionType();
+        $type = $this->child_collection_type;
         if ($this->repo_helper->checkCreateAccessForType($this->getRefId(), $type) && $this->dav_helper->isDAVableObjTitle($name)) {
             switch ($type) {
                 case 'cat':
@@ -133,48 +93,30 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
         }
     }
     
-    /**
-     * Returns a specific child node, referenced by its name
-     *
-     * This method must throw Sabre\DAV\Exception\NotFound if the node does not
-     * exist.
-     *
-     * @throws Exception\NotFound Exception\BadRequest
-     * @param string $name
-     * @return Sabre\DAV\INode
-     */
     public function getChild($name)
     {
         $child_node = null;
-        $child_exists = false;
 
-        // Early exit if the problem info file is opened
         if ($name == ilProblemInfoFileDAV::PROBLEM_INFO_FILE_NAME) {
             return new ilProblemInfoFileDAV($this, $this->repo_helper, $this->dav_helper);
         }
 
-        // Search for the desired file
         foreach ($this->repo_helper->getChildrenOfRefId($this->obj->getRefId()) as $child_ref) {
-            // Check if a DAV Object exists for this type
             if ($this->dav_helper->isDAVableObject($child_ref, true)) {
-                // Check if names matches
                 if ($this->repo_helper->getObjectTitleFromRefId($child_ref, true) == $name) {
-                    $child_exists = true;
+                    $child = $this->dav_helper->createDAVObjectForRefId($child_ref);
                     
-                    // Check if user has permission to read this object
-                    if ($this->checkReadAndVisibleAccessForObj($child_ref)) {
-                        $child_node = $this->dav_helper->createDAVObjectForRefId($child_ref);
+                    if ($child->isVisibleForUser()) {
+                        $child_node = $child;
                     }
                 }
             }
         }
         
-        // There exists 1 or more nodes with this name. Return last found node.
         if (!is_null($child_node)) {
             return $child_node;
         }
         
-        // There is no davable object with the same name. Sorry for you...
         throw new Sabre\DAV\Exception\NotFound("$name not found");
     }
     
@@ -190,9 +132,7 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
         $problem_info_file_needed = false;
 
         foreach ($this->repo_helper->getChildrenOfRefId($this->obj->getRefId()) as $child_ref) {
-            // Check if is davable object types
             if ($this->dav_helper->isDAVableObject($child_ref, true)) {
-                // Check for duplicates
                 $title = $this->repo_helper->getObjectTitleFromRefId($child_ref);
                 if (in_array($title, $already_seen_titles)) {
                     $problem_info_file_needed = true;
@@ -200,15 +140,13 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
                 }
 
                 $already_seen_titles[] = $title;
+                
+                $child = $this->dav_helper->createDAVObjectForRefId($child_ref);
 
-                // Check if read permission is given
-                if ($this->checkReadAndVisibleAccessForObj($child_ref)) {
-                    // Create DAV-object out of ILIAS-object
-                    $child_nodes[$child_ref] = $this->dav_helper->createDAVObjectForRefId($child_ref);
+                if ($child->isVisibleForUser()) {
+                    $child_nodes[$child_ref] = $child;
                 }
-            }
-            // if title is not davable because of forbidden characters in title -> problem info file will be created
-            elseif (!$problem_info_file_needed
+            } elseif (!$problem_info_file_needed
                 && $this->dav_helper->isDAVableObjType($this->repo_helper->getObjectTypeFromRefId($child_ref))
                 && $this->dav_helper->hasTitleForbiddenChars($this->repo_helper->getObjectTitleFromRefId($child_ref))) {
                 $problem_info_file_needed = true;
@@ -224,19 +162,17 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
     
     /**
      * Checks if a child-node with the specified name exists
-     *
+     *            // Check if file has valid extension
      * @param string $name
      * @return bool
      */
     public function childExists($name)
     {
         foreach ($this->repo_helper->getChildrenOfRefId($this->obj->getRefId()) as $child_ref) {
-            // Only davable object types
             if ($this->dav_helper->isDAVableObject($child_ref, true)) {
-                // Check if names are the same
                 if ($this->repo_helper->getObjectTitleFromRefId($child_ref, true) == $name) {
-                    // Check if read permission is given
-                    if ($this->checkReadAndVisibleAccessForObj($child_ref)) {
+                    $child = $this->dav_helper->createDAVObjectForRefId($child_ref);
+                    if ($child->isVisibleForUser()) {
                         return true;
                     } else {
                         /*
@@ -251,18 +187,4 @@ abstract class ilObjContainerDAV extends ilObjectDAV implements Sabre\DAV\IColle
         
         return false;
     }
-
-    protected function checkReadAndVisibleAccessForObj($child_ref)
-    {
-        return $this->repo_helper->checkAccess("visible", $child_ref) && $this->repo_helper->checkAccess("read", $child_ref);
-    }
-    
-    /**
-     * Return the type for child collections of this collection
-     * For courses, groups and folders the type is 'fold'
-     * For categories the type is 'cat'
-     *
-     * @return string $type
-     */
-    abstract public function getChildCollectionType();
 }

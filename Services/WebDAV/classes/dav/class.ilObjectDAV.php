@@ -133,4 +133,9 @@ abstract class ilObjectDAV extends Sabre\DAV\Node
     {
         return $this->obj;
     }
+    
+    protected function isVisibleForUser()
+    {
+        return $this->repo_helper->checkAccess("visible", $this->ref_id) && $this->repo_helper->checkAccess("read", $this->ref_id);
+    }
 }

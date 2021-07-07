@@ -42,7 +42,6 @@ class ilMediaCastSettings
         "image/svg+xml" => "image/svg+xml"
     ];
 
-
     private static $instance = null;
     private $defaultAccess = "users";
     private $purposeSuffixes = array();
@@ -150,18 +149,22 @@ class ilMediaCastSettings
         foreach ($this->purposeSuffixes as $purpose => $filetypes) {
             if ($this->storage->get($purpose . "_types") != false) {
                 $sf = explode(",", $this->storage->get($purpose . "_types"));
+                /* Begin PATCH HSLU: Allow all Mediatypes in Mediacast, we convert them
                 $sf = array_filter($sf, function ($c) {
                     return in_array($c, $this->supported_suffixes);
                 });
+                End PATCH HSLU: Allow all Mediatypes in Mediacast, we convert them */
                 $this->purposeSuffixes[$purpose] = $sf;
             }
         }
         $this->setDefaultAccess($this->storage->get("defaultaccess"));
         if ($this->storage->get("mimetypes")) {
             $mt = explode(",", $this->storage->get("mimetypes"));
+            /* Begin PATCH HSLU: Allow all Mediatypes in Mediacast, we convert them
             $mt = array_filter($mt, function ($c) {
                 return in_array($c, $this->supported_mime_types);
             });
+            End PATCH HSLU: Allow all Mediatypes in Mediacast, we convert them */
 
             $this->setMimeTypes($mt);
         }

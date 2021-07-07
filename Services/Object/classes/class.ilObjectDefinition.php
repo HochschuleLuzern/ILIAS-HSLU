@@ -1216,6 +1216,11 @@ class ilObjectDefinition // extends ilSaxParser
                     'offline_handling' => '0',
                     'orgunit_permissions' => $pl->useOrguPermissions() ? '1' : '0'
                 );
+
+                if($pl_id == "xcwi") {
+                    $this->obj_data[$pl_id]["subobjects"]["crs"] = array("name" => "crs", "max" => "", "lng" => "crs");
+                }
+
                 $parent_types = $pl->getParentTypes();
                 foreach ($parent_types as $parent_type) {
                     $this->obj_data[$parent_type]["subobjects"][$pl_id] = array("name" => $pl_id, "max" => "", "lng" => $pl_id, "plugin" => true);

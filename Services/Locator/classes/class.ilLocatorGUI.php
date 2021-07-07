@@ -135,7 +135,7 @@ class ilLocatorGUI
 
             // add item for each node on path
             foreach ((array) $path as $key => $row) {
-                if (!in_array($row["type"], array("root", "cat", "crs", "fold", "grp", "prg", "lso"))) {
+                if (!in_array($row["type"], array("root", "cat", "crs", "fold", "grp", "prg", "lso", "xcwi"))) {
                     continue;
                 }
                 if ($crs_ref_id > 0 && $row["child"] == $crs_ref_id) {

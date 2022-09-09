@@ -98,7 +98,10 @@ class EvalMath
         'sin','sinh','arcsin','asin','arcsinh','asinh',
         'cos','cosh','arccos','acos','arccosh','acosh',
         'tan','tanh','arctan','atan','arctanh','atanh',
-        'sqrt','abs','ln','log');
+//BEGIN PATCH HSLU: Adding floor and round
+        //'sqrt','abs','ln','log');
+        'sqrt','abs','ln','log', 'floor', 'round');
+    //END PATCH HSLU: Adding floor and round
 
     public function __construct()
     {

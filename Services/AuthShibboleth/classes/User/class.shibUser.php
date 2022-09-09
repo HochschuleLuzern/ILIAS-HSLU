@@ -37,7 +37,11 @@ class shibUser extends ilObjUser
             $shibUser->setId($existing_usr_id);
             $shibUser->read();
         }
-        $shibUser->setAuthMode('shibboleth');
+        //BEGIN PATCH HSLU Shibboleth Auth shall not overwrite Campus AD Users
+        else {
+            $shibUser->setAuthMode('shibboleth');
+        }
+        //END PATCH HSLU Shibboleth Auth shall not overwrite Campus AD Users
 
         return $shibUser;
     }

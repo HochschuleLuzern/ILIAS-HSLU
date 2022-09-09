@@ -2676,6 +2676,33 @@
 		</xsl:when>
 		<!--END PATCH HSLU To allow SWITCHtube in Mediaelements-->
 
+		<!--BEGIN PATCH HSLU To allow SRF in Mediaelements-->
+		<!-- SRF -->
+		<xsl:when test = "not(substring-after($data,'srf.ch/play/') = '') or not(substring-after($data,'rts.ch/play/') = '') or not(substring-after($data,'rsi.ch/play/') = '') or not(substring-after($data,'tp.srgssr.ch/p/srf') = '')">
+			<iframe>
+				<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				<xsl:variable name='srf_start'><xsl:if test="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='m']/@Value = 'audio'">start</xsl:if><xsl:if test="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='m']/@Value = 'video'">startTime</xsl:if></xsl:variable>
+				<xsl:variable name='srf_time'><xsl:if test="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='t']/@Value != ''">&amp;<xsl:value-of select="$srf_start" />=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='t']/@Value" /></xsl:if></xsl:variable>
+				<xsl:variable name='srf_domain'>
+					<xsl:if test="not(substring-after($data,'tp.srgssr.ch/p/srf') = '')">tp.srgssr.ch/p/srf/</xsl:if>
+					<xsl:if test="substring-after($data,'tp.srgssr.ch/p/srf') = ''">
+						<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='origin']/@Value" />.ch/play/</xsl:if>
+				</xsl:variable>
+				<xsl:attribute name="src">
+						https://<xsl:value-of select="$srf_domain" />embed?urn=urn:<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='origin']/@Value" />:<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='m']/@Value" />:<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='v']/@Value" /><xsl:value-of select="$srf_time" />
+				</xsl:attribute>
+				<xsl:attribute name="allowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="webkitallowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="mozallowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="allow">
+					geolocation *; autoplay; encrypted-media
+				</xsl:attribute>
+				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
+			</iframe>
+		</xsl:when>
+		<!--END PATCH HSLU To allow SRF in Mediaelements-->
+
 		<!-- Flickr -->
 		<xsl:when test = "substring-after($data,'flickr.com') != ''">
 			<xsl:variable name="flickr_tags"><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value != ''">&amp;tags=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value"/></xsl:if></xsl:variable>

@@ -200,14 +200,70 @@ class ilExternalMediaAnalyzer
         $pos2 = strpos($a_location, "?");
         if ($pos1 > 0) {
             $len = ($pos2 > 0)
-            ? $pos2-$pos1
-            : (strlen($a_location)-$pos1);
-            $par["v"] = substr($a_location, $pos1+1, $len);
+            ? $pos2 - $pos1
+            : (strlen($a_location) - $pos1);
+            $par["v"] = substr($a_location, $pos1 + 1, $len);
         }
 
         return $par;
     }
     // END PATCH HSLU To allow SWITCHtube in Mediaelements
+
+    //BEGIN PATCH HSLU To allow SRF in Mediaelements
+    /**
+     * Identify SRF links
+     */
+    public static function isSrf($a_location)
+    {
+        if (strpos($a_location, "rts.ch") > 0 ||
+            strpos($a_location, "rsi.ch") > 0 ||
+            strpos($a_location, "srgssr.ch") > 0 ||
+            strpos($a_location, "srf.ch") > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Extract SRF Parameter
+     */
+    public static function extractSrfParameters($a_location)
+    {
+        $par = array();
+
+        if (strstr($a_location, "audio") || strstr($a_location, "radio")) {
+            $par["m"] = "audio";
+        } else {
+            $par["m"] = "video";
+        }
+
+        if (strpos($a_location, "rts.ch") > 0) {
+            $par['origin'] = 'rts';
+        } elseif (strpos($a_location, "rsi.ch") > 0) {
+            $par['origin'] = 'rsi';
+        } elseif (strpos($a_location, "srgssr.ch") > 0) {
+            $par['origin'] = 'srgssr';
+        } else {
+            $par['origin'] = 'srf';
+        }
+
+        if ($id = strstr($a_location, "urn=")) {
+            $par["v"] = substr($id, 18);
+        } elseif ($id = strstr($a_location, "detail")) {
+            $par["v"] = substr($id, 7);
+        } elseif ($id = strstr($a_location, "id=")) {
+            $par["v"] = substr($id, 3);
+        }
+
+        if (($len = strpos($par["v"], "&startTime=")) > 0 ||
+            ($len = strpos($par["v"], "?startTime=")) > 0) {
+            $par["t"] = substr($par["v"], $len + 11);
+            $par["v"] = substr($par["v"], 0, $len);
+        }
+
+        return $par;
+    }
+    // END PATCH HSLU To allow SRF in Mediaelements
 
     public static function getVimeoMetadata(string $vid): array
     {
@@ -325,6 +381,14 @@ class ilExternalMediaAnalyzer
             $a_parameter = array();
         }
         // END PATCH HSLU To allow SWITCHtube in Mediaelements
+
+        // BEGIN PATCH HSLU To allow SRF in Mediaelements
+        // SWITCHtube
+        if (ilExternalMediaAnalyzer::isSrf($a_location)) {
+            $ext_par = ilExternalMediaAnalyzer::extractSrfParameters($a_location);
+            $a_parameter = array();
+        }
+        // END PATCH HSLU To allow SRF in Mediaelements
 
         // Flickr
         if (ilExternalMediaAnalyzer::isFlickr($a_location)) {

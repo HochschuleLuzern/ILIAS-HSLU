@@ -166,13 +166,13 @@ class ilExternalMediaAnalyzer
         string $a_location
     ): array {
         $par = array();
-        $pos1 = strpos($a_location, "vimeo.com/");
-        $pos2 = strpos($a_location, "&", $pos1 + 10);
+        $pos1 = strrpos($a_location, "/");
+        $pos2 = strpos($a_location, "&");
         if ($pos1 > 0) {
             $len = ($pos2 > 0)
                 ? $pos2
                 : strlen($a_location);
-            $par["id"] = substr($a_location, $pos1 + 10, $len - ($pos1 + 10));
+            $par["id"] = substr($a_location, $pos1 + 1, $len - ($pos1 + 1));
         }
 
         return $par;
@@ -278,6 +278,12 @@ class ilExternalMediaAnalyzer
         // YouTube
         if (ilExternalMediaAnalyzer::isYouTube($a_location)) {
             $ext_par = ilExternalMediaAnalyzer::extractYouTubeParameters($a_location);
+            $a_parameter = array();
+        }
+
+        // Vimeo
+        if (ilExternalMediaAnalyzer::isVimeo($a_location)) {
+            $ext_par = ilExternalMediaAnalyzer::extractVimeoParameters($a_location);
             $a_parameter = array();
         }
 

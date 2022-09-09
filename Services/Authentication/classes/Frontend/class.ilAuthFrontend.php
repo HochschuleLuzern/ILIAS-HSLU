@@ -457,7 +457,11 @@ class ilAuthFrontend
         $num_login_attempts = ilObjUser::_getLoginAttempts($usr_id);
 
         if ($num_login_attempts <= $max_attempts) {
-            ilObjUser::_incrementLoginAttempts($usr_id);
+            // BEGIN PATCH HSLU: Don't update failed login attempts if user is inactive
+            if (ilObjUser::_lookupActive($usr_id)) {
+                ilObjUser::_incrementLoginAttempts($usr_id);
+            }
+            // END PATCH HSLU: Don't update failed login attempts if user is inactive
         }
 
         if ($num_login_attempts >= $max_attempts) {

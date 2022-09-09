@@ -2648,6 +2648,68 @@
 			</object>
 		</xsl:when>
 
+		<!--BEGIN PATCH HSLU To allow Vimeo in Page Editor-->
+		<!-- Vimeo -->
+		<xsl:when test = "not(substring-after($data,'vimeo.com') = '')">
+			<iframe>
+				<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				<xsl:attribute name="src">
+					<xsl:value-of select="$httpprefix"/>//player.vimeo.com/video/<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='id']/@Value" />
+				</xsl:attribute>
+				<xsl:attribute name="allowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="webkitallowfullscreen">true</xsl:attribute>
+				<xsl:attribute name="mozallowfullscreen">true</xsl:attribute>
+				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
+			</iframe>
+		</xsl:when>
+		<!--END PATCH HSLU To allow Vimeo in Page Editor-->
+
+		<!-- Flickr -->
+		<xsl:when test = "substring-after($data,'flickr.com') != ''">
+			<xsl:variable name="flickr_tags"><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value != ''">&amp;tags=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='tags']/@Value"/></xsl:if></xsl:variable>
+			<xsl:variable name="flickr_sets"><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='sets']/@Value != ''">&amp;set_id=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='sets']/@Value"/></xsl:if></xsl:variable>
+			<xsl:variable name="flickr_user_id">user_id=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='user_id']/@Value"/></xsl:variable>
+			<iframe frameBorder="0" scrolling="no">
+				<xsl:if test="$width != ''">
+					<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$height != ''">
+					<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				</xsl:if>
+				<xsl:attribute name="src"><xsl:value-of select="$httpprefix"/>//www.flickr.com/slideShow/index.gne?<xsl:value-of select="$flickr_user_id" /><xsl:value-of select="$flickr_tags" /><xsl:value-of select="$flickr_sets" /></xsl:attribute>
+				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
+			</iframe>
+		</xsl:when>
+
+		<!-- GoogleVideo -->
+		<xsl:when test = "substring-after($data,'video.google') != ''">
+			<embed id="VideoPlayback" allowFullScreen="true"  type="application/x-shockwave-flash">
+				<xsl:attribute name="src"><xsl:value-of select="$httpprefix"/>//video.google.com/googleplayer.swf?docid=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='docid']/@Value" />&amp;fs=true</xsl:attribute>
+				<xsl:if test="$width != ''">
+					<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$height != ''">
+					<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				</xsl:if>
+				<xsl:comment>Comment to have separate embed ending tag</xsl:comment>
+			</embed>
+		</xsl:when>
+
+		<!-- GoogleDoc -->
+		<xsl:when test = "substring-after($data,'docs.google') != ''">
+			<xsl:variable name="googledoc_action"><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='type']/@Value = 'Presentation'">EmbedSlideshow</xsl:if><xsl:if test = "//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='type']/@Value = 'Document'">View</xsl:if></xsl:variable>
+			<iframe frameborder='0'>
+				<xsl:attribute name="src"><xsl:value-of select="$httpprefix"/>//docs.google.com/<xsl:value-of select="$googledoc_action"/>?docid=<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose=$curPurpose]/Parameter[@Name='docid']/@Value" /></xsl:attribute>
+				<xsl:if test="$width != ''">
+					<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$height != ''">
+					<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				</xsl:if>
+				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
+			</iframe>
+		</xsl:when>
 
 		<!-- mp3 (mediaelement.js) -->
 		<xsl:when test = "$type='audio/mpeg' and (substring-before($data,'.mp3') != '' or substring-before($data,'.MP3') != '')">

@@ -131,7 +131,7 @@ class ilAssSelfAssessmentQuestionFormatter implements ilAssSelfAssessmentMigrato
         $st = ilUtil::getSecureTags();
 
         $not_supported = ['img'];
-        $tags = ['br', 'table', 'td', 'tr', 'th'] + array_diff($st, $not_supported);
+        $tags = ['br', 'p', 'table', 'td', 'tr', 'th'] + array_diff($st, $not_supported);
 
         return $tags;
     }

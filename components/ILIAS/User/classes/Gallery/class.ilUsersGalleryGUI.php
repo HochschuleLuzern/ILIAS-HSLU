@@ -115,10 +115,40 @@ class ilUsersGalleryGUI
 
         $cards = [];
 
+        // BEGIN PATCH HSLU: Hide people in hidden admin role
+        try {
+            if (class_exists("EventoImport\\import\\data_management\\repository\\HiddenAdminRepository", true)) {
+                global $DIC;
+                $rbac_review = $DIC->rbac()->review();
+                $query_params = $DIC->http()->request()->getQueryParams();
+                if (isset($query_params['ref_id'])) {
+                    $ref_id = (int) $query_params['ref_id'];
+                    $hidden_admin_repo = new \EventoImport\import\data_management\repository\HiddenAdminRepository($DIC->database());
+                    $hidden_admin_role_id = $hidden_admin_repo->getRoleIdForContainerRefId($ref_id);
+                } else {
+                    $hidden_admin_role_id = null;
+                }
+            } else {
+                $hidden_admin_role_id = null;
+            }
+        } catch (Exception $e) {
+            // If any errors happen in this patch -> skip it. This is only a feature for convenience
+            $hidden_admin_role_id = null;
+        }
+        // END PATCH HSLU: Hide people in hidden admin role
         foreach ($gallery_groups as $group) {
             $sorted_group = new ilUsersGallerySortedUserGroup($group, new ilUsersGalleryUserCollectionPublicNameSorter());
 
             foreach ($sorted_group as $user) {
+                // BEGIN PATCH HSLU: Hide people in hidden admin role
+                try {
+                    if (!is_null($hidden_admin_role_id) && !is_null($rbac_review) && $rbac_review->isAssigned($user->getAggregatedUser()->getId(), $hidden_admin_role_id)) {
+                        continue;
+                    }
+                } catch (Exception $e) {
+                    // If any errors happen in this patch -> skip it. This is only a feature for convenience
+                }
+                // END PATCH HSLU: Hide people in hidden admin role
                 $cards[] = $this->getCardForUser($user, $sorted_group);
             }
         }

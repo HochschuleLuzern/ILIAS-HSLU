@@ -72,7 +72,7 @@ class ilDBUpdate
                         $this->error = (string) $check;
                         return false;
                     }
-                    unset($q);
+                    $q = "";
                 } else {
                     /** @noinspection PhpUndefinedVariableInspection */
                     $q .= " " . $statement;

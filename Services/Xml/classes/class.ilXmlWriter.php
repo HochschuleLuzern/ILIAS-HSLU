@@ -286,7 +286,7 @@ class ilXmlWriter
     /**
      * Writes a comment
      */
-    private function xmlComment(string $comment): void
+    public function xmlComment(string $comment): void
     {
         $this->xmlStr .= "<!--" . $comment . "-->";
     }

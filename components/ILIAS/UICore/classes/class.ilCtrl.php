@@ -562,6 +562,14 @@ class ilCtrl implements ilCtrlInterface
     /**
      * @inheritDoc
      */
+    public function getTargetScript(): string
+    {
+        return $this->context->getTargetScript();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function isAsynch(): bool
     {
         return $this->context->isAsync();

@@ -397,6 +397,7 @@ abstract class ActiveRecord
                 $this->{$k} = $waked ?? $record->{$k} ?? null;
             }
             arObjectCache::store($this);
+            $this->afterObjectLoad();
         }
     }
 

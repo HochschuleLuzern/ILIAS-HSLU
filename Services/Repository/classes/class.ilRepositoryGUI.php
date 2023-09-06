@@ -21,9 +21,7 @@ use ILIAS\Repository\StandardGUIRequest;
 
 /**
  * Class ilRepositoryGUI
- *
  * @author Alexander Killing <killing@leifos.de>
- *
  * @ilCtrl_Calls ilRepositoryGUI: ilObjGroupGUI, ilObjFolderGUI, ilObjFileGUI, ilObjCourseGUI, ilCourseObjectivesGUI
  * @ilCtrl_Calls ilRepositoryGUI: ilObjSAHSLearningModuleGUI, ilObjChatroomGUI, ilObjForumGUI
  * @ilCtrl_Calls ilRepositoryGUI: ilObjLearningModuleGUI, ilObjGlossaryGUI
@@ -41,7 +39,7 @@ use ILIAS\Repository\StandardGUIRequest;
  * @ilCtrl_Calls ilRepositoryGUI: ilObjLTIConsumerGUI
  * @ilCtrl_Calls ilRepositoryGUI: ilObjCmiXapiGUI
  * @ilCtrl_Calls ilRepositoryGUI: ilPermissionGUI
- *
+ * @ilCtrl_Calls ilRepositoryGUI: ilExerciseHandlerGUI
  */
 class ilRepositoryGUI implements ilCtrlBaseClassInterface
 {

@@ -535,7 +535,7 @@ class ilContainer extends ilObject
         $wizard_options->initContainer($clone_source, $ref_id);
 
         foreach ($options as $source_id => $option) {
-            $wizard_options->addEntry($source_id, $option);
+            $wizard_options->addEntry(intval($source_id), $option);
         }
         $wizard_options->read();
         $wizard_options->storeTree($clone_source);

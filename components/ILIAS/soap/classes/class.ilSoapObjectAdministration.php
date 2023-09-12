@@ -1180,7 +1180,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
         $wizard_options->saveRoot($source_id);
 
         foreach ($options as $source_id => $option) {
-            $wizard_options->addEntry($source_id, $option);
+            $wizard_options->addEntry(intval($source_id), $option);
         }
         $wizard_options->read();
 

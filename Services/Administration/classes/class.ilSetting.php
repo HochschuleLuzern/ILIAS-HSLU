@@ -141,6 +141,12 @@ class ilSetting implements \ILIAS\Administration\Setting
     {
         return $this->setting;
     }
+    public function setValueType(): void
+    {
+        if (!isset(self::$value_type)) {
+            self::$value_type = self::_getValueType();
+        }
+    }
 
     public function set(string $a_key, string $a_val): void
     {

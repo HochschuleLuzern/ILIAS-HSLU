@@ -55,10 +55,15 @@ class ilSettingsFactory
             // use a field that is likely to exist.
             // ... code was strange in < ILIAS 8 (wrong parameter count, module name for keyword, ...)
             // use dummy instead
-            $settings->set(
-                "dummy",
-                $settings->get("dummy", "dummy")
-            );
+            $settings->setValueType();
+            /*
+            if(is_null($settings->get("dummy"))){
+                $settings->set(
+                    "dummy",
+                    $settings->get("dummy", "dummy")
+                );
+            }
+            */
         } finally {
             $GLOBALS["DIC"] = $tmp_dic;//PHP8Review: This may not be a critical Global but i still would recommend to use a global call here
         }

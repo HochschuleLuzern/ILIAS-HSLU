@@ -1307,7 +1307,7 @@ abstract class assQuestion
         return $this->getId();
     }
 
-    public function saveQuestionDataToDb(int $original_id = -1): void
+    public function saveQuestionDataToDb(?int $original_id = -1): void
     {
         if ($this->getId() == -1) {
             $next_id = $this->db->nextId('qpl_questions');

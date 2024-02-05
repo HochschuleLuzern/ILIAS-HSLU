@@ -235,9 +235,11 @@ class ilSurveyExecutionGUI
         }
 
         // validate finished id
-        if ($this->object->getActiveID($user_id, $anonymous_code, $appr_id) !==
-            $this->run_manager->getCurrentRunId()) {
-            throw new ilSurveyException("Run ID mismatch");
+        if (!($user_id === ANONYMOUS_USER_ID && empty($anonymous_code))) {
+            if ($this->object->getActiveID($user_id, $anonymous_code, $appr_id) !==
+                $this->run_manager->getCurrentRunId()) {
+                throw new ilSurveyException("Run ID mismatch user_id: " . $user_id . " anonymous_code: " . $anonymous_code . " appr_id: " .$appr_id . " getCuurentRunId(): " . $this->run_manager->getCurrentRunId() . " getActiveID(): " . $this->object->getActiveID($user_id, $anonymous_code, $appr_id));
+            }
         }
     }
 

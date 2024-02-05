@@ -241,6 +241,10 @@ class ilSurveyExecutionGUI
                 // nothing todo
             }
         }
+
+        // HSLU: Anonymous access leads to errors if an anonymous survey already exists
+        if ($user_id === ANONYMOUS_USER_ID && empty($anonymous_code)) return;
+
         // validate finished id
         //var_dump($this->run_manager->getCurrentRunId());
         //var_dump($this->object->getActiveID($user_id, $anonymous_code, $appr_id));
@@ -253,7 +257,8 @@ class ilSurveyExecutionGUI
         // - $this->access_manager->isCodeInputAllowed() returns FALSE
         if ($this->object->getActiveID($user_id, $anonymous_code, $appr_id) !==
             $this->run_manager->getCurrentRunId()) {
-            throw new ilSurveyException("Run ID mismatch");
+                // HSLU: more detailed error message
+                throw new ilSurveyException("Run ID mismatch user_id: " . $user_id . " anonymous_code: " . $anonymous_code . " appr_id: " . $appr_id . " getCurentRunId(): " . $this->run_manager->getCurrentRunId() . " getActiveID(): " . $this->object->getActiveID($user_id, $anonymous_code, $appr_id));
         }
     }
 

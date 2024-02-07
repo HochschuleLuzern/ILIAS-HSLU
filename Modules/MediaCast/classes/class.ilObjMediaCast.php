@@ -389,7 +389,8 @@ class ilObjMediaCast extends ilObject
         $this->deleteOrder();
 
         $pos = 0;
-        foreach ($a_items as $item_id) {
+        foreach ($a_items as $item) {
+            $item_id = $item['id'];
             $pos++;
 
             $sql = "INSERT INTO il_media_cast_data_ord (obj_id,item_id,pos)" .

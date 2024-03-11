@@ -4096,6 +4096,7 @@ common#:#err_valid_login_account_creation_disabled#:#Die Authentifizierung war e
 common#:#err_wrong_header#:#Grund: Falscher Header
 common#:#err_wrong_login#:#Der Anmeldename oder das Passwort sind ungültig.
 common#:#err_wrong_password#:#Falsches Passwort
+common#:#err_no_eduid#:#Ihre SWITCH edu-ID scheint nicht mit ihrem HSLU Konto gelinkt zu sein. Auf der Seite account-onboarding.hslu.ch können Sie prüfen, ob Sie schon eine SWITCH edu-ID erstellt und mit der HSLU gelinkt haben.
 common#:#error#:#Fehler
 common#:#error_empty_file_or_folder#:#Die Datei ist entweder 0 Byte gross oder es handelt sich um einen Ordner.
 common#:#error_extraction_failed#:#Das Entpacken des Archivs und dessen Ordnerstruktur ist fehlgeschlagen. Wahrscheinlich verfügen Sie nicht über die Rechte um Ordner oder Kategorien in diesem Objekt zu erstellen.

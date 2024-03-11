@@ -4090,6 +4090,7 @@ common#:#err_valid_login_account_creation_disabled#:#Authentication succeeded, b
 common#:#err_wrong_header#:#Reason: Wrong header.
 common#:#err_wrong_login#:#Wrong Login or Password
 common#:#err_wrong_password#:#Wrong Password
+common#:#err_no_eduid#:#Your SWITCH edu-ID does not seem to be linked with your HSLU account. On the account-onboarding.hslu.ch page you can check if you already have a SWITCH edu-ID and whether it is linked with your HSLU account.
 common#:#error#:#Error
 common#:#error_empty_file_or_folder#:#The file size is 0 bytes or it is a folder.
 common#:#error_extraction_failed#:#The extraction of the archive and its directories failed. Probably because you don’t have the permission to create folders or categories within this object.

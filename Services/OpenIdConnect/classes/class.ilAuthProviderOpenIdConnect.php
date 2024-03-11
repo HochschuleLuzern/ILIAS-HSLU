@@ -148,7 +148,7 @@ class ilAuthProviderOpenIdConnect extends ilAuthProvider
         //BEGIN PATCH HSLU ext_account may not be blank
         if (!is_string($ext_account) || strlen($ext_account) <= 0){
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
-            $status->setReason('err_wrong_login');
+            $status->setReason('err_no_eduid');
             return $status;
         }
         //END PATCH HSLU ext_account may not be blank

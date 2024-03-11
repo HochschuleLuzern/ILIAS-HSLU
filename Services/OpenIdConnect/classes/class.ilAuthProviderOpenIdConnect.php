@@ -145,6 +145,14 @@ class ilAuthProviderOpenIdConnect extends ilAuthProvider
 
         $this->logger->debug('Authenticated external account: ' . $ext_account);
 
+        //BEGIN PATCH HSLU ext_account may not be blank
+        if (!is_string($ext_account) || strlen($ext_account) <= 0){
+            $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
+            $status->setReason('err_no_eduid');
+            return $status;
+        }
+        //END PATCH HSLU ext_account may not be blank
+
         $int_account = ilObjUser::_checkExternalAuthAccount(
             ilOpenIdConnectUserSync::AUTH_MODE,
             $ext_account

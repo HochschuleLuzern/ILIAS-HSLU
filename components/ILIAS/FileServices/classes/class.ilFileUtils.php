@@ -154,7 +154,7 @@ class ilFileUtils
             try {
                 $itemPath = $targetDir . '/' . substr(
                     $item->getPath(),
-                    strlen($sourceDir)
+                    strlen($sourceDir)+1
                 );
                 $stream = $sourceFS->readStream($item->getPath());
                 $targetFS->writeStream($itemPath, $stream);

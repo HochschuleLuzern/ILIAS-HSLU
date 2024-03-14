@@ -98,10 +98,10 @@ final class LegacyPathHelper
         ] = self::listPaths();
 
         return match (true) {
-            self::checkPossiblePath($temp, $absolute_path) => self::filesystems()->temp(),
-            self::checkPossiblePath($web, $absolute_path) => self::filesystems()->web(),
             self::checkPossiblePath($webRelativeWithLeadingDot, $absolute_path) => self::filesystems()->web(),
             self::checkPossiblePath($webRelativeWithoutLeadingDot, $absolute_path) => self::filesystems()->web(),
+            self::checkPossiblePath($temp, $absolute_path) => self::filesystems()->temp(),
+            self::checkPossiblePath($web, $absolute_path) => self::filesystems()->web(),
             self::checkPossiblePath($storage, $absolute_path) => self::filesystems()->storage(),
             self::checkPossiblePath($customizing, $absolute_path) => self::filesystems()->customizing(),
             self::checkPossiblePath($customizingRelativeWithLeadingDot, $absolute_path) => self::filesystems(

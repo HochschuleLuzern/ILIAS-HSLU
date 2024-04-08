@@ -109,7 +109,11 @@ class ilDclBaseRecordFieldModel
 
             $next_id = $this->db->nextId("il_dcl_stloc" . $storage_location . "_value");
 
-            $value = $this->serializeData($this->value);
+            if(($storage_location == '3_value' || $storage_location == '3_default') && ($this->value == 0 || $this->value == null)){
+                $value = null;
+            }else{
+                $value = $this->serializeData($this->value);
+            }
 
             if ($this->getId() == 0) {
                 $this->doCreate();

@@ -44,6 +44,8 @@ abstract class AbstractRecursiveZipPreProcessor implements PreProcessor
 
     public function process(FileStream $stream, Metadata $metadata): ProcessingStatus
     {
+/*
+    PATCH_HSLU: HSLU allows upload of zip files regardless of content
         if ($this->isFileAZip($metadata)) {
             try {
                 $zip_file_path = $stream->getMetadata('uri');
@@ -61,7 +63,7 @@ abstract class AbstractRecursiveZipPreProcessor implements PreProcessor
                 return new ProcessingStatus(ProcessingStatus::PENDING, '');
             }
         }
-
+*/
         if (!$this->checkPath($metadata->getFilename())) {
             return new ProcessingStatus(ProcessingStatus::REJECTED, $this->getRejectionMessage());
         }

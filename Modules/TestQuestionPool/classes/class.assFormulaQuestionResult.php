@@ -415,6 +415,7 @@ class assFormulaQuestionResult
         $ilLog = $DIC['ilLog'];
         if ($this->getRatingSimple()) {
             if ($this->isCorrect($variables, $results, $value, $units[$unit] ?? null)) {
+            $pts = $this->getPoints();
                 return $this->getPoints();
             } else {
                 return 0;

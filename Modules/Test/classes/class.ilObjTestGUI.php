@@ -232,7 +232,8 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         }
 
         if (
-            !$this->getCreationMode()
+            $this->object instanceof ilObjTest
+            && !$this->getCreationMode()
             && isset($this->test_question_set_config_factory)
             && $this->test_question_set_config_factory->getQuestionSetConfig()->areDepenciesBroken()
             && !$this->test_question_set_config_factory->getQuestionSetConfig()->isValidRequestOnBrokenQuestionSetDepencies($next_class, $cmd)
@@ -2168,8 +2169,10 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             $this->ctrl->redirect($this, "infoScreen");
         }
 
-        $this->getTabsManager()->getQuestionsSubTabs();
-        $this->getTabsManager()->activateSubTab(ilTestTabsManager::SUBTAB_ID_QST_LIST_VIEW);
+        if ($this->object instanceof ilObjTest) {
+            $this->getTabsManager()->getQuestionsSubTabs();
+            $this->getTabsManager()->activateSubTab(ilTestTabsManager::SUBTAB_ID_QST_LIST_VIEW);
+        }
 
         // #11631, #12994
         $this->ctrl->setParameter($this, 'q_id', '');

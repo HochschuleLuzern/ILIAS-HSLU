@@ -46,7 +46,7 @@ class ilAssignmentsPerParticipantTableGUI extends ilExerciseSubmissionTableGUI
             }
         }
 
-        $this->setSelectAllCheckbox("ass");
+        $this->setSelectAllCheckbox("sel_ass");
     }
 
     /**

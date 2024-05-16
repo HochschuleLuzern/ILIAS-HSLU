@@ -377,7 +377,7 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, Ques
                     isset($userdata[$result]['value'])) {
                     $input = $this->generateResultInputHTML($result, (string) $userdata[$result]['value'], $forsolution);
                 } elseif ($forsolution) {
-                    $value = '';
+                    $value = ' ';
                     if (!is_array($userdata)) {
                         $value = $resObj->calculateFormula($this->getVariables(), $this->getResults(), parent::getId());
                         $value = sprintf("%." . $resObj->getPrecision() . "f", $value);
@@ -391,7 +391,9 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, Ques
                         }
                     }
 
-                    $input = $this->generateResultInputHTML($result, $value, true);
+                    $input = '<span style="height: 24px;" class="ilc_qinput_TextInput solutionbox">' . ilLegacyFormElementsUtil::prepareFormOutput(
+                        $value
+                    ) . '</span>';
                 } else {
                     $input = $this->generateResultInputHTML($result, '', false);
                 }

@@ -1375,7 +1375,7 @@ class ilExerciseManagementGUI
             }
 
             $data[$ass_id][$member_id] = array(
-                "status" => $status[$ass_id]
+                "status" => ($status[$ass_id] ?? "")
             );
             if (isset($marks[$ass_id])) {
                 $data[$ass_id][$member_id]["mark"] = $marks[$ass_id];

@@ -112,6 +112,7 @@ class ilSoapClient
             $this->log->debug('Using connection timeout: ' . $this->getTimeout());
             $this->log->debug('Using response timeout: ' . $this->getResponseTimeout());
 
+            if (!class_exists('SoapClient')) return false;
             $this->setSocketTimeout(true);
             $this->client = new SoapClient(
                 $this->uri,
@@ -129,7 +130,7 @@ class ilSoapClient
                 )
             );
             return true;
-        } catch (SoapFault $ex) {
+        } catch (Exception $ex) {
             $this->log->warning('Soap init failed with message: ' . $ex->getMessage());
             $this->resetSocketTimeout();
             return false;

@@ -91,17 +91,20 @@ class ilSoapClient
             $this->log->debug('Using connection timeout: ' . $this->getTimeout());
             $this->log->debug('Using response timeout: ' . $this->getResponseTimeout());
 
-            $this->setSocketTimeout(true);
-            $this->client = new SoapClient(
-                $this->uri,
-                array(
-                    'exceptions' => true,
-                    'trace' => 1,
-                    'connection_timeout' => $this->getTimeout()
-                )
-            );
-            return true;
-        } catch (SoapFault $ex) {
+            if(class_exists('SoapClient')){
+                $this->setSocketTimeout(true);
+                $this->client = new SoapClient(
+                    $this->uri,
+                    array(
+                        'exceptions' => true,
+                        'trace' => 1,
+                        'connection_timeout' => (int) $this->getTimeout()
+                    )
+                );
+                return true;
+            }
+            return false;
+        } catch (Exception $ex) {
             $this->log->warning('Soap init failed with message: ' . $ex->getMessage());
             $this->resetSocketTimeout();
             return false;

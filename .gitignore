@@ -44,7 +44,8 @@
 
 # Directories
 /data
-/Customizing/global
+/Customizing/global/*
+!/Customizing/global/skin
 /Customizing/clients
 virtual-data
 /libs/composer/vendor

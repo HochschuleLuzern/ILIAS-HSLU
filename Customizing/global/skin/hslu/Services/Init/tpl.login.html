@@ -1,0 +1,72 @@
+<!-- BEGIN login_information -->
+<div class="small">{TXT_LOGIN_INFORMATION}</div>
+<!-- END login_information -->
+
+<div>
+	<!-- BEGIN login_page_editor -->
+	{LPE}
+	<!-- END login_page_editor -->
+</div>
+<div class="ilStartupSection">
+	<!-- BEGIN shib_login_form -->
+	<p>
+		{SHIB_LOGIN_FORM}
+	</p>
+	<!-- END shib_login_form -->
+	<!-- BEGIN saml_login -->
+	{SAML_LOGIN_FORM}
+	<!-- END saml_login -->
+	<!-- BEGIN cas_login -->
+	<p>
+		{CAS_LOGIN_FORM}
+	</p>
+	<!-- END cas_login -->
+	<!-- BEGIN oidc_login -->
+	{OPEN_ID_CONNECT_LOGIN_FORM}
+	<!-- END oidc_login -->
+	<!-- BEGIN ilias_login -->
+	{LOGIN_FORM}
+	<!-- END ilias_login -->
+	<!-- BEGIN reg_links -->
+	<p class="ilStartupSection">
+		{REG_PWD_CLIENT_LINKS}
+	</p>
+	<!-- END reg_links -->
+	<!-- BEGIN agreement -->
+	<p>
+		{USER_AGREEMENT}
+	</p>
+	<!-- END agreement -->
+</div>
+<script>
+<!--
+
+// Clear "campus\" and "campus/" at the beginning of the username
+function correctIliasLogin()
+{
+	var username_input = document.getElementById("username");
+
+	if(username_input.value.toLowerCase().substr(0, 7) == 'campus\\'
+		|| username_input.value.toLowerCase().substr(0, 7) == 'campus/') {
+		username_input.value = username_input.value.substr(7, 100);
+	}
+}
+
+// Replacement for jquery "$(document).ready(function() { .. }"
+window.onload = () => {
+	// Add method to clear the additional prefixes "campus\" and "campus/"
+	var submit_btn = document.querySelector("input[name='cmd[doStandardAuthentication]']");
+	submit_btn.setAttribute("onclick", "correctIliasLogin()");
+
+	// Select input field on page load (either username or password field)
+	var username_input = document.getElementById("username");
+	if(username_input.value)
+	{
+		document.getElementById("password").focus();
+	} else {
+		username_input.focus();
+	}
+};
+
+//-->
+</script>

@@ -1,0 +1,202 @@
+// # ITCSS structure
+// Try to apply changes by only changing the variables in the settings
+@use "./010-settings" as globals;
+
+// Import Custom Sass Files here
+@use  "hslu-variables";
+
+// Default Skin is loaded with the custom setting being applied.
+@use "../../../../../templates/default/delos" with (
+// ## Begin Replacement Variables $il-main-border-color: globals.$il-main-border-color,
+$il-main-border-dark-color: globals.$il-main-border-dark-color,
+$il-main-border: globals.$il-main-border,
+$il-border-radius-base: globals.$il-border-radius-base,
+$il-border-radius-large: globals.$il-border-radius-large,
+$il-border-radius-small: globals.$il-border-radius-small,
+$il-border-radius-secondary-base: globals.$il-border-radius-secondary-base,
+$il-border-radius-secondary-large: globals.$il-border-radius-secondary-large,
+$il-border-radius-secondary-small: globals.$il-border-radius-secondary-small,
+$il-button-font-size: globals.$il-button-font-size,
+$il-button-font-weight: globals.$il-button-font-weight,
+$il-btn-standard-color: globals.$il-btn-standard-color,
+$il-btn-standard-bg: globals.$il-btn-standard-bg,
+$il-btn-standard-border: globals.$il-btn-standard-border,
+$il-btn-primary-color: globals.$il-btn-primary-color,
+$il-btn-primary-bg: globals.$il-btn-primary-bg,
+$il-btn-primary-border: globals.$il-btn-primary-border,
+$il-engaged-btn-color: globals.$il-engaged-btn-color,
+$il-engaged-btn-bg: globals.$il-engaged-btn-bg,
+$il-btn-ctrl-color: globals.$il-btn-ctrl-color,
+$il-btn-ctrl-bg: globals.$il-btn-ctrl-bg,
+$il-btn-ctrl-border: globals.$il-btn-ctrl-border,
+$il-btn-ctrl-engaged-border: globals.$il-btn-ctrl-engaged-border,
+$il-btn-ctrl-outer-height: globals.$il-btn-ctrl-outer-height,
+$il-btn-ctrl-inner-btn-height: globals.$il-btn-ctrl-inner-btn-height,
+$il-disabled-btn-color: globals.$il-disabled-btn-color,
+$il-disabled-btn-bg: globals.$il-disabled-btn-bg,
+$il-disabled-btn-border: globals.$il-disabled-btn-border,
+$il-btn-tag-bg: globals.$il-btn-tag-bg,
+$il-btn-tag-bg-highlighted: globals.$il-btn-tag-bg-highlighted,
+$il-bulky-text-color: globals.$il-bulky-text-color,
+$il-bulky-bg-color: globals.$il-bulky-bg-color,
+$il-bulky-label-size: globals.$il-bulky-label-size,
+$il-bulky-border-color: globals.$il-bulky-border-color,
+$il-bulky-bg-color-engaged: globals.$il-bulky-bg-color-engaged,
+$il-caret-width-base: globals.$il-caret-width-base,
+$il-caret-width-large: globals.$il-caret-width-large,
+$il-btn-border-radius-base: globals.$il-btn-border-radius-base,
+$il-btn-border-radius-large: globals.$il-btn-border-radius-large,
+$il-btn-border-radius-small: globals.$il-btn-border-radius-small,
+$il-main-color: globals.$il-main-color,
+$il-secondary-color: globals.$il-secondary-color,
+$il-success-color: globals.$il-success-color,
+$il-info-color: globals.$il-info-color,
+$il-warning-color: globals.$il-warning-color,
+$il-danger-color: globals.$il-danger-color,
+$il-neutral-color: globals.$il-neutral-color,
+$il-text-muted: globals.$il-text-muted,
+$il-neutral-light-color: globals.$il-neutral-light-color,
+$il-main-bg: globals.$il-main-bg,
+$il-page-bg: globals.$il-page-bg,
+$il-main-dark-bg: globals.$il-main-dark-bg,
+$il-main-darker-bg: globals.$il-main-darker-bg,
+$il-highlight-bg: globals.$il-highlight-bg,
+$il-text-color: globals.$il-text-color,
+$il-headings-color: globals.$il-headings-color,
+$il-text-hover-color: globals.$il-text-hover-color,
+$il-text-light-color: globals.$il-text-light-color,
+$il-text-color-invert: globals.$il-text-color-invert,
+$il-link-color: globals.$il-link-color,
+$il-link-hover-color: globals.$il-link-hover-color,
+$il-focus-color: globals.$il-focus-color,
+$il-focus-protection-color: globals.$il-focus-protection-color,
+$il-alert-success-bg: globals.$il-alert-success-bg,
+$il-alert-success-border: globals.$il-alert-success-border,
+$il-alert-success-text: globals.$il-alert-success-text,
+$il-alert-info-bg: globals.$il-alert-info-bg,
+$il-alert-info-border: globals.$il-alert-info-border,
+$il-alert-info-text: globals.$il-alert-info-text,
+$il-alert-warning-bg: globals.$il-alert-warning-bg,
+$il-alert-warning-border: globals.$il-alert-warning-border,
+$il-alert-warning-text: globals.$il-alert-warning-text,
+$il-alert-danger-bg: globals.$il-alert-danger-bg,
+$il-alert-danger-border: globals.$il-alert-danger-border,
+$il-alert-danger-text: globals.$il-alert-danger-text,
+$il-extended-color-1: globals.$il-extended-color-1,
+$il-extended-color-2: globals.$il-extended-color-2,
+$il-extended-color-3: globals.$il-extended-color-3,
+$il-extended-color-4: globals.$il-extended-color-4,
+$il-extended-color-5: globals.$il-extended-color-5,
+$il-extended-color-6: globals.$il-extended-color-6,
+$il-extended-color-7: globals.$il-extended-color-7,
+$il-extended-color-8: globals.$il-extended-color-8,
+$il-extended-color-9: globals.$il-extended-color-9,
+$il-avatar-letter-color-variants: globals.$il-avatar-letter-color-variants,
+$il-footer-link-hover-color: globals.$il-footer-link-hover-color,
+$il-footer-link-color: globals.$il-footer-link-color,
+$il-footer-bg-color: globals.$il-footer-bg-color,
+$il-footer-color: globals.$il-footer-color,
+$il-footer-height: globals.$il-footer-height,
+$il-standard-page-logo-height: globals.$il-standard-page-logo-height,
+$il-standard-page-logo-width: globals.$il-standard-page-logo-width,
+$il-standard-page-header-height: globals.$il-standard-page-header-height,
+$il-standard-page-header-bg-color: globals.$il-standard-page-header-bg-color,
+$il-standard-page-header-page-title-color: globals.$il-standard-page-header-page-title-color,
+$il-grid-float-breakpoint-max: globals.$il-grid-float-breakpoint-max,
+$il-grid-float-breakpoint: globals.$il-grid-float-breakpoint,
+$il-toolbar-height: globals.$il-toolbar-height,
+$il-mainbar-btn-color: globals.$il-mainbar-btn-color,
+$il-mainbar-btn-bg-color: globals.$il-mainbar-btn-bg-color,
+$il-mainbar-btn-color-hover: globals.$il-mainbar-btn-color-hover,
+$il-mainbar-btn-bg-color-hover: globals.$il-mainbar-btn-bg-color-hover,
+$il-mainbar-btn-color-engaged: globals.$il-mainbar-btn-color-engaged,
+$il-mainbar-btn-bg-color-engaged: globals.$il-mainbar-btn-bg-color-engaged,
+$il-mainbar-btn-icon-filter: globals.$il-mainbar-btn-icon-filter,
+$il-mainbar-btn-hover-icon-filter: globals.$il-mainbar-btn-hover-icon-filter,
+$il-mainbar-btn-engaged-icon-filter: globals.$il-mainbar-btn-engaged-icon-filter,
+$il-background-images-path: globals.$il-background-images-path,
+$il-icon-font-path: globals.$il-icon-font-path,
+$il-shadow--large: globals.$il-shadow--large,
+$il-web-font-path: globals.$il-web-font-path,
+$il-font-family-sans-serif: globals.$il-font-family-sans-serif,
+$il-headings-font-family: globals.$il-headings-font-family,
+$il-font-size-xsmall: globals.$il-font-size-xsmall,
+$il-font-size-small: globals.$il-font-size-small,
+$il-font-size-base: globals.$il-font-size-base,
+$il-font-size-large: globals.$il-font-size-large,
+$il-font-size-xlarge: globals.$il-font-size-xlarge,
+$il-font-size-xxlarge: globals.$il-font-size-xxlarge,
+$il-font-size-h1: globals.$il-font-size-h1,
+$il-line-height-base: globals.$il-line-height-base,
+$il-line-height-computed: globals.$il-line-height-computed,
+$il-small-line-height-computed: globals.$il-small-line-height-computed,
+$il-line-height-large: globals.$il-line-height-large,
+$il-headings-line-height: globals.$il-headings-line-height,
+$il-line-height-small: globals.$il-line-height-small,
+$il-font-weight-light: globals.$il-font-weight-light,
+$il-font-weight-base: globals.$il-font-weight-base,
+$il-font-weight-bold: globals.$il-font-weight-bold,
+$il-font-weight-xbold: globals.$il-font-weight-xbold,
+$il-headings-font-weight: globals.$il-headings-font-weight,
+$il-link-decoration: globals.$il-link-decoration,
+$il-link-hover-decoration: globals.$il-link-hover-decoration,
+ // ## End Replacement Variables
+);
+// Apply/load other styling changes here.
+
+/* Use HSLU font */
+@font-face {
+  font-family: 'FS Albert Web Regular';
+  src:	url('#{hslu-variables.$web-font-path}FSAlbert/FSAlbertWeb-Regular.woff2') format('woff2'),
+  url('#{hslu-variables.$web-font-path}FSAlbert/FSAlbertWeb-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Set path for bootstrap fonts */
+/*
+@font-face {
+  font-family: "Glyphicons Halflings";
+  src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot");
+  src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+}
+ */
+table.calmini td.calminitoday {
+  background-color: globals.$il-main-color;
+}
+
+button.copg-add.dropdown-toggle.btn .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:focus .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:hover .glyphicon-plus-sign,
+#copg-editor-help .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:focus .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:hover .il-copg-add-text,
+#copg-editor-help .il-copg-add-text{
+  color: black;
+}
+
+button.copg-add.dropdown-toggle.btn:hover {
+  background-color: darken(globals.$il-btn-standard-bg, 15%);
+  color: globals.$il-text-light-color;
+}
+.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
+  filter: invert(100%);
+}
+.il-maincontrols-slate .btn-bulky .icon, .il-maincontrols-slate .link-bulky .icon, .il-drilldown .btn-bulky .icon, .il-drilldown .link-bulky .icon {
+  filter: none;
+}
+
+// Sets the SVG-Images in the main-menu to white
+// Only used, if color-changed SVGs are in use
+/*.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
+	filter: grayscale(100) invert(100%);
+}
+
+.il-mainbar-tools-button .btn-bulky .icon {
+	filter: grayscale(100) invert(100%);
+}
+
+.il-mainbar-tool-trigger-item .btn-bulky img.icon {
+	filter: grayscale(100) invert(100%);
+}*/

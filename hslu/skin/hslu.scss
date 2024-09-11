@@ -1,0 +1,107 @@
+@use 'sass:color';
+
+// HSLU Akzentfarben:
+//
+// Blau #77C5D8
+// hell1 #DAEEF3
+// hell2 #BAE0EA
+// dunkel1 #449DC2
+// dunkel2 #206A8A
+//
+// Grün #ADCA2A
+// hell1 #E9F0C1
+// hell2 #D6E28C
+// dunkel1 #7D9E38
+// dunkel2 #386939
+//
+// Magenta #EE6A87
+// hell1 #FBD0D3
+// hell2 #F6A9B2
+// dunkel1 #BB365D
+// dunkel2 #9F304D
+//
+// Gelb #FCC300
+// hell1 #FFF0BE
+// hell2 #FFE086
+// dunkel1 #F7A315
+// dunkel2 #D47F1C
+//
+// Grau #F0F0F0
+
+$hslu-primary:    #206A8A; // HSLU Blau dunkel2
+$hslu-secondary:  #9F304D; // HSLU Magenta dunkel2
+$hslu-success:    darken($hslu-primary, 15%);
+
+$delos-main-color:     #4c6586;
+$delos-success-color:  #6ea03c;
+$delos-info-color:     #31708f;
+$delos-warning-color:  #B54F00;
+
+@use "../../templates/default/delos" with (
+  $il-main-color:           $hslu-primary,
+  $il-success-color:        $hslu-success,
+  $il-info-color:           #BAE0EA, // HSLU Blau hell2
+  $il-warning-color:        $hslu-secondary,
+  $il-focus-color:          #449DC2, // HSLU Blau dunkel1
+  $il-link-color:           black,
+  $il-link-hover-color:     $hslu-success,
+  $il-btn-primary-bg:       $hslu-primary,
+  $il-btn-primary-color:    white,
+  $il-btn-primary-border:   $hslu-primary,
+  $il-btn-standard-bg:      white,
+  $il-btn-standard-color:   black,
+  $il-btn-standard-border:  $hslu-primary,
+  $il-engaged-btn-bg:       #E0E0E0,
+
+  // These are needed because the original setup did import order incorrectly,
+  // and thus some of the overrides were not fully applied.
+  // So we keep these for now, for parity with the previous setup,
+  // but they should be removed in the future together with the delos variables above.
+  $il-highlight-bg:             lighten($delos-main-color, 50%),
+  $il-btn-ctrl-color:           $delos-main-color,
+  $il-btn-ctrl-engaged-border:  $delos-main-color,
+  $il-footer-link-color:        $delos-main-color,
+  $il-footer-link-hover-color:  darken($delos-main-color, 10%),
+  $il-alert-success-bg:         color.scale($delos-success-color, $lightness: 86%),
+  $il-alert-success-border:     color.scale($delos-success-color, $lightness: 86%),
+  $il-alert-info-bg:            color.scale($delos-info-color, $lightness: 86%),
+  $il-alert-info-border:        color.scale($delos-info-color, $lightness: 86%),
+  $il-alert-warning-bg:         color.scale($delos-warning-color, $lightness: 86%),
+  $il-alert-warning-border:     color.scale($delos-warning-color, $lightness: 86%),
+  $il-btn-tag-bg-highlighted:   $delos-warning-color,
+);
+
+// HSLU font:
+@font-face {
+  font-family: 'FS Albert Web Regular';
+  src:	url('fonts/FSAlbert/FSAlbertWeb-Regular.woff2') format('woff2'),
+    url('fonts/FSAlbert/FSAlbertWeb-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+table.calmini td.calminitoday {
+  background-color: $hslu-primary;
+}
+
+button.copg-add.dropdown-toggle.btn .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:focus .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:hover .glyphicon-plus-sign,
+#copg-editor-help .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:focus .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:hover .il-copg-add-text,
+#copg-editor-help .il-copg-add-text {
+  color: black;
+}
+
+button.copg-add.dropdown-toggle.btn:hover {
+  background-color: darken(white, 15%);
+  color: lighten(#161616, 35%);
+}
+.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
+  filter: invert(100%);
+}
+.il-maincontrols-slate .btn-bulky .icon, .il-maincontrols-slate .link-bulky .icon, .il-drilldown .btn-bulky .icon, .il-drilldown .link-bulky .icon {
+  filter: none;
+}

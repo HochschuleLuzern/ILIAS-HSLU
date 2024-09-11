@@ -856,7 +856,7 @@ class ilMail
             $parsed_usr_ids[] = $address_type->resolve();
         }
 
-        return array_unique(array_merge(...$parsed_usr_ids));
+        return array_unique(array_filter(array_merge(...$parsed_usr_ids)));
     }
 
     /**

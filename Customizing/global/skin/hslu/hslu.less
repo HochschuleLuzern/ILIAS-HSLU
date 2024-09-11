@@ -1,0 +1,59 @@
+@import "../../../../templates/default/delos";
+// Import Custom Less Files here
+@import "hslu-variables.less";
+
+/* Use HSLU font */
+@font-face {
+	font-family: 'FS Albert Web Regular';
+	src:	url('@{web-font-path}FSAlbert/FSAlbertWeb-Regular.woff2') format('woff2'),
+			url('@{web-font-path}FSAlbert/FSAlbertWeb-Regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+
+/* Set path for bootstrap fonts */
+@font-face {
+	font-family: "Glyphicons Halflings";
+	src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot");
+	src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+}
+
+table.calmini td.calminitoday {
+	background-color: @il-main-color;
+}
+
+button.copg-add.dropdown-toggle.btn .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:focus .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn:hover .glyphicon-plus-sign,
+#copg-editor-help .glyphicon-plus-sign,
+button.copg-add.dropdown-toggle.btn .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:focus .il-copg-add-text,
+button.copg-add.dropdown-toggle.btn:hover .il-copg-add-text,
+#copg-editor-help .il-copg-add-text{
+	color: black;
+}
+
+button.copg-add.dropdown-toggle.btn:hover {
+	background-color: darken(@il-btn-standard-bg, 15%);
+	color: @il-text-light-color;
+}
+.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
+	filter: invert(100%);
+}
+.il-maincontrols-slate .btn-bulky .icon, .il-maincontrols-slate .link-bulky .icon, .il-drilldown .btn-bulky .icon, .il-drilldown .link-bulky .icon {
+	filter: none;
+}
+
+// Sets the SVG-Images in the main-menu to white
+// Only used, if color-changed SVGs are in use
+/*.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
+	filter: grayscale(100) invert(100%);
+}
+
+.il-mainbar-tools-button .btn-bulky .icon {
+	filter: grayscale(100) invert(100%);
+}
+
+.il-mainbar-tool-trigger-item .btn-bulky img.icon {
+	filter: grayscale(100) invert(100%);
+}*/

@@ -1,0 +1,84 @@
+//== Colors
+//
+//##
+
+/*
+HSLU Akzentfarben:
+
+Blau #77C5D8
+hell1 #DAEEF3
+hell2 #BAE0EA
+dunkel1 #449DC2
+dunkel2 #206A8A
+
+Grün #ADCA2A
+hell1 #E9F0C1
+hell2 #D6E28C
+dunkel1 #7D9E38
+dunkel2 #386939
+
+Magenta #EE6A87
+hell1 #FBD0D3
+hell2 #F6A9B2
+dunkel1 #BB365D
+dunkel2 #9F304D
+
+Gelb #FCC300
+hell1 #FFF0BE
+hell2 #FFE086
+dunkel1 #F7A315
+dunkel2 #D47F1C
+
+Grau #F0F0F0
+ */
+
+// Brand colors after change
+@brand-primary:		#206A8A; // -> HSLU Blau, dunkel 2
+@brand-secondary:		#9F304D; // -> HSLU Magenta, dunkel 2
+@brand-success:		darken(@il-main-color, 15%);
+@brand-info:		#BAE0EA;
+@brand-warning:		@brand-secondary;
+@brand-danger:		#690036;
+
+//** For Standard Buttons, Main color used in various places, used to be @brand-primary
+@il-main-color: @brand-primary;
+//** For Primary Buttons, used to point to interactions with a special importance, used to be @brand-secondary
+// @il-secondary-color: @brand-secondary;
+//** Used to indicate some success, used to be @brand-success
+@il-success-color: @brand-success;
+//** Used to indicate some success, used to be @brand-info
+@il-info-color: @brand-info;
+//** Used to indicate some warning or to draw special focus to some element, used to be @brand-warning
+@il-warning-color: @brand-warning;
+//** Used to indicate some warning or to draw special focus to some element, used to be @brand-danger
+//@il-danger-color: @brand-danger;
+
+
+/** if left unchanged, you have to copy delos fonts folder to your skin folder.
+* To use the delos fonts in your skin,
+* please change this value (in custom less data or variables.less of your custom skin) to "../../../../templates/default/fonts/"
+*/
+@web-font-path: "fonts/";
+
+// Shadow for panel-boxes in repository, calender etc.
+@il-panel-shadow: 0 3px 3px rgba(0,0,0,0.10), 0 6px 15px rgba(0,0,0,0.12);
+
+// Used for accessibility border when navigating with the tab key
+@il-focus-color: #449DC2;
+
+// Color links
+@il-link-color: black;
+@il-link-hover-color: darken(@il-main-color, 15%);
+
+// Color primary button
+@il-btn-primary-bg: @il-main-color;
+@il-btn-primary-color: white;
+@il-btn-primary-border: @il-main-color;
+
+// Color standard button
+@il-btn-standard-bg: white;
+@il-btn-standard-color: black;
+@il-btn-standard-border: @il-main-color;
+
+// Used for view control to differentiate to the white standard button (used for example in ILIAS Page Editor)
+@il-engaged-btn-bg: #e0e0e0;

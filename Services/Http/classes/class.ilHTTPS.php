@@ -87,23 +87,29 @@ class ilHTTPS
      */
     public function isDetected(): bool
     {
-        if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on") {
-            return true;
+        $isDetected = false;
+
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            $isDetected = true;
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $isDetected = true;
         }
 
-        if ($this->automatic_detection) {
-            $header_name = "HTTP_" . str_replace("-", "_", strtoupper($this->header_name));
-            /* echo $header_name;
-             echo $_SERVER[$header_name];*/
-            if (isset($_SERVER[$header_name])) {
-                if (strcasecmp($_SERVER[$header_name], $this->header_value) === 0) {
-                    $_SERVER["HTTPS"] = "on";
-                    return true;
+        if (!$isDetected) {
+            if ($this->automatic_detection) {
+                $header_name = "HTTP_" . str_replace("-", "_", strtoupper($this->header_name));
+                /* echo $header_name;
+                echo $_SERVER[$header_name];*/
+                if (isset($_SERVER[$header_name])) {
+                    if (strcasecmp($_SERVER[$header_name], $this->header_value) == 0) {
+                        $_SERVER["HTTPS"] = "on";
+                        $isDetected = true;
+                    }
                 }
             }
         }
-
-        return false;
+        return $isDetected;
     }
 
     private function readProtectedClasses(): void

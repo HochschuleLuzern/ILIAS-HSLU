@@ -91,6 +91,17 @@ class ilHTTPS
             return true;
         }
 
+        // BEGIN PATCH HSLU
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            $_SERVER['HTTPS'] = 'on';
+            return true;
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') {
+            $_SERVER['HTTPS'] = 'on';
+            return true;
+        }
+        // END PATCH HSLU
+
         if ($this->automatic_detection) {
             $header_name = "HTTP_" . str_replace("-", "_", strtoupper($this->header_name));
             /* echo $header_name;

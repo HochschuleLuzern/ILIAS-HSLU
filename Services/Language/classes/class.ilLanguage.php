@@ -413,6 +413,7 @@ class ilLanguage
             $language = $language_detection->detect();
 
             ilSession::set("lang", $language);
+            $ilUser->setPref("language", $language);
         }
 
         $post_change_lang_to = [];

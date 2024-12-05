@@ -411,6 +411,7 @@ class ilLanguage implements \ILIAS\Language\Language
             $language = $language_detection->detect();
 
             ilSession::set("lang", $language);
+            $ilUser->setPref("language", $language);
         }
 
         $post_change_lang_to = [];

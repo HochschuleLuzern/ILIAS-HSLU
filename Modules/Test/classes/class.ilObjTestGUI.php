@@ -2423,8 +2423,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             $counter++;
             $max_points += $question_gui->object->getMaximumPoints();
         }
-
-        $template->setVariable("TITLE", strip_tags(htmlspecialchars($this->object->getTitle()), ilObjectGUI::ALLOWED_TAGS_IN_TITLE_AND_DESCRIPTION));
+        $template->setVariable("TITLE", strip_tags($this->object->getTitle(), ilObjectGUI::ALLOWED_TAGS_IN_TITLE_AND_DESCRIPTION));
         $template->setVariable("PRINT_TEST", ilLegacyFormElementsUtil::prepareFormOutput($this->lng->txt("tst_print")));
         $template->setVariable("TXT_PRINT_DATE", ilLegacyFormElementsUtil::prepareFormOutput($this->lng->txt("date")));
         $template->setVariable(

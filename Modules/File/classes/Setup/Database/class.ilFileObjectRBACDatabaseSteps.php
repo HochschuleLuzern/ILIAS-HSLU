@@ -49,16 +49,33 @@ class ilFileObjectRBACDatabaseSteps implements ilDatabaseUpdateSteps
     {
         $edit_file_ops_id = $this->getOpsID($this->database, self::EDIT_FILE);
 
-        $q = "SELECT
-                rbac_pa.rol_id,
-                rbac_pa.ops_id,
-                rbac_pa.ref_id
-            FROM rbac_pa
-            JOIN object_reference ON rbac_pa.ref_id = object_reference.ref_id
-            JOIN object_data ON object_reference.obj_id = object_data.obj_id
-            WHERE object_data.type = 'file';
+        /* Begin PATCH HSLU: ilFileObjectRBACDatabaseSteps - update DB directly with new id because HSLU has 12 million recs to process */
+
+/*$q = "SELECT
+rbac_pa.rol_id,
+rbac_pa.ops_id,
+rbac_pa.ref_id
+FROM rbac_pa
+JOIN object_reference ON rbac_pa.ref_id = object_reference.ref_id
+JOIN object_data ON object_reference.obj_id = object_data.obj_id
+WHERE object_data.type = 'file';
+";
+*/
+
+        $edit_file_ops_id_str = strval($edit_file_ops_id);
+
+        $q = "UPDATE rbac_pa
+                JOIN object_reference ON rbac_pa.ref_id = object_reference.ref_id
+                JOIN object_data ON object_reference.obj_id = object_data.obj_id
+                SET rbac_pa.ops_id = REPLACE(REGEXP_REPLACE(rbac_pa.ops_id, 'a:[0-9]+:{', CONCAT('a:',CEIL(ROUND((LENGTH(ops_id) - LENGTH(REPLACE ( ops_id, ';', ''))) / LENGTH(';')) / 2)+1, ':{')),';}', concat(';i:',CEIL(ROUND((LENGTH(ops_id) - LENGTH(REPLACE ( ops_id, ';', ''))) / LENGTH(';')) / 2),';i:" . $edit_file_ops_id_str . ";}'))
+                WHERE object_data.type = 'file'
+                and rbac_pa.ops_id LIKE '%i:4;%'
+                and rbac_pa.ops_id NOT LIKE '%i:" . $edit_file_ops_id_str . "%';
         ";
 
+        $res = $this->database->manipulate($q);
+
+        /*
         $res = $this->database->query($q);
         while ($row = $this->database->fetchAssoc($res)) {
             $ops_ids = unserialize($row['ops_id'], ['allowed_classes' => false]);
@@ -78,6 +95,9 @@ class ilFileObjectRBACDatabaseSteps implements ilDatabaseUpdateSteps
                 );
             }
         }
+        */
+        /* End PATCH HSLU: ilFileObjectRBACDatabaseSteps - update DB directly with new id because HSLU has 12 million recs to process */
+
     }
 
     /**

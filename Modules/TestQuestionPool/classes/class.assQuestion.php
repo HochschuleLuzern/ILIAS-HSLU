@@ -1941,7 +1941,8 @@ abstract class assQuestion
         float $maxpoints,
         int $pass,
         bool $manualscoring,
-        bool $obligationsEnabled
+        bool $obligationsEnabled,
+        ?int $test_id = null
     ): bool {
         global $DIC;
         $ilDB = $DIC['ilDB'];
@@ -1991,8 +1992,8 @@ abstract class assQuestion
             }
 
             if (self::isForcePassResultUpdateEnabled() || $old_points != $points || $rowsnum == 0) {
-                $test_id = ilObjTest::_lookupTestObjIdForQuestionId($question_id);
-                if ($test_id === null) {
+                $test_id = $test_id ? (int) ilObjTest::_getObjectIDFromTestID($test_id) : ilObjTest::_lookupTestObjIdForQuestionId($question_id);
+                if ($test_id === null || $test_id == 0) {
                     return false;
                 }
                 $test = new ilObjTest(

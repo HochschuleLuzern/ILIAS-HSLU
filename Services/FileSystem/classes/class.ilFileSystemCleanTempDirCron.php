@@ -98,6 +98,37 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
         // only delete files and folders older than ten days to prevent issues with ongoing processes (e.g. zipping a folder)
         $date = "until 10 day ago";
 
+        // the folders are sorted based on their path length to ensure that nested folders are deleted first
+        // thereby preventing any issues due to deletion attempts on no longer existing folders.
+        $folders = $this->filesystem->finder()->in([""]);
+        $folders = $folders->directories();
+        $folders = $folders->date($date);
+        $folders = $folders->sort(fn (
+            Metadata $a,
+            Metadata $b
+        ): int => strlen($a->getPath()) - strlen($b->getPath()));
+        $folders = $folders->reverseSorting();
+        $folders = $folders->getIterator();
+
+        // chmod to reset permssions on folders preventing deletion of files
+        $folders->rewind();
+        while ($folders->valid()) {
+            try {
+                $folder_match = $folders->current();
+                $path = $folder_match->getPath();
+                if ($folder_match->isDir()) {
+                    @chmod($path, 0770);
+                }
+                $folders->next();
+            } catch (Throwable $t) {
+                $this->logger->error(
+                    "Cron Job \"Clean temp directory\" could not chmod " . $path
+                    . "due to the following exception: " . $t->getMessage()
+                );
+                $folders->next();
+            }
+        }
+
         // files are deleted before folders to prevent issues that would arise when trying to delete a (no longer existing) file in a deleted folder.
         $files = $this->filesystem->finder()->in([""]);
         $files = $files->files();
@@ -122,18 +153,6 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
                 $files->next();
             }
         }
-
-        // the folders are sorted based on their path length to ensure that nested folders are deleted first
-        // thereby preventing any issues due to deletion attempts on no longer existing folders.
-        $folders = $this->filesystem->finder()->in([""]);
-        $folders = $folders->directories();
-        $folders = $folders->date($date);
-        $folders = $folders->sort(fn (
-            Metadata $a,
-            Metadata $b
-        ): int => strlen($a->getPath()) - strlen($b->getPath()));
-        $folders = $folders->reverseSorting();
-        $folders = $folders->getIterator();
 
         $deleted_folders = [];
 

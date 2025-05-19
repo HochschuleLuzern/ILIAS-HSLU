@@ -94,6 +94,7 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
 
     public function run(): ilCronJobResult
     {
+        $tempFolder = CLIENT_DATA_DIR . "/temp/";
         $this->initDependencies();
         // only delete files and folders older than ten days to prevent issues with ongoing processes (e.g. zipping a folder)
         $date = "until 10 day ago";
@@ -117,7 +118,7 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
                 $folder_match = $folders->current();
                 $path = $folder_match->getPath();
                 if ($folder_match->isDir()) {
-                    @chmod($path, 0770);
+                    @chmod($tempFolder . $path, 0770);
                 }
                 $folders->next();
             } catch (Throwable $t) {

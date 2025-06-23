@@ -794,7 +794,10 @@ class ilTrMatrixTableGUI extends ilLPTableBaseGUI
                     $a_csv->addColumn($val);
 
                     if (isset($this->perc_map) && ($this->perc_map[$obj_id] ?? false)) {
-                        $perc = (int) $a_set[$c . "_perc"];
+                        if (isset($a_set[$c . "_perc"]))
+                            $perc = (int) $a_set[$c . "_perc"];
+                        else
+                            $perc = null;
                         if (!$perc) {
                             $perc = null;
                         }

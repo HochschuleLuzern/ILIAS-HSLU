@@ -2739,7 +2739,6 @@
 				<xsl:comment>Comment to have separate iframe ending tag</xsl:comment>
 			</iframe>
 		</xsl:when>
->>>>>>> 7d50da2ed9b (PATCH HSLU Add Support for Vimeo in Page Editor)
 
 		<!-- mp3 (mediaelement.js) -->
 		<xsl:when test = "$type='audio/mpeg' and (substring-before($data,'.mp3') != '' or substring-before($data,'.MP3') != '')">

@@ -85,9 +85,9 @@ final class LocalConfig
     public function __construct(
         private string $rootPath,
         private int $fileAccessPublic = 0744,
-        private int $fileAccessPrivate = 0700,
+        private int $fileAccessPrivate = 0744,
         private int $directoryAccessPublic = 0755,
-        private int $directoryAccessPrivate = 0700,
+        private int $directoryAccessPrivate = 0755,
         private int $lockMode = LOCK_EX,
         private int $linkBehaviour = self::SKIP_LINKS
     ) {

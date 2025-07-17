@@ -30,6 +30,8 @@ use ILIAS\UI\Renderer as UIRenderer;
 use ILIAS\HTTP\Services as HTTPServices;
 use ILIAS\Refinery\Factory as Refinery;
 use ILIAS\Style\Content\Service as ContentStyle;
+use ILIAS\Filesystem\Util\LegacyPathHelper;
+use ILIAS\Filesystem\Filesystem;
 
 /**
  * Class ilTestScreenGUI
@@ -309,6 +311,12 @@ class ilTestScreenGUI
     private function getModalLauncherLink(): Link
     {
         $uri = $this->data_factory->uri($this->http->request()->getUri()->__toString())->withParameter('launcher_id', 'exam_modal');
+        // START TEMP PATCH HSLU
+        // GuzzleHttp ServerRequest getUriFromGlobals() evaluates schema to 'http' if $_SERVER['HTTPS'] not set
+        if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'))   {
+            $uri = $uri->withSchema('https');
+        }
+        // END TEMP PATCH HSLU
         return $this->data_factory->link($this->lng->txt('tst_exam_start'), $uri);
     }
 

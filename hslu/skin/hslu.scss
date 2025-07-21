@@ -105,3 +105,15 @@ button.copg-add.dropdown-toggle.btn:hover {
 .il-maincontrols-slate .btn-bulky .icon, .il-maincontrols-slate .link-bulky .icon, .il-drilldown .btn-bulky .icon, .il-drilldown .link-bulky .icon {
   filter: none;
 }
+
+// Fix for sizing of images in test questions. See: IL-557
+.thumbnail > img, .thumbnail a > img {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.img-responsive, .thumbnail > img, .thumbnail a > img, .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

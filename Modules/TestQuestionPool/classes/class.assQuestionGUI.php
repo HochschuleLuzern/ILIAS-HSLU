@@ -780,7 +780,7 @@ abstract class assQuestionGUI
         $this->ctrl->redirectByClass('ilAssQuestionPreviewGUI', ilAssQuestionPreviewGUI::CMD_SHOW);
     }
 
-    private function saveQuestionToTest(): int
+    protected function saveQuestionToTest(): int
     {
         $originalexists = !is_null($this->object->getOriginalId())
                 && $this->questioninfo->questionExistsInPool($this->object->getOriginalId());

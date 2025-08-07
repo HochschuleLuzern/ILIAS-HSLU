@@ -920,6 +920,10 @@ class ilContainerRenderer
                 }
 
                 $item_data = $this->item_presentation->getRawDataByRefId($ref_id);
+                if (!is_array($item_data)) {
+                    ilLoggerFactory::getRootLogger()->warning("Missing item data for ref_id $ref_id in container rendering");
+                    continue;
+                }
                 $checkbox = \ILIAS\Containter\Content\ItemRenderer::CHECKBOX_NONE;
                 if ($this->container_gui->isActiveAdministrationPanel()) {
                     $checkbox = \ILIAS\Containter\Content\ItemRenderer::CHECKBOX_ADMIN;

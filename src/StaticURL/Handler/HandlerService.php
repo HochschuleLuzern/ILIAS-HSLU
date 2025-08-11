@@ -97,7 +97,12 @@ class HandlerService
             // Perform Redirect
             $uri_path = $response->getURIPath();
             $base_path = $base_uri->getPath();
-            $uri_path = str_replace($base_path, '', $uri_path);
+            // TEMP PACH HSLU: replace only start of uri as base_path can be elsewhere in uri
+            // $uri_path = str_replace($base_path . '/', '/', $uri_path);
+            if (substr($uri_path, 0, strlen($base_path)) == $base_path) {
+                $uri_path = substr($uri_path, strlen($base_path));
+            }
+            // END TEMP PACH HSLU
             $full_uri = $base_uri . '/' . trim((string) $uri_path, '/');
         }
 

@@ -264,7 +264,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
             return;
         }
 
-        if ($this->authSession->isValid()) {
+        if ($this->authSession->isValid() && $this->authSession->getUserId() !== (int) ANONYMOUS_USER_ID) {
             $this->logger->debug('Valid session -> redirect to starting page');
             ilInitialisation::redirectToStartingPage();
             return;

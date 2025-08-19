@@ -212,3 +212,9 @@ button.copg-add.dropdown-toggle.btn:hover {
   max-width: 100%;
   height: auto;
 }
+
+/* fix for: Darstellungsfehler: Hat der Objekteblock keinen Titel, so legen sich die Kontext-Menüs vom Objekteblock und dem ersten Objekt übereinander. See https://hslu-it.atlassian.net/browse/IL-573 */
+.sr-only {
+  color: transparent !important;
+  position: relative !important;
+}

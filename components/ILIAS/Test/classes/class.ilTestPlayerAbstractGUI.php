@@ -29,6 +29,7 @@ use ILIAS\TestQuestionPool\Questions\QuestionPartiallySaveable;
 use ILIAS\Test\Presentation\WorkingTime;
 use ILIAS\UI\Component\Modal\Interruptive as InterruptiveModal;
 use ILIAS\UI\Component\Signal;
+use ILIAS\UI\Implementation\Component\SignalGenerator;
 
 /**
  * @author		Björn Heyser <bheyser@databay.de>
@@ -1873,6 +1874,18 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         exit;
     }
 
+    protected function saveOnQuestionListNavigationCmd(): void
+    {
+        $target_sequence = $this->testrequest->int('targetSequence');
+
+        if ($this->canSaveResult() && !$this->isParticipantsAnswerFixed($this->getCurrentQuestionId())) {
+            $this->saveQuestionSolution();
+        }
+
+        $this->ctrl->setParameter($this, 'sequence', $target_sequence);
+        $this->ctrl->redirect($this, ilTestPlayerCommands::SHOW_QUESTION);
+    }
+
     protected function showSideList($current_sequence_element): void
     {
         $question_summary_data = $this->service->getQuestionSummaryData($this->test_sequence);
@@ -1903,8 +1916,21 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
                 $status = ILIAS\UI\Component\Listing\Workflow\Step::IN_PROGRESS;
             }
 
+            $signal = null;
+            if (!$row['disabled']) {
+                $signal = (new SignalGenerator())->create();
+                $this->tpl->addOnLoadCode(
+                    "$(document).on('{$signal->getId()}', function(event, signalData) {"
+                    . ' const form = document.querySelector("#taForm");'
+                    . ' const formAction = form.action;'
+                    . ' form.action = formAction.replace(/cmd=[^&]*/, "cmd=saveOnQuestionListNavigation&targetSequence=' . $row['sequence'] . '");'
+                    . ' form.submit();'
+                    . '});'
+                );
+            }
+
             $questions[] = $this->ui_factory->listing()->workflow()
-                ->step($title, $description, $action)
+                ->step($title, $description, $signal)
                 ->withStatus($status);
             $active = $row['sequence'] == $current_sequence_element ? $idx : $active;
         }

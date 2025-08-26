@@ -585,7 +585,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
     public function autosaveOnTimeLimitCmd()
     {
         if (!$this->isParticipantsAnswerFixed($this->getCurrentQuestionId())) {
-            $this->saveQuestionSolution(false, true);
+            $this->saveQuestionSolution(true, true);
         }
         $this->ctrl->redirect($this, ilTestPlayerCommands::REDIRECT_ON_TIME_LIMIT);
     }

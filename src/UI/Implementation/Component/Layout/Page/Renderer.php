@@ -115,7 +115,16 @@ class Renderer extends AbstractComponentRenderer
             $component->getMetaData()
         )->toHtml());
 
-        return $tpl->get();
+        // START TEMP PATCH HSLU: Hack to suppress accidental removal of LiveVoting latex variables in braces
+        $output = $tpl->get();
+        global $DIC;
+        $cmdClass = $DIC->ctrl()->getCmdClass();
+        if ($cmdClass !== null && $cmdClass == 'ilobjlivevotinggui') {
+            $output = str_replace("&lbrace;","{",str_replace("&rbrace;","}",$output));
+            $output = str_replace("&amp;lbrace;","{",str_replace("&amp;rbrace;","}",$output));
+        }
+        return $output;
+        // END TEMP PATCH HSLU: Hack to suppress accidental removal of LiveVoting latex variables in braces
     }
 
     protected function convertBreadcrumbsToDropdownLocator(

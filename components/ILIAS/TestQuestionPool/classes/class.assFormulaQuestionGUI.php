@@ -980,9 +980,14 @@ class assFormulaQuestionGUI extends assQuestionGUI
                 }
             }
         }
-
-        // fau: testNav - take question variables always from authorized solution because they are saved with this flag, even if an authorized solution is not saved
-        $solutions = $this->object->getSolutionValues($active_id, $pass, true);
+        // TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+        if ($this->object->getTestPresentationConfig()->isSolutionInitiallyPrefilled()) {
+            $actualPassIndex = ilObjTest::_getPass($active_id);
+        }
+        else {
+            $actualPassIndex = $pass;
+        }
+        $solutions = $this->object->getSolutionValues($active_id, $actualPassIndex, true);
         foreach ($solutions as $idx => $solution_value) {
             if (preg_match('/^(\$v\d+)$/', $solution_value['value1'], $matches)) {
                 $user_solution[$matches[1]] = $solution_value['value2'];
@@ -990,8 +995,9 @@ class assFormulaQuestionGUI extends assQuestionGUI
         }
 
         if ($user_solution === []) {
-            $user_solution = $this->object->getVariableSolutionValuesForPass($active_id, $pass);
+            $user_solution = $this->object->getVariableSolutionValuesForPass($active_id, $actualPassIndex);
         }
+        // END TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
 
         // generate the question output
         $template = new ilTemplate("tpl.il_as_qpl_formulaquestion_output.html", true, true, 'components/ILIAS/TestQuestionPool');

@@ -282,6 +282,8 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
 
     public function saveCurrentSolution(int $active_id, int $pass, $value1, $value2, bool $authorized = true, $tstamp = 0): int
     {
+        // TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+        $value1_saved = false;
         $init_solution_vars = $this->getVariableSolutionValuesForPass($active_id, $pass);
         foreach ($init_solution_vars as $val1 => $val2) {
             $this->db->manipulateF(
@@ -290,8 +292,15 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
                 [$active_id, $this->getId(), $pass, $val1]
             );
             parent::saveCurrentSolution($active_id, $pass, $val1, $val2, $authorized);
+            if($value1 == $val1){
+                $value1_saved = true;
+            }
         }
-        return parent::saveCurrentSolution($active_id, $pass, $value1, $value2, $authorized, $tstamp);
+        if (!$value1_saved){
+            return parent::saveCurrentSolution($active_id, $pass, $value1, $value2, $authorized, $tstamp);
+        }
+        return 1;
+        // END TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
     }
 
     /**
@@ -357,8 +366,8 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
                     }
 
                     $input = '<span style="height: 24px;" class="ilc_qinput_TextInput solutionbox">' . ilLegacyFormElementsUtil::prepareFormOutput(
-                        $value
-                    ) . '</span>';
+                            $value
+                        ) . '</span>';
                 } else {
                     $input = $this->generateResultInputHTML($result, '', false);
                 }
@@ -590,17 +599,17 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
             $ilDB->insert(
                 'il_qpl_qst_fq_var',
                 array(
-                'variable_id' => array('integer', $next_id),
-                'question_fi' => array('integer', $this->getId()),
-                'variable' => array('text', $variable->getVariable()),
-                'range_min' => array('float', ((strlen($variable->getRangeMin())) ? $variable->getRangeMin() : 0.0)),
-                'range_max' => array('float', ((strlen($variable->getRangeMax())) ? $variable->getRangeMax() : 0.0)),
-                'unit_fi' => array('integer', (is_object($variable->getUnit()) ? (int) $variable->getUnit()->getId() : 0)),
-                'varprecision' => array('integer', (int) $variable->getPrecision()),
-                'intprecision' => array('integer', (int) $variable->getIntprecision()),
-                'range_min_txt' => array('text', $variable->getRangeMinTxt()),
-                'range_max_txt' => array('text', $variable->getRangeMaxTxt())
-            )
+                    'variable_id' => array('integer', $next_id),
+                    'question_fi' => array('integer', $this->getId()),
+                    'variable' => array('text', $variable->getVariable()),
+                    'range_min' => array('float', ((strlen($variable->getRangeMin())) ? $variable->getRangeMin() : 0.0)),
+                    'range_max' => array('float', ((strlen($variable->getRangeMax())) ? $variable->getRangeMax() : 0.0)),
+                    'unit_fi' => array('integer', (is_object($variable->getUnit()) ? (int) $variable->getUnit()->getId() : 0)),
+                    'varprecision' => array('integer', (int) $variable->getPrecision()),
+                    'intprecision' => array('integer', (int) $variable->getIntprecision()),
+                    'range_min_txt' => array('text', $variable->getRangeMinTxt()),
+                    'range_max_txt' => array('text', $variable->getRangeMaxTxt())
+                )
             );
         }
         // save results

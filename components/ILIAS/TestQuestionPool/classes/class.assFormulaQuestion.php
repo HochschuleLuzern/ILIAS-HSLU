@@ -317,6 +317,8 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, Ques
 
     public function saveCurrentSolution(int $active_id, int $pass, $value1, $value2, bool $authorized = true, $tstamp = 0): int
     {
+        // TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+        $value1_saved = false;
         $init_solution_vars = $this->resolveVariableSolutionValuesForPass($active_id, $pass);
         foreach ($init_solution_vars as $val1 => $val2) {
             $this->db->manipulateF(
@@ -325,8 +327,15 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, Ques
                 [$active_id, $this->getId(), $pass, $val1]
             );
             parent::saveCurrentSolution($active_id, $pass, $val1, $val2, $authorized);
+            if($value1 == $val1){
+                $value1_saved = true;
+            }
         }
-        return parent::saveCurrentSolution($active_id, $pass, $value1, $value2, $authorized, $tstamp);
+        if (!$value1_saved){
+            return parent::saveCurrentSolution($active_id, $pass, $value1, $value2, $authorized, $tstamp);
+        }
+        return 1;
+        // END TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
     }
 
     /**

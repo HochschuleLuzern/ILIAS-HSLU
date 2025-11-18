@@ -872,7 +872,7 @@ class assFormulaQuestionGUI extends assQuestionGUI
         $feedback = ($show_feedback) ? $this->getGenericFeedbackOutput((int) $active_id, $pass) : "";
         if (strlen($feedback)) {
             $cssClass = (
-                $this->hasCorrectSolution($active_id, $pass) ?
+            $this->hasCorrectSolution($active_id, $pass) ?
                 ilAssQuestionFeedback::CSS_CLASS_FEEDBACK_CORRECT : ilAssQuestionFeedback::CSS_CLASS_FEEDBACK_WRONG
             );
 
@@ -942,7 +942,7 @@ class assFormulaQuestionGUI extends assQuestionGUI
 
     // hey: prevPassSolutions - pass will be always available from now on
     public function getTestOutput($active_id, $pass, $is_postponed = false, $use_post_solutions = false, $show_feedback = false): string
-    // hey.
+        // hey.
     {
         $this->tpl->setOnScreenMessage('info', $this->lng->txt('enter_valid_values'));
         // get the solution of the user for the active pass or from the last pass if allowed
@@ -977,8 +977,14 @@ class assFormulaQuestionGUI extends assQuestionGUI
                 }
             }
         }
-
-        $solutions = $this->object->getSolutionValues($active_id, $pass, true);
+        // TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+        if ($this->object->getTestPresentationConfig()->isSolutionInitiallyPrefilled()) {
+            $actualPassIndex = ilObjTest::_getPass($active_id);
+        }
+        else{
+            $actualPassIndex = $pass;
+        }
+        $solutions = $this->object->getSolutionValues($active_id, $actualPassIndex, true);
         foreach ($solutions as $idx => $solution_value) {
             if (preg_match("/^(\\\$v\\d+)$/", $solution_value['value1'], $matches)) {
                 $user_solution[$matches[1]] = $solution_value['value2'];
@@ -986,8 +992,9 @@ class assFormulaQuestionGUI extends assQuestionGUI
         }
 
         if ($user_solution === []) {
-            $user_solution = $this->object->getVariableSolutionValuesForPass($active_id, $pass);
+            $user_solution = $this->object->getVariableSolutionValuesForPass($active_id, $actualPassIndex);
         }
+        // END TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
 
         // generate the question output
         $template = new ilTemplate("tpl.il_as_qpl_formulaquestion_output.html", true, true, 'Modules/TestQuestionPool');

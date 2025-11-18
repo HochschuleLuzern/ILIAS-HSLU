@@ -2484,6 +2484,11 @@ JS;
 
         $this->tpl->addJavascript('./Modules/Test/js/ilTestPlayerQuestionEditControl.js');
         $this->tpl->addOnLoadCode('il.TestPlayerQuestionEditControl.init(' . json_encode($config) . ')');
+        // TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+        if($question_config->isSolutionInitiallyPrefilled()){
+            $this->tpl->addOnLoadCode('il.TestPlayerQuestionEditControl.stickAnswerChanged()');
+        }
+        // END TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
     }
     // fau.
 

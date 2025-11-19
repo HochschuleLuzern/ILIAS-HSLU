@@ -917,7 +917,9 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
                 if (!array_key_exists($matches[1], $user_solution)) {
                     $user_solution[$matches[1]] = array();
                 }
-                $user_solution[$matches[1]]["unit"] = $solution_value["value2"];
+                $user_solution[$matches[1]]["unit"] = $this->unitrepository->getUnit(
+                    $this->refinery->kindlyTo()->int()->transform($solution_value["value2"]),
+                );
             }
         }
         //vd($this->getResults());
@@ -928,7 +930,7 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
                 $this->getVariables(),
                 $this->getResults(),
                 $user_solution[$result->getResult()]["value"] ?? '',
-                $user_solution[$result->getResult()]["unit"] ?? '',
+                $user_solution[$result->getResult()]["unit"] ?? null,
                 $this->unitrepository->getUnits()
             );
         }
@@ -942,14 +944,11 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
 
         $points = 0;
         foreach ($this->getResults() as $result) {
-            $v = isset($user_solution[$result->getResult()]) ? $user_solution[$result->getResult()] : null;
-            $u = isset($user_solution[$result->getResult() . '_unit']) ? $user_solution[$result->getResult() . '_unit'] : null;
-
             $points += $result->getReachedPoints(
                 $this->getVariables(),
                 $this->getResults(),
-                $v,
-                $u,
+                $user_solution[$result->getResult()] ?? '',
+                $this->unitrepository->getUnit($user_solution[$result->getResult() . '_unit'] ?? 0),
                 $this->unitrepository->getUnits()
             );
         }
@@ -1318,7 +1317,7 @@ class assFormulaQuestion extends assQuestion implements iQuestionCondition, ilAs
                 $check_unit = false;
                 if (array_key_exists($result_name, $available_units) &&
                     $available_units[$result_name] !== null) {
-                    $check_unit = in_array($user_solution[$result_name]['unit'], $available_units[$result_name]);
+                    $check_unit = in_array($user_solution[$result_name]['unit'] ?? null, $available_units[$result_name]);
                 }
 
                 if ($check_unit == true) {

@@ -623,6 +623,92 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         $this->ctrl->redirect($this, ilTestPlayerCommands::SHOW_QUESTION);
     }
 
+    protected function recalculateScoresCmd()
+    {
+        $ref_id = 0;
+        $login = null;
+
+        $question_fi = 0;
+        $active_fi = 0;
+        $pass = 0;
+
+        $ptypes = array();
+        $pvalues = array();
+
+        if (isset($_GET['ref_id']) && $_GET['ref_id'] != "") {
+            $ref_id = (int) $_GET['ref_id'];
+        }
+
+        if (isset($_GET['login']) && $_GET['login'] != "") {
+            $login = (string) $_GET['login'];
+        }
+
+        $query = 'SELECT question_fi, active_fi, pass ' .
+            ' FROM tst_test_result ' .
+            ' WHERE active_fi IN ( ' .
+            '	SELECT active_id ' .
+            '	FROM tst_active ' .
+            '	WHERE test_fi IN( ' .
+            '		SELECT test_id  ' .
+            '		FROM tst_tests ' .
+            '		WHERE obj_fi IN (  ' .
+            '			SELECT obj_id ' .
+            '			FROM object_reference  ' .
+            '			WHERE ref_id = %s  ' .
+            '		) ' .
+            '	) ';
+
+        $ptypes[] = 'integer';
+        $pvalues[] = $ref_id;
+
+        if(!empty($login)){
+
+            $query .= '	AND user_fi IN ( ' .
+            '		SELECT usr_id  ' .
+            '		FROM usr_data ' .
+            '		WHERE login = %s  ' .
+            '	) ';
+
+           $ptypes[] = 'text';
+           $pvalues[] = $login;
+        }
+        $query .= ')';
+
+        $result = $this->db->queryF(
+            $query,
+            $ptypes,
+            $pvalues
+        );
+
+        if ($this->db->numRows($result) == 0) {
+            return;
+        }
+
+        while ($row = $this->db->fetchAssoc($result)) {
+
+            $question_fi = $row["question_fi"];
+            $active_fi = $row["active_fi"];
+            $pass = $row["pass"];
+
+            if (is_numeric($question_fi) && (int) $question_fi) {
+
+                $questionOBJ = $this->getQuestionInstance($question_fi);
+
+                if($questionOBJ->arePointsWrong($active_fi, $pass)){
+
+                /*    $this->logging_services->root()->write(
+                        "RECALC_SCORES:"
+                        . "active_fi={$active_fi} "
+                        . "question_fi={$question_fi} "
+                        . "pass={$pass}"
+                    );
+                */
+                   $questionOBJ->calculateResultsFromSolution($active_fi, $pass);
+                }
+            }
+        }
+        $this->ctrl->redirect($this, ilTestPlayerCommands::SHOW_QUESTION);
+    }
     protected function markQuestionAndSaveIntermediateCmd(): void
     {
         $this->handleIntermediateSubmit();

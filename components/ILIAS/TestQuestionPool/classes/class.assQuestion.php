@@ -651,6 +651,47 @@ abstract class assQuestion implements Question
         ilCourseObjectiveResult::_updateObjectiveResult($this->current_user->getId(), $active_id, $this->getId());
     }
 
+
+    final public function arePointsWrong(int $active_id, int $pass, bool $obligationsEnabled = false): bool
+    {
+        $pointsAreWrong = false;
+
+        // determine reached points for submitted solution
+        $reached_points = $this->calculateReachedPoints($active_id, $pass);
+        $questionHintTracking = new ilAssQuestionHintTracking($this->getId(), $active_id, $pass);
+        $requestsStatisticData = $questionHintTracking->getRequestStatisticDataByQuestionAndTestpass();
+        $reached_points = $reached_points - $requestsStatisticData->getRequestsPoints();
+
+        // adjust reached points regarding to tests scoring options
+        $reached_points = $this->adjustReachedPointsByScoringOptions($reached_points, $active_id, $pass);
+
+        if (is_null($reached_points)) {
+            $reached_points = 0.0;
+        }
+
+        // old points
+        global $DIC;
+        $ilDB = $DIC['ilDB'];
+        $rowsnum = 0;
+        $old_points = 0;
+
+        if ($pass !== null) {
+            $result = $ilDB->queryF(
+                "SELECT points FROM tst_test_result WHERE active_fi = %s AND question_fi = %s AND pass = %s",
+                array('integer','integer','integer'),
+                array($active_id, $this->getId(), $pass)
+            );
+            $rowsnum = $result->numRows();
+        }
+        if ($rowsnum > 0) {
+            $row = $ilDB->fetchAssoc($result);
+            $old_points = $row["points"];
+        }
+        $pointsAreWrong = ($old_points != $reached_points);
+        return  $pointsAreWrong;
+
+    }
+
     /**
      * persists the working state for current testactive and testpass
      * @return bool if saving happened
@@ -681,6 +722,7 @@ abstract class assQuestion implements Question
 
         return $saveStatus;
     }
+
 
     /**
      * persists the preview state for current user and question

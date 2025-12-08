@@ -623,6 +623,92 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         $this->ctrl->redirect($this, ilTestPlayerCommands::SHOW_QUESTION);
     }
 
+    protected function recalculateScoresCmd()
+    {
+        global $DIC;
+        $ref_id = 0;
+        $login = null;
+
+        $question_fi = 0;
+        $active_fi = 0;
+        $pass = 0;
+        $usr_login = '';
+
+        $ptypes = array();
+        $pvalues = array();
+
+        if (isset($_GET['ref_id']) && $_GET['ref_id'] != "") {
+            $ref_id = (int) $_GET['ref_id'];
+        }
+
+        if (isset($_GET['login']) && $_GET['login'] != "") {
+            $login = (string) $_GET['login'];
+        }
+
+        $query = 'SELECT question_fi, active_fi, pass, usr_data.login ' .
+            ' FROM tst_test_result ' .
+            ' LEFT JOIN tst_active ON tst_active.active_id = tst_test_result.active_fi ' .
+            ' LEFT JOIN usr_data ON usr_data.usr_id =  tst_active.user_fi ' .
+            ' WHERE active_fi IN ( ' .
+            '	SELECT active_id ' .
+            '	FROM tst_active ' .
+            '	WHERE test_fi IN( ' .
+            '		SELECT test_id  ' .
+            '		FROM tst_tests ' .
+            '		WHERE obj_fi IN (  ' .
+            '			SELECT obj_id ' .
+            '			FROM object_reference  ' .
+            '			WHERE ref_id = %s  ' .
+            '		) ' .
+            '	) ';
+
+        $ptypes[] = 'integer';
+        $pvalues[] = $ref_id;
+
+        if(!empty($login)){
+
+            $query .= '	AND user_fi IN ( ' .
+            '		SELECT usr_id  ' .
+            '		FROM usr_data ' .
+            '		WHERE login = %s  ' .
+            '	) ';
+
+           $ptypes[] = 'text';
+           $pvalues[] = $login;
+        }
+        $query .= ')';
+
+        $result = $this->db->queryF(
+            $query,
+            $ptypes,
+            $pvalues
+        );
+
+        if ($this->db->numRows($result) == 0) {
+            return;
+        }
+
+        while ($row = $this->db->fetchAssoc($result)) {
+
+            $question_fi = $row["question_fi"];
+            $active_fi = $row["active_fi"];
+            $pass = $row["pass"];
+            $usr_login = $row["login"];
+
+            if (is_numeric($question_fi) && (int) $question_fi) {
+
+                $questionOBJ = $this->getQuestionInstance($question_fi);
+
+                if($questionOBJ->arePointsWrong($active_fi, $pass)){
+
+                    $DIC->logger()->root()->log('recalculateScoresCmd calculateResultsFromSolution params : ' . ' ' . var_export($active_fi, true) . ' ' . var_export($question_fi, true) . ' ' . var_export($pass, true) . ' ' . var_export($usr_login, true),\ilLogLevel::ERROR);
+
+                    $questionOBJ->calculateResultsFromSolution($active_fi, $pass);
+                }
+            }
+        }
+        $this->ctrl->redirect($this, ilTestPlayerCommands::SHOW_QUESTION);
+    }
     protected function markQuestionAndSaveIntermediateCmd(): void
     {
         $this->handleIntermediateSubmit();

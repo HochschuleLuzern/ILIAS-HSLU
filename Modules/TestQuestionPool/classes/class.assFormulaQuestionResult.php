@@ -501,10 +501,15 @@ class assFormulaQuestionResult
             if ($this->getUnit() !== null) {
                 // if expected resultunit != baseunit convert to resultunit
                 if ($this->getUnit()->getBaseUnit() != -1) {
-                    $result = ilMath::_div($result, $this->getUnit()->getFactor(), $this->getPrecision());
+                    if ($this->getUnit()->getFactor() == 0) {
+                        throw new ilMathDivisionByZeroException(sprintf("Division of %s by %s not possible!", $result, $this->getUnit()->getFactor()));
+                    }
+                    // must round first before truncating to avoid tolerance errors on small numbers
+                    $result = number_format(round(floatval($result) / $this->getUnit()->getFactor(),$this->getPrecision()), $this->getPrecision(), '.', '');
                 } else {
                     //if resultunit == baseunit calculate to get correct precision
-                    $result = ilMath::_mul($result, $this->getUnit()->getFactor(), $this->getPrecision());
+                    // must round first before truncating to avoid tolerance errors on small numbers
+                    $result = number_format(round(floatval($result) * $this->getUnit()->getFactor(),$this->getPrecision()), $this->getPrecision(), '.', '');
                 }
             }
 

@@ -625,12 +625,14 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
     protected function recalculateScoresCmd()
     {
+        global $DIC;
         $ref_id = 0;
         $login = null;
 
         $question_fi = 0;
         $active_fi = 0;
         $pass = 0;
+        $usr_login = '';
 
         $ptypes = array();
         $pvalues = array();
@@ -643,8 +645,10 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $login = (string) $_GET['login'];
         }
 
-        $query = 'SELECT question_fi, active_fi, pass ' .
+        $query = 'SELECT question_fi, active_fi, pass, usr_data.login ' .
             ' FROM tst_test_result ' .
+            ' LEFT JOIN tst_active ON tst_active.active_id = tst_test_result.active_fi ' .
+            ' LEFT JOIN usr_data ON usr_data.usr_id =  tst_active.user_fi ' .
             ' WHERE active_fi IN ( ' .
             '	SELECT active_id ' .
             '	FROM tst_active ' .
@@ -689,6 +693,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $question_fi = $row["question_fi"];
             $active_fi = $row["active_fi"];
             $pass = $row["pass"];
+            $usr_login = $row["login"];
 
             if (is_numeric($question_fi) && (int) $question_fi) {
 
@@ -696,14 +701,9 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
                 if($questionOBJ->arePointsWrong($active_fi, $pass)){
 
-                /*    $this->logging_services->root()->write(
-                        "RECALC_SCORES:"
-                        . "active_fi={$active_fi} "
-                        . "question_fi={$question_fi} "
-                        . "pass={$pass}"
-                    );
-                */
-                   $questionOBJ->calculateResultsFromSolution($active_fi, $pass);
+                    $DIC->logger()->root()->log('recalculateScoresCmd calculateResultsFromSolution params : ' . ' ' . var_export($active_fi, true) . ' ' . var_export($question_fi, true) . ' ' . var_export($pass, true) . ' ' . var_export($usr_login, true),\ilLogLevel::ERROR);
+
+                    $questionOBJ->calculateResultsFromSolution($active_fi, $pass);
                 }
             }
         }

@@ -37,6 +37,18 @@ class ilUserSearch extends ilAbstractSearch
 {
     private bool $active_check = false;
     private bool $inactive_check = false;
+    private bool $time_limit_valid_check = false;
+
+    public function useGlobalVisibilitySettings()
+    {
+        $settings = ilSearchSettings::getInstance();
+        if (!$settings->isInactiveUserVisible()) {
+            $this->active_check = true;
+        }
+        if (!$settings->isLimitedUserVisible()) {
+            $this->time_limit_valid_check = true;
+        }
+    }
 
     public function enableActiveCheck(bool $a_enabled): void
     {
@@ -46,6 +58,11 @@ class ilUserSearch extends ilAbstractSearch
     public function enableInactiveCheck(bool $a_enabled): void
     {
         $this->inactive_check = $a_enabled;
+    }
+
+    public function enableTimeLimitValidCheck(bool $a_enabled): void
+    {
+        $this->time_limit_valid_check = $a_enabled;
     }
 
     public function performSearch(): ilSearchResult
@@ -61,6 +78,13 @@ class ilUserSearch extends ilAbstractSearch
             $query .= 'AND active = 1 ';
         } elseif ($this->inactive_check) {
             $query .= 'AND active = 0 ';
+        }
+        if ($this->time_limit_valid_check) {
+            $query .= sprintf(
+                'AND (time_limit_unlimited = 1 OR (time_limit_unlimited = 0 AND time_limit_from < %s AND time_limit_until > %s)) ',
+                $this->db->quote(time(), 'integer'),
+                $this->db->quote(time(), 'integer'),
+            );
         }
 
 

@@ -110,7 +110,19 @@ class ilMailAutoCompleteUserProvider extends ilMailAutoCompleteRecipientProvider
     {
         $outer_conditions = [];
         $outer_conditions[] = 'usr_data.usr_id != ' . $this->db->quote(ANONYMOUS_USER_ID, 'integer');
-        $outer_conditions[] = 'usr_data.active != ' . $this->db->quote(0, 'integer');
+        $settings = ilSearchSettings::getInstance();
+        if (!$settings->isInactiveUserVisible()) {
+            $outer_conditions[] = 'usr_data.active != ' . $this->db->quote(0, 'integer');
+        }
+        if (!$settings->isLimitedUserVisible()) {
+            $outer_conditions[] = sprintf(
+                '(usr_data.time_limit_unlimited = %s OR (usr_data.time_limit_unlimited = %s AND usr_data.time_limit_from < %s AND usr_data.time_limit_until > %s))',
+                $this->db->quote(1, 'integer'),
+                $this->db->quote(0, 'integer'),
+                $this->db->quote(time(), 'integer'),
+                $this->db->quote(time(), 'integer'),
+            );
+        }
 
         $field_conditions = [];
         foreach ($this->getFields() as $field) {

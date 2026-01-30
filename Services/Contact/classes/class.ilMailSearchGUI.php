@@ -286,7 +286,7 @@ class ilMailSearchGUI
             $query_parser->parse();
 
             $user_search = ilObjectSearchFactory::_getUserSearchInstance($query_parser);
-            $user_search->enableActiveCheck(true);
+            $user_search->useGlobalVisibilitySettings();
             $user_search->setFields(['login']);
             $result_obj = $user_search->performSearch();
             $contacts_search_result->mergeEntries($result_obj);
@@ -382,7 +382,7 @@ class ilMailSearchGUI
         $query_parser->parse();
 
         $user_search = ilObjectSearchFactory::_getUserSearchInstance($query_parser);
-        $user_search->enableActiveCheck(true);
+        $user_search->useGlobalVisibilitySettings();
         $user_search->setFields(['login']);
         $result_obj = $user_search->performSearch();
         $all_results->mergeEntries($result_obj);

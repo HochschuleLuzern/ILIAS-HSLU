@@ -388,6 +388,9 @@ class ilPCResourcesGUI extends ilPageContentGUI
                 count($block->getItemRefIds()) > 0) {
                 foreach ($block->getItemRefIds() as $ref_id) {
                     $data = $item_presentation_manager->getRawDataByRefId($ref_id);
+                    if (is_null($data)) {
+                        continue;
+                    }
                     if ($block->getBlock() instanceof \ILIAS\Container\Content\OtherBlock) {
                         if ($data["type"] === "itgr" || in_array($ref_id, $item_ref_ids)) {
                             continue;

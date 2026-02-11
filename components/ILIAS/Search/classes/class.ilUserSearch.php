@@ -37,6 +37,7 @@ class ilUserSearch extends ilAbstractSearch
 {
     private bool $active_check = false;
     private bool $inactive_check = false;
+    private bool $time_limited_check = false;
 
     public function enableActiveCheck(bool $a_enabled): void
     {
@@ -46,6 +47,11 @@ class ilUserSearch extends ilAbstractSearch
     public function enableInactiveCheck(bool $a_enabled): void
     {
         $this->inactive_check = $a_enabled;
+    }
+
+    public function enableTimeLimitedCheck(bool $a_enabled): void
+    {
+        $this->time_limited_check = $a_enabled;
     }
 
     public function performSearch(): ilSearchResult
@@ -61,6 +67,15 @@ class ilUserSearch extends ilAbstractSearch
             $query .= 'AND active = 1 ';
         } elseif ($this->inactive_check) {
             $query .= 'AND active = 0 ';
+        }
+
+        if ($this->time_limited_check) {
+            $query .= "AND " . sprintf(
+                '(usr_data.time_limit_unlimited = %s OR (time_limit_from < %s AND time_limit_until > %s))',
+                $this->db->quote(1, ilDBConstants::T_INTEGER),
+                $this->db->quote(time(), ilDBConstants::T_INTEGER),
+                $this->db->quote(time(), ilDBConstants::T_INTEGER)
+            ) . " ";
         }
 
 

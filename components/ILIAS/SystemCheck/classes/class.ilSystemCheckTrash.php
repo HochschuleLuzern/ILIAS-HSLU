@@ -137,20 +137,37 @@ class ilSystemCheckTrash
 
     protected function removeSelectedFromSystem(): void
     {
+        $start = time();
+        $root_deleted = 0;
+        $total_deleted = 0;
         $deleted = $this->readSelectedDeleted();
         foreach ($deleted as $del_num => $deleted_info) {
             $sub_nodes = $this->readDeleted((int) ($deleted_info['tree'] ?? 0));
 
             foreach ($sub_nodes as $sub_num => $subnode_info) {
-                $ref_obj = ilObjectFactory::getInstanceByRefId((int) ($subnode_info['child'] ?? 0), false);
-                if (!$ref_obj instanceof ilObject) {
-                    continue;
+                // HSLU: Add a hard-coded half hour limit
+                if (time() - $start > 1800) {
+                    $this->logger->warning("Time limit of 30 minutes reached, stopping. Deleted {$root_deleted} root, {$total_deleted} total items.");
+                    break;
                 }
 
-                $ref_obj->delete();
-                ilTree::_removeEntry((int) ($subnode_info['tree'] ?? 0), (int) ($subnode_info['child'] ?? 0));
+                // HSLU: wrap in try-catch to avoid crashing the whole process if one delete fails
+                try {
+                    $ref_obj = ilObjectFactory::getInstanceByRefId((int) ($subnode_info['child'] ?? 0), false);
+                    if (!$ref_obj instanceof ilObject) {
+                        continue;
+                    }
+
+                    $ref_obj->delete();
+                    ilTree::_removeEntry((int) ($subnode_info['tree'] ?? 0), (int) ($subnode_info['child'] ?? 0));
+                } catch (Exception $e) {
+                    $this->logger->error("Deleting {$subnode_info['child']} failed with exception: " . $e->getMessage());
+                }
+                ++$total_deleted;
             }
+            ++$root_deleted;
         }
+        $this->logger->info("Finished deleting. Deleted {$root_deleted} root, {$total_deleted} total items.");  // HSLU: log the number of deleted items
     }
 
     protected function readSelectedDeleted(): array

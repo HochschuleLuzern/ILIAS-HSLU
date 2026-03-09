@@ -63,6 +63,8 @@ class ilSCCronTrash extends ilCronJob
     public function getValidScheduleTypes(): array
     {
         return [
+            CronJobScheduleType::SCHEDULE_TYPE_IN_MINUTES,  // HSLU: allow more flexible scheduling
+            CronJobScheduleType::SCHEDULE_TYPE_IN_HOURS,  // HSLU: allow more flexible scheduling
             CronJobScheduleType::SCHEDULE_TYPE_DAILY,
             CronJobScheduleType::SCHEDULE_TYPE_WEEKLY,
             CronJobScheduleType::SCHEDULE_TYPE_MONTHLY,
@@ -168,6 +170,19 @@ class ilSCCronTrash extends ilCronJob
         $trash->setMode(ilSystemCheckTrash::MODE_TRASH_REMOVE);
 
         $settings = new ilSetting('sysc');
+
+        // HSLU: only run during offpeak hours if configured
+        if ($settings->get('trash_cron_offpeak')) {
+            $weekday = (int) date('N');
+            $hour = (int) date('G');
+            $is_offpeak = $weekday >= 6 || $hour >= 20 || $hour <= 7;
+            if (!$is_offpeak) {
+                global $DIC;
+                $log = $DIC->logger()->sysc();
+                $log->info("Offpeak only is set, but it is not offpeak (weekday=$weekday, hour=$hour), exiting.");
+                return new ilCronJobResult();  // The default status is STATUS_NO_ACTION, which is perfect here.
+            }
+        }
 
         $trash->setNumberLimit((int) $settings->get('num', '0'));
         $trash->setTypesLimit(array_filter([$settings->get('types', '')]));

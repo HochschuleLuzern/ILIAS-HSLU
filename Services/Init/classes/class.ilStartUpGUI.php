@@ -814,13 +814,20 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
             $this->setting->get('auth_mode') != ilAuthUtils::AUTH_SHIBBOLETH ||
             $this->setting->get('shib_auth_allow_local')
         ) && $this->setting->get('auth_mode') != ilAuthUtils::AUTH_CAS) {
-            return $this->substituteLoginPageElements(
-                $tpl,
-                $page_editor_html,
-                $this->ui_renderer->render($form ?? $this->buildStandardLoginForm()),
-                '[list-login-form]',
-                'LOGIN_FORM'
-            );
+            /* START PATCH HSLU: Enable local login form only if specifically requested */
+            $request = $this->httpRequest;
+            $params = $request->getQueryParams();
+
+            if (isset($params['local']) && $params['local'] === 'true') {
+                return $this->substituteLoginPageElements(
+                    $tpl,
+                    $page_editor_html,
+                    $this->ui_renderer->render($form ?? $this->buildStandardLoginForm()),
+                    '[list-login-form]',
+                    'LOGIN_FORM'
+                );
+            }
+            /* END PATCH HSLU: Enable local login form only if specifically requested */
         }
 
         return $page_editor_html;

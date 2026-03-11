@@ -826,6 +826,16 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
     ): string {
         global $tpl;
 
+        // BEGIN PATCH HSLU: Enable local login form only if specifically requested
+        global $DIC;
+        if ($DIC->settings()->get('hide_local_login', '0')) {
+            $params = $this->httpRequest->getQueryParams();
+            if (($params['local'] ?? '') !== 'true') {
+                return $page_editor_html;
+            }
+        }
+        // END PATCH HSLU
+
         $shib_is_default_without_local_login = (
             (int) $this->setting->get('auth_mode') === ilAuthUtils::AUTH_SHIBBOLETH &&
             !$this->setting->get('shib_auth_allow_local', '0')

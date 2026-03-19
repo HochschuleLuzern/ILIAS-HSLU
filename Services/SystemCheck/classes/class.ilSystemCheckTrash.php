@@ -153,12 +153,15 @@ class ilSystemCheckTrash
 
                 // HSLU: wrap in try-catch to avoid crashing the whole process if one delete fails
                 try {
-                    $ref_obj = ilObjectFactory::getInstanceByRefId((int) ($subnode_info['child'] ?? 0), false);
-                    if (!$ref_obj instanceof ilObject) {
-                        continue;
+                    // TEMP PATCH HSLU: Delete the tree entry even if the child is not to be found in db
+                    try {
+                        $ref_obj = ilObjectFactory::getInstanceByRefId((int) ($subnode_info['child'] ?? 0), false);
+                    } catch (Exception $e) {
+                        $ref_obj = null;
                     }
-
-                    $ref_obj->delete();
+                    if ($ref_obj instanceof ilObject) {
+                        $ref_obj->delete();
+                    }
                     ilTree::_removeEntry((int) ($subnode_info['tree'] ?? 0), (int) ($subnode_info['child'] ?? 0));
                 } catch (Exception $e) {
                     $this->logger->error("Deleting {$subnode_info['child']} failed with exception: " . $e->getMessage());

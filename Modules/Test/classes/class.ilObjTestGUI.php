@@ -2169,10 +2169,9 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             $this->ctrl->redirect($this, "infoScreen");
         }
 
-        if ($this->object instanceof ilObjTest) {
-            $this->getTabsManager()->getQuestionsSubTabs();
-            $this->getTabsManager()->activateSubTab(ilTestTabsManager::SUBTAB_ID_QST_LIST_VIEW);
-        }
+        // TEMP PATCH HSLU: always init the tab manager
+        $this->getTabsManager()->getQuestionsSubTabs();
+        $this->getTabsManager()->activateSubTab(ilTestTabsManager::SUBTAB_ID_QST_LIST_VIEW);
 
         // #11631, #12994
         $this->ctrl->setParameter($this, 'q_id', '');

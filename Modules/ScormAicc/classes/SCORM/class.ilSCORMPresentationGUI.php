@@ -74,7 +74,11 @@ class ilSCORMPresentationGUI
 
         //        switch ($next_class) {
         //            default:
-        $this->$cmd();
+        // TEMP PATCH HSLU: Ignore log messages for which there is no function
+        if ($cmd !== "logWarning" && $cmd !== "logMessage") {
+            $this->$cmd();
+        }
+
         //        }
     }
 

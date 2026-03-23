@@ -2472,7 +2472,10 @@ class ilObjCourseGUI extends ilContainerGUI
                 if ($cmd == "" && $this->object->isNewsTimelineLandingPageEffective()) {
                     $this->ctrl->redirectByClass("ilnewstimelinegui");
                 }
-
+                /* TEMP PATCH HSLU: ignore frameset command */
+                if ($cmd === "frameset") {
+                    $cmd = "";
+                }
                 if (!$cmd) {
                     $cmd = 'view';
                 }

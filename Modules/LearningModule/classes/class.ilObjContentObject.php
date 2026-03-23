@@ -894,14 +894,17 @@ class ilObjContentObject extends ilObject
         $this->setPageHeader((string) $lm_rec["page_header"]);
         $this->setTOCMode((string) $lm_rec["toc_mode"]);
         $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"]));
-        $this->setActiveNumbering(ilUtil::yn2tf($lm_rec["numbering"]));
+        // TEMP PATCH HSLU: Supply default value to yn2tf because not nullable
+        $this->setActiveNumbering(ilUtil::yn2tf($lm_rec["numbering"] ?? "n"));
         $this->setActivePrintView(ilUtil::yn2tf($lm_rec["print_view_active"]));
         $this->setActivePreventGlossaryAppendix(ilUtil::yn2tf($lm_rec["no_glo_appendix"]));
         $this->setHideHeaderFooterPrint((bool) $lm_rec["hide_head_foot_print"]);
         $this->setActiveDownloads(ilUtil::yn2tf($lm_rec["downloads_active"]));
         $this->setActiveDownloadsPublic(ilUtil::yn2tf($lm_rec["downloads_public_active"]));
+        $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"]));
         $this->setActiveLMMenu(ilUtil::yn2tf($lm_rec["lm_menu_active"]));
-        $this->setCleanFrames(ilUtil::yn2tf($lm_rec["clean_frames"]));
+        // TEMP PATCH HSLU: Supply default value to yn2tf because not nullable
+        $this->setCleanFrames(ilUtil::yn2tf($lm_rec["clean_frames"] ?? "n"));
         $this->setHeaderPage((int) $lm_rec["header_page"]);
         $this->setFooterPage((int) $lm_rec["footer_page"]);
         $this->setHistoryUserComments(ilUtil::yn2tf($lm_rec["hist_user_comments"]));

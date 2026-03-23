@@ -176,7 +176,10 @@ class ilObjRootFolderGUI extends ilContainerGUI
                     $this->tpl,
                     $this->object->getRefId()
                 );
-
+                /* TEMP PATCH HSLU: ignore frameset command */
+                if ($cmd === "frameset") {
+                    $cmd = "";
+                }
                 if (!$cmd) {
                     $cmd = "render";
                 }

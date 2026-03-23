@@ -204,12 +204,13 @@ class ilLMPresentationLinker implements \ILIAS\COPage\PageLinker
                     if ($a_anchor !== "") {
                         $a_anchor = "copganc_" . $a_anchor;
                     }
+                    // TEMP PATCH HSLU: Remove &amp; from link
                     $link = $this->ctrl->getLinkTargetByClass(
                         self::TARGET_GUI,
                         $a_cmd,
                         $a_anchor,
                         false,
-                        true
+                        false
                     );
                     //					$link = str_replace("&", "&amp;", $link);
 

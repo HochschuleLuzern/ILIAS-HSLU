@@ -214,6 +214,7 @@ class Factory
                 continue;
             }
 
+            $show_inline_feedback = true;
             $qid = $qresult['qid'];
             $type = $qresult['type'];
             $title = $qresult['title'];

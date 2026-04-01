@@ -84,6 +84,7 @@ class ilTestResultsFactory
                 continue;
             }
 
+            $show_inline_feedback = true;
             $qid = $qresult['qid'];
             $type = $qresult['type'];
             $title = $qresult['title'];

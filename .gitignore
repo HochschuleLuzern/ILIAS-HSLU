@@ -1,3 +1,7 @@
+# HSLU
+/.vscode/
+/.mailmap
+
 # IDEs and Development
 /.env
 /.floo

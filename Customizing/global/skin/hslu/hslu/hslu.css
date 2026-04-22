@@ -1,38 +1,5 @@
 @charset "UTF-8";
 /*
-HSLU Akzentfarben:
-
-Blau #77C5D8
-hell1 #DAEEF3
-hell2 #BAE0EA
-dunkel1 #449DC2
-dunkel2 #206A8A
-
-Grün #ADCA2A
-hell1 #E9F0C1
-hell2 #D6E28C
-dunkel1 #7D9E38
-dunkel2 #386939
-
-Magenta #EE6A87
-hell1 #FBD0D3
-hell2 #F6A9B2
-dunkel1 #BB365D
-dunkel2 #9F304D
-
-Gelb #FCC300
-hell1 #FFF0BE
-hell2 #FFE086
-dunkel1 #F7A315
-dunkel2 #D47F1C
-
-Grau #F0F0F0
- */
-/** if left unchanged, you have to copy delos fonts folder to your skin folder.
-* To use the delos fonts in your skin,
-* please change this value (in custom less data or variables.less of your custom skin) to "../../../../templates/default/fonts/"
-*/
-/*
 * Dependencies
 */
 /*!
@@ -2652,7 +2619,7 @@ input.btn, input.il-link.link-bulky,
   transform: none;
 }
 .btn-default.engaged, .navbar-form > a.engaged {
-  background-color: #e0e0e0;
+  background-color: #E0E0E0;
   border-width: 1px;
   border-style: solid;
   border-color: #206A8A;
@@ -2703,7 +2670,7 @@ input.btn, input.il-link.link-bulky,
   transform: none;
 }
 .btn-primary.engaged {
-  background-color: #e0e0e0;
+  background-color: #E0E0E0;
   border-width: 1px;
   border-style: solid;
   border-color: #206A8A;
@@ -3763,7 +3730,7 @@ button .minimize, button .close {
   transform: none;
 }
 .btn-tag.engaged {
-  background-color: #e0e0e0;
+  background-color: #E0E0E0;
   border-width: 1px;
   border-style: solid;
   border-color: #206A8A;
@@ -4670,7 +4637,7 @@ hr.il-divider-with-label {
   transition: width 0.6s ease;
 }
 .ui-input-file-input-progress-container .ui-input-file-input-progress-indicator.success {
-  background-color: rgb(48.3142857143, 64.2071428571, 85.1857142857);
+  background-color: rgb(17.6, 58.3, 75.9);
 }
 .ui-input-file-input-progress-container .ui-input-file-input-progress-indicator.error {
   background-color: #9F304D;
@@ -19238,21 +19205,12 @@ div.Access {
   color: rgb(111.25, 111.25, 111.25);
 }
 
-/* Use HSLU font */
 @font-face {
   font-family: "FS Albert Web Regular";
   src: url("fonts/FSAlbert/FSAlbertWeb-Regular.woff2") format("woff2"), url("fonts/FSAlbert/FSAlbertWeb-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
-/* Set path for bootstrap fonts */
-/*
-@font-face {
-  font-family: "Glyphicons Halflings";
-  src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot");
-  src: url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../../../node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
-}
- */
 table.calmini td.calminitoday {
   background-color: #206A8A;
 }
@@ -19281,18 +19239,6 @@ button.copg-add.dropdown-toggle.btn:hover {
   filter: none;
 }
 
-/*.il-mainbar-triggers .btn-bulky .icon, .il-mainbar-triggers .il-link.link-bulky .icon {
-	filter: grayscale(100) invert(100%);
-}
-
-.il-mainbar-tools-button .btn-bulky .icon {
-	filter: grayscale(100) invert(100%);
-}
-
-.il-mainbar-tool-trigger-item .btn-bulky img.icon {
-	filter: grayscale(100) invert(100%);
-}*/
-/* fix for sizing of images in test questions. See https://hslu-it.atlassian.net/browse/IL-557 */
 .thumbnail > img, .thumbnail a > img {
   margin-right: auto;
   margin-left: auto;
@@ -19304,7 +19250,6 @@ button.copg-add.dropdown-toggle.btn:hover {
   height: auto;
 }
 
-/* fix for: Darstellungsfehler: Hat der Objekteblock keinen Titel, so legen sich die Kontext-Menüs vom Objekteblock und dem ersten Objekt übereinander. See https://hslu-it.atlassian.net/browse/IL-573 */
 .sr-only {
   color: transparent !important;
   position: relative !important;

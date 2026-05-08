@@ -1,0 +1,6 @@
+Orig-message: TEST PATCH HSLU: when status is not set it is not returned at all on submit
+Orig-commit: 47bbee7fd6a
+Category: Bugfix
+New-message: HSLU FIX: Do not assume existence of $status on submit
+Release-10: Drop
+Jira: IL-308

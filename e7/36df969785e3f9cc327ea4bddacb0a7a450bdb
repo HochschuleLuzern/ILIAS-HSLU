@@ -1,0 +1,6 @@
+Orig-message: PATCH TEMP HSLU: prevent MathJax settings DB table lock
+Orig-commit: 9b67244aa08
+Category: Bugfix
+New-message: HSLU FIX: Fix unclear problem in settings initialization
+Description: Somehow it prevents MathJax settings locking up the DB.
+Release-10: Keep

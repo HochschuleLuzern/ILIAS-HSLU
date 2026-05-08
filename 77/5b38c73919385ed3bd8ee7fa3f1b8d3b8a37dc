@@ -1,0 +1,5 @@
+Orig-message: Fix Manual Scoring in Random Test doesnt update Reached Points
+Orig-commit: 53b2dafb2f9
+Category: Backport
+Release-10: Drop
+Jira: IL-609

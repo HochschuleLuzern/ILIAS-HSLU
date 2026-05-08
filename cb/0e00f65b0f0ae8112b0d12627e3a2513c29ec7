@@ -1,0 +1,8 @@
+Orig-message: PATCH HSLU: HSLU ext_account may not be blank
+Orig-commit: 952ee58053b
+Category: Feature
+New-message: HSLU: HSLU ext_account may not be blank
+Release-10: Special
+
+Orig-message: PATCH HSLU: HSLU ext_account may not be blank - change to err msg
+Orig-commit: 30795d989dd

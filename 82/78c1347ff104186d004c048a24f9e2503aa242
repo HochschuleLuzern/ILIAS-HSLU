@@ -1,0 +1,6 @@
+Orig-message: 44665: Opening Communication > News throws Whoops
+Orig-commit: 8278c1347ff
+Category: Backport
+Release-10: Drop
+Jira: IL-535
+Mantis: 44665

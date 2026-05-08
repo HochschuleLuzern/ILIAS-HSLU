@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: Übung - Fix for Class 'ilExerciseHandlerGUI' is not a child of 'ilRepositoryGUI error
+Orig-commit: 1d49277a54d
+Category: Bugfix
+New-message: HSLU FIX: Fix for Class 'ilExerciseHandlerGUI' is not a child of 'ilRepositoryGUI' error
+Release-10: Special

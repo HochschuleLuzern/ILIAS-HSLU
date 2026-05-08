@@ -1,0 +1,6 @@
+Orig-message: Revert TEMP PATCH HSLU: Remove &amp; from link""
+Orig-commit: c3e5a7d5791
+Category: Drop
+New-message: HSLU FIX: Revert TEMP PATCH HSLU: Remove &amp; from link""
+Release-10: Keep
+Jira: IL-457

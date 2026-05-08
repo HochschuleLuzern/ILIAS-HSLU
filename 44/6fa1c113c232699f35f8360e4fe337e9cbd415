@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Ignore log messages for which there is no function
+Orig-commit: 0a15fca738d
+Category: Bugfix
+New-message: HSLU FIX: Ignore log messages for which there is no function
+Release-10: Drop
+Jira: IL-457

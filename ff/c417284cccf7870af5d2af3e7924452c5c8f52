@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Hack to suppress accidental removal of LiveVoting latex variables in braces
+Orig-commit: ffc417284cc
+Category: Bugfix
+New-message: HSLU FIX: Hack to suppress accidental removal of LiveVoting latex variables in braces
+Release-10: Drop
+Jira: IL-580
+Mantis: 45749

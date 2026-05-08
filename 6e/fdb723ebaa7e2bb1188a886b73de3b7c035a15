@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Umfrage - anonyme Zugriff führt zu Fehler wenn ein anonyme Durchführung schon existiert
+Orig-commit: 33eb8fa23b9
+Category: Bugfix
+New-message: HSLU FIX: Anonymous access leads to errors if an anonymous survey already exists
+Release-10: Special
+Jira: IL-170

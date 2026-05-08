@@ -1,0 +1,8 @@
+Orig-message: TEMP PATCH HSLU: Test: Fix Access Rights to Import of Questions
+Orig-commit: 1d97d0f3e35
+Category: Bugfix
+New-message: HSLU FIX: Test: Fix Access Rights to Import of Questions
+Release-10: Drop
+Jira: IL-605
+Xurrent: 71216916
+Mantis: 44882

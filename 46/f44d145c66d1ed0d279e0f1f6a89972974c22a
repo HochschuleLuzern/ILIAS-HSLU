@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: alle auswählen funktioniert nicht
+Orig-commit: 46f44d145c6
+Category: Bugfix
+New-message: HSLU FIX: Selecting all doesn't work
+Release-10: Keep
+Jira: IL-309

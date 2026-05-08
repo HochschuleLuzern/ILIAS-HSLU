@@ -1,0 +1,8 @@
+Orig-message: TEMP PATCH HSLU: Direct call to login.php page wrongly redirected to startup page even when user only automatically logged in anonymously
+Orig-commit: 4d3b02f7b84
+Category: Bugfix
+New-message: HSLU FIX: Direct call to login.php page wrongly redirected to startup page even when user only automatically logged in anonymously
+Release-10: Keep
+Jira: IL-565
+Xurrent: 64740470
+Xurrent: 64698104

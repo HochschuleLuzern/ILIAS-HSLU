@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: use case where role description may be missing
+Orig-commit: 9533e7936ba
+Category: Bugfix
+New-message: HSLU FIX: use case where role description may be missing
+Release-10: Drop

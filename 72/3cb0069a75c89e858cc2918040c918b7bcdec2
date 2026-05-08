@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU Adding Floor & Round
+Orig-commit: 723cb0069a7
+Category: Feature
+New-message: HSLU: Add floor and round to EvalMath
+Release-10: Special

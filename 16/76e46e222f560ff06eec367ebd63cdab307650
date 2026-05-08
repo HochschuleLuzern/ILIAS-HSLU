@@ -1,0 +1,4 @@
+Orig-message: TEMP PATCH HSLU: include slash in base_path as uri_path can start with ilias.php
+Orig-commit: 1676e46e222
+Jira: IL-564
+Xurrent: 64689245

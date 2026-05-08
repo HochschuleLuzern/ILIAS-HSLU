@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU Allow plugins to comment xml
+Orig-commit: bd1423a8678
+Category: Feature
+New-message: HSLU: Allow plugins to create XML comments
+Release-10: Drop

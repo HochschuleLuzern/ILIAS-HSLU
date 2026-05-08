@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: remove usr_ids where id = 0
+Orig-commit: 0c750032a0a
+Category: Bugfix
+New-message: HSLU FIX: remove usr_ids where id = 0
+Release-10: Keep
+Jira: IL-390

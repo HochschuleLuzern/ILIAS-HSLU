@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Error When Trying to Export CSV in Matrix View of Learning Progress in Courses
+Orig-commit: a3df3e35b28
+Category: Bugfix
+New-message: HSLU FIX: Error When Trying to Export CSV in Matrix View of Learning Progress in Courses
+Release-10: Drop
+Jira: IL-550
+Mantis: 44249

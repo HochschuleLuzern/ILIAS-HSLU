@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Creating a new STACK question within a test does not add it to the test - amended visibility of saveQuestionToTest
+Orig-commit: 92d6edce493
+Category: Bugfix
+New-message: HSLU FIX: Creating a new STACK question within a test does not add it to the test - amended visibility of saveQuestionToTest
+Release-10: Drop
+Jira: IL-560
+Mantis: 45395

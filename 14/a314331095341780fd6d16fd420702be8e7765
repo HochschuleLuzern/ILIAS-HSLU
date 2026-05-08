@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Fix missing method getTitleForHTMLOutput on ilObject in ilObjTestGUI (#44772)
+Orig-commit: 0c56c57bc67
+Category: Bugfix
+New-message: HSLU FIX: Fix missing method getTitleForHTMLOutput on ilObject in ilObjTestGUI (#44772)
+Release-10: Drop
+Jira: IL-531
+Mantis: 44772

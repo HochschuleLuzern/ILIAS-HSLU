@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Fix für Fehlermeldung Kein Zugriffsrecht nach Klonen von Kurs
+Orig-commit: 9b1c5f5a203
+Category: Bugfix
+New-message: HSLU FIX: Fix for "No access rights" error message after cloning a course
+Release-10: Special
+Jira: IL-285

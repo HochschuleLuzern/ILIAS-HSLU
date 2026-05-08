@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Only tests of type ilObjTest have a tabs manager
+Orig-commit: 69ee3b71648
+Category: Bugfix
+New-message: HSLU FIX: Only tests of type ilObjTest have a tabs manager
+Release-10: Drop
+Jira: IL-311

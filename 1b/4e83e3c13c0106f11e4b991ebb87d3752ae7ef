@@ -1,0 +1,8 @@
+Orig-message: TEMP PATCH HSLU: Evaluation of expected test result - must round first before truncating to avoid tolerance errors on small numbers
+Orig-commit: 5f6240e68c9
+Category: Bugfix
+New-message: HSLU FIX: Evaluation of expected test result - must round first before truncating to avoid tolerance errors on small numbers
+Release-10: Drop
+Jira: IL-599
+Xurrent: 68837495
+Mantis: 44733

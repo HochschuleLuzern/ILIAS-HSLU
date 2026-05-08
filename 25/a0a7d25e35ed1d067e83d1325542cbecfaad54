@@ -1,0 +1,6 @@
+Orig-message: LSO: 45466, adjust function to copy extro and intro content page objects.
+Orig-commit: 25a0a7d25e3
+Category: Backport
+Release-10: Drop
+Jira: IL-570
+Xurrent: 64871142

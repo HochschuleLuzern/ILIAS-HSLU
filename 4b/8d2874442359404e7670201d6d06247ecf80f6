@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: Remove TPL in NON-Gui-Class
+Orig-commit: 4b8d2874442
+Category: Bugfix
+New-message: HSLU FIX: Remove TPL in NON-Gui-Class
+Release-10: Drop

@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: [PATCH] Adjust question list navigation to submit question form - see Mantis 44211
+Orig-commit: 7a413b16e04
+Category: Bugfix
+New-message: HSLU FIX: [PATCH] Adjust question list navigation to submit question form - see Mantis 44211
+Release-10: Special
+Mantis: 44211

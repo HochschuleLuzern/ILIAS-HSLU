@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: GuzzleHttp ServerRequest getUriFromGlobals() evaluates schema to http if [HTTPS] not set
+Orig-commit: 9854bf1c550
+Category: Feature
+New-message: HSLU: GuzzleHttp ServerRequest getUriFromGlobals() evaluates schema to http if [HTTPS] not set
+Release-10: Drop
+Jira: IL-556

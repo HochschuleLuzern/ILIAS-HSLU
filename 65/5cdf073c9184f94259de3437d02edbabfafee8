@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: Fix Login Error - Undefined array key 0
+Orig-commit: 655cdf073c9
+Category: Bugfix
+New-message: HSLU FIX: Fix Login Error - Undefined array key 0
+Release-10: Drop

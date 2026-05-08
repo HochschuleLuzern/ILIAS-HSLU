@@ -1,0 +1,6 @@
+Orig-message: Test: Fix Saving And Presentation of Availability
+Orig-commit: c4c01e40ced
+Category: Backport
+Release-10: Drop
+Jira: IL-589
+Xurrent: 65984005

@@ -1,0 +1,6 @@
+Orig-message: Skins recompiled for: ilias9 - fix for sizing of images in test questions
+Orig-commit: 00b42915a5f
+Category: Bugfix, Skin
+New-message: HSLU FIX: Correct sizing of images in test questions
+Release-10: Keep
+Jira: IL-557

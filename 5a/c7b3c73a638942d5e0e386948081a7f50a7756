@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Supply default value to yn2tf because not nullable
+Orig-commit: 5ac7b3c73a6
+Category: Bugfix
+New-message: HSLU FIX: Supply default value to yn2tf because not nullable
+Release-10: Drop
+Jira: IL-457

@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Wrong Calculation of scoring - ints returned instead of floats
+Orig-commit: 49454b59aeb
+Category: Bugfix
+New-message: HSLU FIX: Wrong Calculation of scoring - ints returned instead of floats
+Release-10: Drop
+Jira: IL-301

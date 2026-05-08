@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU Allow Tables & Line Breaks in LMs
+Orig-commit: 528954c54be
+Category: Feature
+New-message: HSLU: Allow Tables & Line Breaks in LMs
+Release-10: Special

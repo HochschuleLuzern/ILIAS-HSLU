@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU Call afterObjectLoad method following read of ActiveRecord
+Orig-commit: 84739ffa778
+Category: Bugfix
+New-message: HSLU FIX: Call afterObjectLoad method following read of ActiveRecord
+Release-10: Keep

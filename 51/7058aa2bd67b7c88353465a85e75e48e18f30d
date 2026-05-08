@@ -1,0 +1,4 @@
+Orig-message: [FIX] 0044470: PermanentLink/File: Legacy permanent links for file objects lead to wrong HTTP redirect URL for ILIAS installed in sub-path
+Orig-commit: 517058aa2bd
+Category: Backport
+Release-10: Drop

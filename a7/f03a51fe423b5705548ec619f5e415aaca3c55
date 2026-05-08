@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: page editor - ignore page items if no data returned for ref
+Orig-commit: a7f03a51fe4
+Category: Bugfix
+New-message: HSLU FIX: page editor - ignore page items if no data returned for ref
+Release-10: Keep
+Jira: IL-607
+Xurrent: 72611329

@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: allow original_id to be null when saving a question
+Orig-commit: c885c1c4794
+Category: Bugfix
+New-message: HSLU FIX: allow original_id to be null when saving a question
+Release-10: Drop

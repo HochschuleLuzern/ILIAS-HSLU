@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: Fix cron-job to empty trash
+Orig-commit: 8d38ff9991c
+Category: Bugfix
+New-message: HSLU FIX: Fix cron-job to empty trash
+Release-10: Drop

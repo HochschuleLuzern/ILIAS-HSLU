@@ -1,0 +1,4 @@
+Orig-message: ResourceStorage: Use more specific name for View Mode" query parameter"
+Orig-commit: 995210fbdd4
+Category: Backport
+Release-10: Drop

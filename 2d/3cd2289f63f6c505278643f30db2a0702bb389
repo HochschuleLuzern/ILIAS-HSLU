@@ -1,0 +1,5 @@
+Orig-message: [FIX] #45068 T&A: Fatal Error When Copying Courses Containing Certain Tests
+Orig-commit: 10a354a2705
+Category: Backport
+Release-10: Drop
+Jira: IL-577

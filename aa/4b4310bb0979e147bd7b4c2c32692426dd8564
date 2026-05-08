@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU: Enable local login form only if specifically requested
+Orig-commit: e51ddee89e4
+Category: Feature
+New-message: HSLU: Enable local login form only if specifically requested
+Release-10: Keep
+Jira: IL-505

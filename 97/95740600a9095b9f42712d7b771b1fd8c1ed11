@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: [PATCH] for Mantis Bug #0040770: Answers to the last question are not saved when the set exam time ends
+Orig-commit: 9795740600a
+Category: Bugfix
+New-message: HSLU FIX: [PATCH] for Mantis Bug #0040770: Answers to the last question are not saved when the set exam time ends
+Release-10: Keep
+Mantis: 40770

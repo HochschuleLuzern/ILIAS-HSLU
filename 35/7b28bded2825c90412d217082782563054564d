@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Added missing initialisation of actions
+Orig-commit: b48915c0365
+Category: Bugfix
+New-message: HSLU FIX: Added missing initialisation of actions
+Release-10: Drop
+Jira: IL-566
+Xurrent: 64771532

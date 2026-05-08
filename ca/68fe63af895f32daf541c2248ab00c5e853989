@@ -1,0 +1,8 @@
+Orig-message: TEMP PATCH HSLU: temp fix for missing item_data until mantis 45359 is resolved
+Orig-commit: ca68fe63af8
+Category: Bugfix
+New-message: HSLU FIX: temp fix for missing item_data until mantis 45359 is resolved
+Release-10: Drop
+Jira: IL-561
+Xurrent: 64576998
+Mantis: 45359

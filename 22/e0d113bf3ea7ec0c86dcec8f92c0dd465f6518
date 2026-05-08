@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Den Knopf Prüfen in Fragenpool im Bereich Kollaboration funktioniert nicht - T&A 44733: Fixes invalid data types in assFormulaQuestionResult::getReachedPoints method
+Orig-commit: 22e0d113bf3
+Category: Backport
+Release-10: Drop
+Jira: IL-599
+Xurrent: 68837495
+Mantis: 44733

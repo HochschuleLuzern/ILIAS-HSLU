@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: course templates may not have a course member role
+Orig-commit: fc132a02066
+Category: Bugfix
+New-message: HSLU FIX: course templates may not have a course member role
+Release-10: Keep
+Jira: IL-335

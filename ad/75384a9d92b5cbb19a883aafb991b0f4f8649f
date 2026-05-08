@@ -1,0 +1,6 @@
+Orig-message: LearningSequence: Use ENUM type instead of constants for page types
+Orig-commit: 4ddbb795788
+Category: Backport
+Release-10: Drop
+Jira: IL-570
+Xurrent: 64871142

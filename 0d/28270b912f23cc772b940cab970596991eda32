@@ -1,0 +1,12 @@
+Orig-message: TEMP PATCH HSLU: replace only start of uri as base_path may be found elsewhere in uri
+Orig-commit: 0fada6144a1
+Category: Bugfix
+New-message: HSLU FIX: replace only start of uri as base_path may be found elsewhere in uri
+Release-10: Drop
+Jira: IL-564
+Xurrent: 64689245
+
+Orig-message: TEMP PATCH HSLU: include slash in base_path as uri_path can start with ilias.php
+Orig-commit: 1676e46e222
+Jira: IL-564
+Xurrent: 64689245

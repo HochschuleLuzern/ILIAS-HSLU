@@ -1,0 +1,6 @@
+Orig-message: LearningSequence: Fix copy/clone process of learning sequences when intro/extro pages are missing
+Orig-commit: d87745e0de7
+Category: Backport
+Release-10: Drop
+Jira: IL-591
+Xurrent: 66262821

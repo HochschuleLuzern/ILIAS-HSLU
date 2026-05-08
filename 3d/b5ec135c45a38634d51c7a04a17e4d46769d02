@@ -1,0 +1,5 @@
+Orig-message: T&A 44764: Fixes end datetime of availability period in test settings being rese… (#9309)
+Orig-commit: 3db5ec135c4
+Category: Backport
+Release-10: Drop
+Jira: IL-537

@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Fix il_media_cast_data_ord duplicate entry on reordering following delete where multiple items exist
+Orig-commit: 5ca9f5e26f2
+Category: Bugfix
+New-message: HSLU FIX: Fix il_media_cast_data_ord duplicate entry on reordering following delete where multiple items exist
+Release-10: Keep
+Jira: IL-181
+Mantis: 40446

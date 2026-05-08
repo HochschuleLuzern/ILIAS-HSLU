@@ -1,0 +1,7 @@
+Orig-message: 43981: Not possible to create pages if the user's language preference is missing
+Orig-commit: 03e6b16033c
+Category: Backport
+Release-10: Drop
+Jira: IL-594
+Xurrent: 66942002
+Mantis: 43981

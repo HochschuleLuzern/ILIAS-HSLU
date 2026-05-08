@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Remove &amp; from link
+Orig-commit: 131ba1ca782
+Category: Drop
+New-message: HSLU FIX: Remove &amp; from link
+Release-10: Keep
+Jira: IL-457
+Mantis: 41016

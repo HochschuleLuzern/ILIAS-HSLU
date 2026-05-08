@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Delete the tree entry even if the child is not to be found in db
+Orig-commit: 18c983e87a3
+Category: Bugfix
+New-message: HSLU FIX: Delete the tree entry even if the child is not to be found in db
+Release-10: Drop
+Jira: IL-457

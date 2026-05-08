@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: always init the tab manager
+Orig-commit: 4ac7e968026
+Category: Bugfix
+New-message: HSLU FIX: always init the tab manager
+Release-10: Drop
+Jira: IL-457
+Mantis: 39760

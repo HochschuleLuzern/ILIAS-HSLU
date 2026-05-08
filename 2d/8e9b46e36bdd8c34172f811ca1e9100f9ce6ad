@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Portfoliovorlage cant be edited because banner missing
+Orig-commit: 2d8e9b46e36
+Category: Bugfix
+New-message: HSLU FIX: Portfoliovorlage cant be edited because banner missing
+Release-10: Drop
+Jira: IL-53

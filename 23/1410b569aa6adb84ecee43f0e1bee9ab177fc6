@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU: ilFileObjectRBACDatabaseSteps - update DB directly with new id because HSLU has 12 million recs to process
+Orig-commit: 231410b569a
+Category: Feature
+New-message: HSLU: ilFileObjectRBACDatabaseSteps - update DB directly with new id because HSLU has 12 million recs to process
+Release-10: Drop
+Jira: IL-511

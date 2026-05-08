@@ -1,0 +1,5 @@
+Orig-message: Fallback to first page and reset offset and range if out of bounds after filter
+Orig-commit: c8cb3fb1498
+Jira: IL-601
+Xurrent: 69262077
+Mantis: 44781

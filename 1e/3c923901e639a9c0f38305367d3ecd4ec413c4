@@ -1,0 +1,5 @@
+Orig-message:  PATCH HSLU Allow Shibboleth & LDAP Same Account
+Orig-commit: e22ca22cba0
+Category: Feature
+New-message: HSLU: Allow Shibboleth & LDAP Same Account
+Release-10: Drop

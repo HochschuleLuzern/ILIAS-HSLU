@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU Don't Update Failed Login for Inactive
+Orig-commit: ffd0624e60f
+Category: Feature
+New-message: HSLU: Do not update login attempts for inactive users
+Release-10: Drop

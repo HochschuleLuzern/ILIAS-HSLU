@@ -1,0 +1,7 @@
+Orig-message: Fallback to first page and reset offset and range if out of bounds after filter. (Backport)
+Orig-commit: fcb0a1aef87
+Category: Backport
+Release-10: Drop
+Jira: IL-601
+Xurrent: 69262077
+Mantis: 44781

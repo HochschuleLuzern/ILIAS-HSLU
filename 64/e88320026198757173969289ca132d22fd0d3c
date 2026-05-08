@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: missing feedback order from answer id for order causing course copy to fail
+Orig-commit: 64e88320026
+Category: Bugfix
+New-message: HSLU FIX: missing feedback order from answer id for order causing course copy to fail
+Release-10: Drop
+Jira: IL-376

@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: ignore frameset command
+Orig-commit: 0c8c9ff8e9c
+Category: Bugfix
+New-message: HSLU FIX: ignore frameset command
+Release-10: Drop
+Jira: IL-457

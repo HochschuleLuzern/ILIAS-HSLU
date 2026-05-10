@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Show userdata (not solution) values even if value missing
+Orig-commit: 3447e401530
+Category: Feature
+New-message: HSLU: Change processing in substituteVariables() method of assFormulaQuestion
+Description: Show userdata (not solution) values even if value missing
+Release-10: Keep

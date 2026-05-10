@@ -1,0 +1,8 @@
+Orig-message: TEMP PATCH HSLU: Show detailed feedback for all questions
+Orig-commit: 9cbf2b0d3c2
+Category: Bugfix
+New-message: HSLU FIX: Show detailed feedback for all questions
+Release-10: Keep
+Jira: IL-621
+Xurrent: 75322340
+Mantis: 47011

@@ -1,0 +1,10 @@
+Orig-message: TEMP PATCH HSLU: change permissions on folders to be deleted in clean temp dir cron job
+Orig-commit: 1e7f6840962
+Category: Feature
+New-message: HSLU: change permissions on folders to be deleted in clean temp dir cron job
+Release-10: Keep
+Jira: IL-496
+
+Orig-message: TEMP PATCH HSLU: change permissions on folders to be deleted in clean temp dir cron job - using absolute path
+Orig-commit: d8078c61141
+Jira: IL-496

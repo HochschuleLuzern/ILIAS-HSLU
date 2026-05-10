@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Use global user search settings for mail recipient search
+Orig-commit: fe13f1ab54c
+Category: Bugfix
+New-message: HSLU FIX: Use global user search settings for mail recipient search
+Release-10: Keep
+Jira: IL-615
+Mantis: 46993

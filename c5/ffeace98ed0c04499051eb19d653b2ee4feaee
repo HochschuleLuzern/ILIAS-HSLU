@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU Eliminate null exception occurring when attempting to append to query after unset() has been called
+Orig-commit: 8e09338b5b2
+Category: Bugfix
+New-message: HSLU FIX: Prevent undefined variable error in execQuery
+Description: Should not unset() variable that is needed inside a loop
+Release-10: Keep

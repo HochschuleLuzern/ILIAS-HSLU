@@ -1,0 +1,12 @@
+Orig-message: PATCH HSLU Skin hinzugefügt
+Orig-commit: e5058fea586
+Category: Skin
+New-message: HSLU FIX: Add HSLU skin
+Release-10: Special
+
+Orig-message: HSLU Patch: Recompiled less files
+Orig-commit: 5e043413825
+
+Orig-message: Updated hslu skin for sass and release_9.8
+Orig-commit: b3f06f1a6c6
+Jira: IL-508

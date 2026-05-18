@@ -893,21 +893,20 @@ class ilObjContentObject extends ilObject
         $this->setLayout((string) $lm_rec["default_layout"]);
         $this->setPageHeader((string) $lm_rec["page_header"]);
         $this->setTOCMode((string) $lm_rec["toc_mode"]);
-        $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"]));
-        // TEMP PATCH HSLU: Supply default value to yn2tf because not nullable
+        // TEMP PATCH HSLU: Supply default value to yn2tf because content_object y/n columns are nullable
+        $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"] ?? "n"));
         $this->setActiveNumbering(ilUtil::yn2tf($lm_rec["numbering"] ?? "n"));
-        $this->setActivePrintView(ilUtil::yn2tf($lm_rec["print_view_active"]));
-        $this->setActivePreventGlossaryAppendix(ilUtil::yn2tf($lm_rec["no_glo_appendix"]));
+        $this->setActivePrintView(ilUtil::yn2tf($lm_rec["print_view_active"] ?? "n"));
+        $this->setActivePreventGlossaryAppendix(ilUtil::yn2tf($lm_rec["no_glo_appendix"] ?? "n"));
         $this->setHideHeaderFooterPrint((bool) $lm_rec["hide_head_foot_print"]);
-        $this->setActiveDownloads(ilUtil::yn2tf($lm_rec["downloads_active"]));
-        $this->setActiveDownloadsPublic(ilUtil::yn2tf($lm_rec["downloads_public_active"]));
-        $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"]));
-        $this->setActiveLMMenu(ilUtil::yn2tf($lm_rec["lm_menu_active"]));
-        // TEMP PATCH HSLU: Supply default value to yn2tf because not nullable
+        $this->setActiveDownloads(ilUtil::yn2tf($lm_rec["downloads_active"] ?? "n"));
+        $this->setActiveDownloadsPublic(ilUtil::yn2tf($lm_rec["downloads_public_active"] ?? "n"));
+        $this->setActiveTOC(ilUtil::yn2tf($lm_rec["toc_active"] ?? "n"));
+        $this->setActiveLMMenu(ilUtil::yn2tf($lm_rec["lm_menu_active"] ?? "n"));
         $this->setCleanFrames(ilUtil::yn2tf($lm_rec["clean_frames"] ?? "n"));
         $this->setHeaderPage((int) $lm_rec["header_page"]);
         $this->setFooterPage((int) $lm_rec["footer_page"]);
-        $this->setHistoryUserComments(ilUtil::yn2tf($lm_rec["hist_user_comments"]));
+        $this->setHistoryUserComments(ilUtil::yn2tf($lm_rec["hist_user_comments"] ?? "n"));
         $this->setPublicAccessMode((string) $lm_rec["public_access_mode"]);
         $this->setPublicExportFile("xml", (string) $lm_rec["public_xml_file"]);
         $this->setPublicExportFile("html", (string) $lm_rec["public_html_file"]);

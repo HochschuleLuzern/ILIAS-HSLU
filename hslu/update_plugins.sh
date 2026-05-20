@@ -48,3 +48,4 @@ clone_repo Services/Repository/RepositoryObject/EtherpadLite        ILIAS-Etherp
 clone_repo Services/Repository/RepositoryObject/LiveVoting
 clone_repo Services/Repository/RepositoryObject/InteractiveVideo
 clone_repo Modules/TestQuestionPool/Questions/assStackQuestion
+clone_repo Services/Cron/CronHook/SrLifeCycleManager

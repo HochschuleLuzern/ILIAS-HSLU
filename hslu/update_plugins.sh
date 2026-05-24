@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+flavor=${1:-prod}
+
+echo "Getting plugins for flavor: $flavor"
+
 default_branch=ilias9
 git_org=${HSLU_GIT_ORG:-https://github.com/HochschuleLuzern}
 curdir="$PWD"
@@ -13,11 +17,16 @@ if [[ ! -d Services ]]; then
 fi
 
 clone_repo() {
-    destination="$1"
+    target_flavor="$1"
+    if [[ $target_flavor != $flavor && $flavor != all ]]; then
+        return
+    fi
+
+    destination="$2"
     folder="Customizing/global/plugins/$destination"
-    repo_name="${2:-$(basename "$destination")}"
+    repo_name="${3:-$(basename "$destination")}"
     repo="$git_org/$repo_name.git"
-    branch="${3:-$default_branch}"
+    branch="${4:-$default_branch}"
     echo "Getting $repo (branch: $branch) into $folder"
 
     if [[ ! -d "$folder/.git" ]]; then
@@ -36,16 +45,19 @@ clone_repo() {
     cd "$curdir"
 }
 
-clone_repo Services/EventHandling/EventHook/HSLUObjectDefaults
-clone_repo Services/UIComponent/UserInterfaceHook/HSLUUIDefaults
-clone_repo Services/Cron/CronHook/NotifyOnCronFailure
-clone_repo Services/Cron/CronHook/EventoImport
-clone_repo Services/Cron/CronHook/ResetLoginAttempts
-clone_repo Services/COPage/PageComponent/EmbedMiro
-clone_repo Services/Repository/RepositoryObject/CourseWizard
-clone_repo Modules/Test/Export/ExportWithEventoID
-clone_repo Services/Repository/RepositoryObject/EtherpadLite        ILIAS-Etherpad-Lite-Plugin
-clone_repo Services/Repository/RepositoryObject/LiveVoting
-clone_repo Services/Repository/RepositoryObject/InteractiveVideo
-clone_repo Modules/TestQuestionPool/Questions/assStackQuestion
-clone_repo Services/Cron/CronHook/SrLifeCycleManager
+clone_repo prod Services/EventHandling/EventHook/HSLUObjectDefaults
+clone_repo prod Services/UIComponent/UserInterfaceHook/HSLUUIDefaults
+clone_repo prod Services/Cron/CronHook/NotifyOnCronFailure
+clone_repo prod Services/Cron/CronHook/EventoImport
+clone_repo prod Services/Cron/CronHook/ResetLoginAttempts
+clone_repo prod Services/COPage/PageComponent/EmbedMiro
+clone_repo prod Services/Repository/RepositoryObject/CourseWizard
+clone_repo prod Modules/Test/Export/ExportWithEventoID
+clone_repo prod Services/Repository/RepositoryObject/EtherpadLite        ILIAS-Etherpad-Lite-Plugin
+clone_repo prod Services/Repository/RepositoryObject/LiveVoting
+clone_repo prod Services/Repository/RepositoryObject/InteractiveVideo
+clone_repo prod Modules/TestQuestionPool/Questions/assStackQuestion
+clone_repo prod Services/Cron/CronHook/SrLifeCycleManager
+
+clone_repo exam Services/Cron/CronHook/EventoImportLite
+clone_repo exam Modules/Test/Export/ExportWithEventoID

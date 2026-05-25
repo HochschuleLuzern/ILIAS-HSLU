@@ -1,0 +1,5 @@
+Orig-message: HSLU: Catch all Throwables to prevent cron job failure
+Orig-commit: 23d1b3aa3b3
+Category: Feature
+New-message: HSLU: Catch all Throwables to prevent cron job failure
+Release-10: Keep

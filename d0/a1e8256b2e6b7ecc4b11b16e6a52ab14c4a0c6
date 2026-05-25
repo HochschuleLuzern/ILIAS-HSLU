@@ -1,0 +1,5 @@
+Orig-message: HSLU: Supply default value to all yn2tf calls
+Orig-commit: d0a1e8256b2
+Category: Feature
+New-message: HSLU: Supply default value to all yn2tf calls
+Release-10: Keep

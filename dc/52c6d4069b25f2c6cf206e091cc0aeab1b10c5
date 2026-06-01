@@ -1,0 +1,11 @@
+Orig-message: PATCH HSLU: added function to allow correction of wrongly saved test scores
+Orig-commit: c8aa6ec5af2
+Category: Feature
+New-message: HSLU: added function to allow correction of wrongly saved test scores
+Release-10: Keep
+Jira: IL-599
+Xurrent: 68837495
+Mantis: 44733
+
+Orig-message: PATCH HSLU: added function to allow correction of wrongly saved test scores - added error logging
+Orig-commit: f2dbb3bceef

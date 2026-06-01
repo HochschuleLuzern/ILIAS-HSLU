@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU:  variable HTTPS not set behind load balancer
+Orig-commit: caaec29eedd
+Category: Feature
+New-message: HSLU: variable HTTPS not set behind load balancer
+Release-10: Special
+Jira: IL-336

@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Fix to interactive video import failure
+Orig-commit: c3567ed5cc4
+Category: Bugfix
+New-message: HSLU FIX: Fix to interactive video import failure
+Release-10: Keep
+Jira: IL-249

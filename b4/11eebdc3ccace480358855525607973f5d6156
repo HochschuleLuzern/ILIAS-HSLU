@@ -1,0 +1,5 @@
+Orig-message: PATCH HSLU: Correct wizard options delete error
+Orig-commit: f6535750794
+Category: Bugfix
+New-message: HSLU FIX: Correct wizard options delete error
+Release-10: Keep

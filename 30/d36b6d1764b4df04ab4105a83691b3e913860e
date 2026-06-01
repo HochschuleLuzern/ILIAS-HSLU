@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: fix for questions with dynamically generated variables where user wants to apply previous solution
+Orig-commit: 674424c6b04
+Category: Bugfix
+New-message: HSLU FIX: fix for questions with dynamically generated variables where user wants to apply previous solution
+Release-10: Special
+Jira: IL-597
+Xurrent: 67905603

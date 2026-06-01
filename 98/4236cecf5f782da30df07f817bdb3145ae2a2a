@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU: Make trash bin cron usable
+Orig-commit: 8e12d646ca2
+Category: Feature
+New-message: HSLU: Make trash bin cron usable
+Release-10: Keep
+Jira: IL-610

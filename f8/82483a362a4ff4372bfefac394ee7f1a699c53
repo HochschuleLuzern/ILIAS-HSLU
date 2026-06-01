@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU Force Single Backlink for HSLUDefaults
+Orig-commit: 063e5aeead6
+Category: Feature
+New-message: HSLU: Add helper function to check for backlinks
+Description: Used in the HSLUDefaults plugin
+Release-10: Keep

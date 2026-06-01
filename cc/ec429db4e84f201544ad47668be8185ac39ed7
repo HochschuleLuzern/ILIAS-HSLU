@@ -1,0 +1,9 @@
+Orig-message: TEMP PATCH HSLU: Darstellungsfehler: Hat der Objekteblock keinen Titel, so legen sich die Kontext-Menüs vom Objekteblock und dem ersten Objekt übereinander
+Orig-commit: 685b7c6bb87
+Category: Bugfix, Skin
+New-message: HSLU FIX: Fix display error: overlapping dropdowns
+Description: If the object block had no title displayed, the context menus of the object block and the first object overlapped.
+Release-10: Special
+Jira: IL-573
+Xurrent: 64978882
+Mantis: 32126

@@ -336,7 +336,11 @@ class ilResourceStorageMigrationHelper
         }
 
         $zip = new Zip(
-            (new ZipOptions())->withDirectoryHandling(ZipDirectoryHandling::KEEP_STRUCTURE)
+            (new ZipOptions())
+                ->withDirectoryHandling(ZipDirectoryHandling::KEEP_STRUCTURE)
+                // HSLU: media files are already compressed; storing without DEFLATE
+                // cuts the CPU cost of this CPU-bound migration drastically
+                ->withStoreOnly(true)
         );
         $zip->addDirectory($absolute_path_to_directory);
         try {

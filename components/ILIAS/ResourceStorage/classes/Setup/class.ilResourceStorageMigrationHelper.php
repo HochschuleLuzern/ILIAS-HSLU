@@ -130,6 +130,29 @@ class ilResourceStorageMigrationHelper
         ];
     }
 
+    /**
+     * HSLU
+     * Returns an SQL fragment that restricts a migration to one disjoint slice
+     * of rows, so the same migration can be run in N parallel processes without
+     * any two of them picking the same row.
+     *
+     * Activated per-process via environment variables:
+     *   ILIAS_MIG_SHARDS = total number of parallel workers (N)
+     *   ILIAS_MIG_SHARD  = this worker's index, 0 .. N-1 (K)
+     *
+     * $id_expression must be a trusted column expression (e.g. "od.obj_id"),
+     * never user input. Returns '' (no restriction) when sharding is not configured.
+     */
+    public static function shardSqlCondition(string $id_expression): string
+    {
+        $shards = (int) getenv('ILIAS_MIG_SHARDS');
+        $shard = (int) getenv('ILIAS_MIG_SHARD');
+        if ($shards <= 1 || $shard < 0 || $shard >= $shards) {
+            return '';
+        }
+        return " AND MOD($id_expression, $shards) = $shard";
+    }
+
     public function getClientDataDir(): string
     {
         return $this->client_data_dir;

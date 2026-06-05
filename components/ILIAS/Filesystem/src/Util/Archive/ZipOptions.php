@@ -29,6 +29,7 @@ final class ZipOptions extends Options
     private ?string $zip_output_name = null;
     private int $iterations = 1000;
     private int $deflate_level = 9;
+    private bool $store_only = false;  // HSLU
 
 
     public function withZipOutputPath(string $zip_output_path): self
@@ -63,5 +64,23 @@ final class ZipOptions extends Options
     public function getDeflateLevel(): int
     {
         return $this->deflate_level;
+    }
+
+    /**
+     * HSLU
+     * Store entries without compression (ZipArchive::CM_STORE) instead of DEFLATE.
+     * Useful when the input is already compressed (e.g. media files during the
+     * Resource Storage migration), where DEFLATE only wastes CPU for ~0 size gain.
+     */
+    public function withStoreOnly(bool $store_only): self
+    {
+        $clone = clone $this;
+        $clone->store_only = $store_only;
+        return $clone;
+    }
+
+    public function getStoreOnly(): bool
+    {
+        return $this->store_only;
     }
 }

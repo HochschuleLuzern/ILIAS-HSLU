@@ -125,9 +125,17 @@ class Zip
 
             if ($path === 'php://memory') {
                 $this->zip->addFromString($path_inside_zip, (string) $stream);
+                // HSLU
+                if ($this->options->getStoreOnly()) {
+                    $this->zip->setCompressionName($path_inside_zip, \ZipArchive::CM_STORE);
+                }
                 $stream->close();
             } elseif (is_file($path)) {
                 $this->zip->addFile($path, $path_inside_zip);
+                // HSLU
+                if ($this->options->getStoreOnly()) {
+                    $this->zip->setCompressionName($path_inside_zip, \ZipArchive::CM_STORE);
+                }
                 $stream->close();
             } else {
                 continue;

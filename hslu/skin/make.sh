@@ -46,6 +46,12 @@ find $styledir/images -type f -name '*.svg' -exec sed -i 's/fill:\s*#4c6586;/fil
 # Copy over our images
 cp -R images/* $styledir/images
 
+# For some reason images are accessed both under
+# Customizing/skin/hslu/hslu/images (normal, inside the style dir) and
+# Customizing/skin/hslu/images (weird, under the main skin dir).
+# So, add a symlink:
+ln -s hslu/images $skindir/images
+
 #####################################################################
 ### Cleanup
 

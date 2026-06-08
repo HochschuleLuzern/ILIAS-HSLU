@@ -144,6 +144,11 @@ while true; do
         run_start=$(date -Is)
         run_start_s=$(date +%s)
 
+        if [[ -e "$LOG_DIR/stop" ]]; then
+            echo "Stop requested, exiting."
+            exit 0
+        fi
+
         echo "[$(date -Is)] Running $steps steps..."
 
         exit_code=0
@@ -182,7 +187,7 @@ while true; do
 
         echo "[$(date -Is)] $remaining steps remaining"
 
-        if [[ $run_duration -lt 300 ]] && [[ $bucket_idx -lt $(( ${#STEP_BUCKETS[@]} - 1 )) ]]; then
+        if [[ $run_duration -lt 120 ]] && [[ $bucket_idx -lt $(( ${#STEP_BUCKETS[@]} - 1 )) ]]; then
             bucket_idx=$(( bucket_idx + 1 ))
             echo "[$(date -Is)] Stepping up to ${STEP_BUCKETS[$bucket_idx]} steps/chunk"
         fi

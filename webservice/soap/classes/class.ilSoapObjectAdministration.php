@@ -174,6 +174,10 @@ class ilSoapObjectAdministration extends ilSoapAdministration
         if (ilObject::_isInTrash($a_ref_id)) {
             return $this->raiseError("Object with ID $a_ref_id has been deleted.", 'Client');
         }
+
+        global $DIC;
+        $access = $DIC['ilAccess'];
+
         include_once './webservice/soap/classes/class.ilObjectXMLWriter.php';
 
         $xml_writer = new ilObjectXMLWriter();
@@ -182,7 +186,8 @@ class ilSoapObjectAdministration extends ilSoapAdministration
             $xml_writer->setUserId($user_id);
             $xml_writer->enableOperations(true);
         }
-        $xml_writer->setObjects(array($tmp_obj));
+        $objs = $access->checkAccess("read", "", $a_ref_id) ? array($tmp_obj) : array();
+        $xml_writer->setObjects($objs);
         if ($xml_writer->start()) {
             return $xml_writer->getXML();
         }
@@ -231,6 +236,9 @@ class ilSoapObjectAdministration extends ilSoapAdministration
 
         $res->filter(ROOT_FOLDER_ID, true);
 
+        global $DIC;
+        $access = $DIC['ilAccess'];
+
         $objs = array();
         foreach ($res->getUniqueResults() as $entry) {
             if ($entry['type'] === 'role' || $entry['type'] === 'rolt') {
@@ -239,7 +247,8 @@ class ilSoapObjectAdministration extends ilSoapAdministration
                 }
                 continue;
             }
-            if ($tmp = ilObjectFactory::getInstanceByRefId($entry['ref_id'], false)) {
+            if (($tmp = ilObjectFactory::getInstanceByRefId($entry['ref_id'], false)) &&
+                $access->checkAccess("read", "", (int) $entry['ref_id'])) {
                 $objs[] = $tmp;
             }
         }
@@ -273,6 +282,9 @@ class ilSoapObjectAdministration extends ilSoapAdministration
         if (!$this->checkSession($sid)) {
             return $this->raiseError($this->getMessage(), $this->getMessageCode());
         }
+
+        global $DIC;
+        $access = $DIC['ilAccess'];
 
         if ($combination !== 'and' && $combination !== 'or') {
             return $this->raiseError(
@@ -318,7 +330,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
             $objs[ROOT_FOLDER_ID] = ilObjectFactory::getInstanceByRefId(ROOT_FOLDER_ID, false);
             foreach ($result_ids as $ref_id => $obj_id) {
                 $obj = ilObjectFactory::getInstanceByRefId($ref_id, false);
-                if ($obj instanceof ilObject) {
+                if ($obj instanceof ilObject && $access->checkAccess("read", "", (int) $ref_id)) {
                     $objs[] = $obj;
                 }
             }
@@ -353,7 +365,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
             $objs = array();
             foreach ($res->getUniqueResults() as $entry) {
                 $obj = ilObjectFactory::getInstanceByRefId($entry['ref_id'], false);
-                if ($obj instanceof ilObject) {
+                if ($obj instanceof ilObject && $access->checkAccess("read", "", (int) $entry['ref_id'])) {
                     $objs[] = $obj;
                 }
             }
@@ -403,6 +415,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
         global $DIC;
 
         $tree = $DIC['tree'];
+        $access = $DIC['ilAccess'];
 
         if (!$target_obj = ilObjectFactory::getInstanceByRefId($ref_id, false)) {
             return $this->raiseError(
@@ -425,7 +438,8 @@ class ilSoapObjectAdministration extends ilSoapAdministration
 
         foreach ($tree->getChilds($ref_id, 'title') as $child) {
             if ($all || in_array($child['type'], $types, true)) {
-                if ($tmp = ilObjectFactory::getInstanceByRefId($child['ref_id'], false)) {
+                if (($tmp = ilObjectFactory::getInstanceByRefId($child['ref_id'], false)) &&
+                    $access->checkAccess("read", "", (int) $child['ref_id'])) {
                     $objs[] = $tmp;
                 }
             }

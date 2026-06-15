@@ -1113,7 +1113,13 @@ class ilExSubmission
         // Safe mode fix
         //		chdir($this->getExercisePath());
 
-        $tmpdir = $storage->getTempPath();
+        // HSLU: use a unique working directory per run. Previously this used the
+        // shared $storage->getTempPath() ("tmp_<ass_id>"), so two concurrent
+        // "download all submissions" jobs for the same assignment worked in the
+        // same directory and each zip run ingested the other's (growing) output
+        // archive, producing ever-larger files until the disk filled up.
+        $tmpdir = ilFileUtils::ilTempnam();
+        ilFileUtils::makeDirParents($tmpdir);
         chdir($tmpdir);
         $zip = PATH_TO_ZIP;
 
@@ -1124,6 +1130,8 @@ class ilExSubmission
             $dirsize += ilFileUtils::dirsize($directory);
         }
         if ($dirsize > disk_free_space($tmpdir)) {
+            chdir($cdir);
+            ilFileUtils::delDir($tmpdir);
             return;
         }
 
@@ -1261,6 +1269,8 @@ class ilExSubmission
             unlink($path_final_zip_file);
         }
 
+        // HSLU: always clean up the unique working directory (and restore cwd).
+        ilFileUtils::delDir($tmpdir);
         chdir($cdir);
     }
 

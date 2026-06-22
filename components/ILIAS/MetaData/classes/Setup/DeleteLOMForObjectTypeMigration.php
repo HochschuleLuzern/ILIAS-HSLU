@@ -65,34 +65,41 @@ abstract class DeleteLOMForObjectTypeMigration implements Migration
 
     final public function step(Environment $environment): void
     {
-        $selects = [];
+        // scan tables to find one entry with a matching object type
         foreach (LOMDictionaryInitiator::TABLES as $table) {
-            $selects[] = 'SELECT rbac_id, obj_id FROM ' . $this->db->quoteIdentifier($table) .
-                ' WHERE obj_type = ' . $this->quotedObjectType();
-        }
-        if (empty($selects)) {
-            return;
-        }
-        $query = 'SELECT rbac_id, obj_id FROM (' . implode(' UNION ', $selects) .
-            ') AS t ORDER BY t.rbac_id, t.obj_id ASC LIMIT 1';
-        $res = $this->db->query($query);
-        if (!($row = $this->db->fetchAssoc($res))) {
-            $this->logInfo('No LOM found for ' . $this->objectType());
-            return;
-        }
-        $rbac_id = $row['rbac_id'];
-        $obj_id = $row['obj_id'];
+            $query = 'SELECT rbac_id, obj_id
+                FROM ' . $this->db->quoteIdentifier($table) . '
+                WHERE obj_type = ' . $this->quotedObjectType() . '
+                ORDER BY rbac_id ASC, obj_id ASC
+                LIMIT 1';
 
-        $this->logInfo('Deleting LOM for rbac_id = ' . $rbac_id . ' and obj_id = ' . $obj_id);
+            $res = $this->db->query($query);
+            $row = $this->db->fetchAssoc($res);
+            // if an entry is found, delete it
+            if ($row) {
+                $rbac_id = (int) $row['rbac_id'];
+                $obj_id = (int) $row['obj_id'];
 
-        foreach (LOMDictionaryInitiator::TABLES as $table) {
-            $query = 'DELETE FROM ' . $this->db->quoteIdentifier($table) .
-                ' WHERE obj_type = ' . $this->quotedObjectType() .
-                ' AND rbac_id = ' . $this->db->quote($rbac_id, \ilDBConstants::T_INTEGER) .
-                ' AND obj_id = ' . $this->db->quote($obj_id, \ilDBConstants::T_INTEGER);
-            $this->db->manipulate($query);
+                $this->logInfo(
+                    "Deleting LOM for rbac_id = $rbac_id and obj_id = $obj_id"
+                );
+
+                // delete the entry's occurrences across all tables
+                foreach (LOMDictionaryInitiator::TABLES as $t) {
+                    $delete = 'DELETE FROM ' . $this->db->quoteIdentifier($t) . '
+                        WHERE obj_type = ' . $this->quotedObjectType() . '
+                        AND rbac_id = ' . $this->db->quote($rbac_id, \ilDBConstants::T_INTEGER) . '
+                        AND obj_id = ' . $this->db->quote($obj_id, \ilDBConstants::T_INTEGER);
+
+                    $this->db->manipulate($delete);
+                }
+
+                $this->logSuccess('Done!');
+
+                // IMPORTANT: stop after exactly one entry (next entry will be determined and deleted in next step)
+                return;
+            }
         }
-        $this->logSuccess('Done!');
     }
 
     final public function getRemainingAmountOfSteps(): int

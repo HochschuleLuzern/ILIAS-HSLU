@@ -576,13 +576,13 @@ class ilSurveyEditorGUI
 
         foreach ($question_ids as $qid) {
             // create copy (== pool "original")
-            $new_question = ilObjSurvey::_instanciateQuestion($qid);
+            $new_question = ilObjSurvey::_instanciateQuestion((int) $qid); // HSLU: typecast int
             $new_question->setId();
             $new_question->setObjId($pool_id);
             $new_question->saveToDb();
 
             // link "source" (survey) to copy (pool)
-            SurveyQuestion::_changeOriginalId($qid, $new_question->getId(), $pool_id);
+            SurveyQuestion::_changeOriginalId((int) $qid, $new_question->getId(), $pool_id); // HSLU: typecast int
         }
 
         $this->tpl->setOnScreenMessage('success', $this->lng->txt("survey_copy_to_questionpool_success"), true);

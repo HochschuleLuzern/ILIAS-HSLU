@@ -2,6 +2,8 @@
 set -euo pipefail
 
 STEP_BUCKETS=(10 30 100 300 1000 3000 10000 30000)
+MAX_ATTEMPTS=3   # attempts per setup.php invocation (listing and --run)
+RETRY_DELAY=$((2 + RANDOM % 5)).$((RANDOM % 10))  # seconds between retries; randomized per invocation to desynchronize concurrent runs
 LOG_DIR="$HOME/ilias-migrations"
 RUNS_CSV="$LOG_DIR/runs.csv"
 MIGRATIONS_CSV="$LOG_DIR/migrations.csv"
@@ -10,7 +12,8 @@ usage() {
     echo "Usage: $0 [--no-pause] [--blacklist 'migration1,migration2,...'] ['migration3' 'migration4' ...]"
     echo ""
     echo "Options:"
-    echo "  --no-pause    Do not pause at the end of the script"
+    echo "  --pause       Pause at the end of the script (default, except in tmux)"
+    echo "  --no-pause    Do not pause at the end of the script (default in tmux)"
     echo "  --blacklist   Comma-separated list of migrations to skip entirely"
     echo "  (positional)  If given, only run these migrations (ignoring all others)"
 }
@@ -18,7 +21,8 @@ usage() {
 # --- argument parsing ---
 BLACKLIST=""
 ONLY=()
-PAUSE_AT_END=true
+PAUSE_AT_END=yes
+[[ -n "${TMUX:-}" ]] && PAUSE_AT_END=no
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -26,8 +30,12 @@ while [[ $# -gt 0 ]]; do
             usage
             exit 0
             ;;
+        --pause)
+            PAUSE_AT_END=yes
+            shift
+            ;;
         --no-pause)
-            PAUSE_AT_END=false
+            PAUSE_AT_END=no
             shift
             ;;
         --blacklist)
@@ -69,12 +77,29 @@ fi
 
 # --- helpers ---
 
+# Prints the migration listing on stdout. Retries on failure; returns
+# non-zero if all attempts fail, so callers never mistake a crashed
+# listing for "no pending migrations".
 list_migrations() {
-    php cli/setup.php migrate 2>&1 || true
+    local attempt out
+    for (( attempt = 1; attempt <= MAX_ATTEMPTS; attempt++ )); do
+        if out=$(php cli/setup.php migrate 2>&1); then
+            printf '%s' "$out"
+            return 0
+        fi
+        echo "[$(date -Is)] Listing migrations failed (attempt $attempt/$MAX_ATTEMPTS)" >&2
+        if (( attempt < MAX_ATTEMPTS )); then
+            sleep "$RETRY_DELAY"
+        fi
+    done
+    printf '%s\n' "$out" >&2
+    return 1
 }
 
 parse_pending_migrations() {
-    list_migrations \
+    local out
+    out=$(list_migrations) || return 1
+    printf '%s\n' "$out" \
         | grep '\[remaining steps:' \
         | sed 's/^[[:space:]]*//' \
         | cut -d: -f1 \
@@ -82,8 +107,9 @@ parse_pending_migrations() {
 }
 
 get_remaining_steps() {
-    local migration="$1"
-    list_migrations \
+    local migration="$1" out
+    out=$(list_migrations) || return 1
+    printf '%s\n' "$out" \
         | grep -F " ${migration}:" \
         | grep -oP '\[remaining steps: \K[0-9]+' \
         || true
@@ -112,7 +138,11 @@ is_selected() {
 declare -A session_failed
 
 while true; do
-    mapfile -t all_pending < <(parse_pending_migrations)
+    if ! pending_output=$(parse_pending_migrations); then
+        echo "[$(date -Is)] ERROR: cannot list migrations after $MAX_ATTEMPTS attempts, aborting." >&2
+        exit 1
+    fi
+    mapfile -t all_pending < <(printf '%s' "$pending_output")
 
     pending=()
     for m in "${all_pending[@]+"${all_pending[@]}"}"; do
@@ -133,6 +163,7 @@ while true; do
 
     migration="${pending[0]}"
     bucket_idx=0
+    fail_count=0
     mig_start=$(date -Is)
     mig_start_s=$(date +%s)
 
@@ -166,6 +197,13 @@ while true; do
         echo "[$(date -Is)] Run finished in ${run_duration}s"
 
         if [[ $exit_code -ne 0 ]]; then
+            fail_count=$(( fail_count + 1 ))
+            if [[ $fail_count -lt $MAX_ATTEMPTS ]]; then
+                bucket_idx=0
+                echo "[$(date -Is)] Run failed (exit $exit_code, attempt $fail_count/$MAX_ATTEMPTS), retrying in ${RETRY_DELAY}s with ${STEP_BUCKETS[$bucket_idx]} steps/chunk"
+                sleep "$RETRY_DELAY"
+                continue
+            fi
             mig_duration=$(( run_end_s - mig_start_s ))
             printf '%s,failed,%s,%s,%s\n' \
                 "$migration" "$mig_start" "$run_end" "$mig_duration" \
@@ -174,8 +212,12 @@ while true; do
             echo "[$(date -Is)] FAILED (exit $exit_code) -- skipping to next migration"
             break
         fi
+        fail_count=0
 
-        remaining=$(get_remaining_steps "$migration")
+        if ! remaining=$(get_remaining_steps "$migration"); then
+            echo "[$(date -Is)] ERROR: cannot check remaining steps after $MAX_ATTEMPTS attempts, aborting." >&2
+            exit 1
+        fi
         if [[ -z "$remaining" ]] || [[ "$remaining" -eq 0 ]]; then
             mig_duration=$(( run_end_s - mig_start_s ))
             printf '%s,done,%s,%s,%s\n' \
@@ -194,7 +236,8 @@ while true; do
     done
 done
 
-if $PAUSE_AT_END; then
+if [[ "$PAUSE_AT_END" == yes ]]; then
+    unset TMOUT
     echo
     read -n 1 -s -r -p "Press any key to exit..."
     echo

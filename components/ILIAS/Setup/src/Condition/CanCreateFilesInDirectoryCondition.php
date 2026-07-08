@@ -31,7 +31,9 @@ class CanCreateFilesInDirectoryCondition extends ExternalConditionObjective
         return parent::__construct(
             "Can create files in '$which'",
             function (Setup\Environment $env) use ($which): bool {
-                $probe = $which . "/" . self::PROBE_NAME;
+                // HSLU: to prevent failures while running migrations concurrently,
+                // we add PID as a suffix:
+                $probe = $which . "/" . self::PROBE_NAME . "." . getmypid();
                 if (!@file_put_contents($probe, self::PROBE_NAME)) {
                     return false;
                 }

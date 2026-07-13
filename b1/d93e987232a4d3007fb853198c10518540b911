@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: directory access must always be public because php and apache users are different at HSLU
+Orig-commit: ef9b42bfcf4
+Category: Feature
+New-message: HSLU: directory access must always be public because php and apache users are different at HSLU
+Release-10: Keep
+Jira: IL-549
+Mantis: 44603

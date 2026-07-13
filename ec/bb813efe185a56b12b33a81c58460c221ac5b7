@@ -1,0 +1,7 @@
+Orig-message: TEMP PATCH HSLU: Fix gethiddentag error when manually evaluating answer to question
+Orig-commit: fbe9a140299
+Category: Bugfix
+New-message: HSLU FIX: Fix wrong value type in getHiddenTag
+Description: This happened when manually evaluating answer to a question.
+Release-10: Keep
+Jira: IL-218

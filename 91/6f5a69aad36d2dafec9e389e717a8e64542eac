@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU if setTargetScript is public then a public getTargetScript should also be available (was available pre-8.0)
+Orig-commit: 1055650cf86
+Category: Feature
+New-message: HSLU: Restore the public getTargetScript method in ilCtrl
+Description: It was available pre 8.0.
+Release-10: Keep

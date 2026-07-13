@@ -1,0 +1,6 @@
+Orig-message: PATCH HSLU: Allow Course Wizard to Work
+Orig-commit: 311b55613ac
+Category: Feature
+New-message: HSLU: Add support for Course Wizard
+Description: Include it in ilLocator and ilObjectDefinition to make Course Wizard behave like a container.
+Release-10: Keep

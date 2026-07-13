@@ -1,0 +1,6 @@
+Orig-message: PATCH_HSLU: HSLU allows upload of zip files regardless of content
+Orig-commit: a35cf50ce87
+Category: Feature
+New-message: HSLU: HSLU allows upload of zip files regardless of content
+Release-10: Keep
+Jira: IL-298

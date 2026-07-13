@@ -1,0 +1,5 @@
+Orig-message: TEMP PATCH HSLU: language must also be set in prefs because etherpad needs it later
+Orig-commit: 741b5a45822
+Category: Feature
+New-message: HSLU: language must also be set in prefs because etherpad needs it later
+Release-10: Keep

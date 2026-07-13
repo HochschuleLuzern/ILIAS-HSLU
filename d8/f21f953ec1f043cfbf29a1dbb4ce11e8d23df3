@@ -1,0 +1,6 @@
+Orig-message: TEMP PATCH HSLU: Exception Class SoapClient not found not handled correctly
+Orig-commit: d0b6a267cac
+Category: Bugfix
+New-message: HSLU FIX: Ignore error if class SoapClient does not exist
+Release-10: Special
+Jira: IL-332

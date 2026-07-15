@@ -100,6 +100,35 @@ class assFormulaQuestionGUI extends assQuestionGUI
             }
         }
 
+        // HSLU FIX: Prevent creating a broken formula question when the author clicks
+        // "Save"/"Save and Return" without first clicking "Parse Question".
+        //
+        // There is an existing check below, but it's broken because it assumes at least
+        // some variables have been parsed ($tmp_quest_vars is collected within a foreach,
+        // which runs 0 times).
+        //
+        // We include this additional check, so it's stands on its own and it's easy to
+        // carry the patch.
+        $text_vars = [];
+        $text_results = [];
+        if (preg_match_all('/(\$v\d+)/', $this->request_data_collector->string('question'), $var_matches)) {
+            $text_vars = $var_matches[1];
+        }
+        if (preg_match_all('/(\$r\d+)/', $this->request_data_collector->string('question'), $res_matches)) {
+            $text_results = $res_matches[1];
+        }
+        if (array_diff($text_vars, $found_vars) !== [] || array_diff($text_results, $found_results) !== []) {
+            $checked = false;
+            $this->editQuestion();
+            if ($this->isSaveCommand()) {
+                $this->tpl->setOnScreenMessage(
+                    'failure',
+                    $this->lng->txt('que_contains_unused_var') . ' Click "' . $this->lng->txt('parseQuestion') . '".'
+                );
+            }
+            return 1;
+        }
+
         try {
             $lifecycle = ilAssQuestionLifecycle::getInstance($this->request_data_collector->string('lifecycle'));
             $this->object->setLifecycle($lifecycle);

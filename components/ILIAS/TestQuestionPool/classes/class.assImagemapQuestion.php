@@ -304,7 +304,7 @@ class assImagemapQuestion extends assQuestion implements ilObjQuestionScoringAdj
                 $this->tpl->setOnScreenMessage('failure', 'The image could not be uploaded!');
                 return;
             }
-            $this->log->write('gespeichert: ' . $imagepath . $image_filename);
+            $this->log->root()->debug('gespeichert: ' . $imagepath . $image_filename);
         }
     }
 

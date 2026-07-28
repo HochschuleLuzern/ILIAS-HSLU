@@ -207,7 +207,10 @@ abstract class ilBlockGUI
         if ($this->checkOffset($a_offset)) {
             $this->offset = $a_offset;
         } else {
-            throw new ilException("ilBlockGUI::setOffset(): Offset out of range.");
+            // START PATCH HSLU ZEL: mitigate offset error (occurs when changing news settings so that there are not enough items to show anymore to reach the page indicated by the offset)
+            $this->offset = 0;
+//            throw new ilException("ilBlockGUI::setOffset(): Offset out of range.");
+            // END PATCH HSLU ZEL
         }
     }
 

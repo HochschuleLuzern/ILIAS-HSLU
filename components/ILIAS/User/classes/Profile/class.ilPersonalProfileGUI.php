@@ -552,6 +552,11 @@ class ilPersonalProfileGUI
         // standard fields
         $up = new ilUserProfile();
         $up->skipField('password');
+        // START PATCH ZEL: actually hide the corresponding form section when editing the profile picture by the user is disabled in the ilias account standard fields config
+        if ($this->settings->get('usr_settings_disable_upload')) {
+            $up->skipField('upload');
+        }
+        // END PATCH ZEL
         $up->skipGroup('settings');
         $up->skipGroup('preferences');
 

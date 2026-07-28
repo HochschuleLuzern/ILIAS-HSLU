@@ -133,7 +133,11 @@ class NewsCollectionService
 
     public function invalidateCache(int $user_id): void
     {
-        $this->cache->invalidateNewsForUser($user_id, new NewsCriteria());
+        // START PATCH HSLU ZEL: news items were not updated after changing and saving the period in the news settings when caching is active
+        $news_period = ilNewsItem::_lookupUserPDPeriod($user_id);
+        $this->cache->invalidateNewsForUser($user_id, new NewsCriteria(period: $news_period));
+//        $this->cache->invalidateNewsForUser($user_id, new NewsCriteria());
+        // END PATCH HSLU ZEL
     }
 
     /**

@@ -51,10 +51,8 @@ class ilExerciseSubmissionMigration implements Migration
     public function step(Environment $environment): void
     {
         $db = $this->helper->getDatabase();
-        // HSLU
-        $shard = \ilResourceStorageMigrationHelper::shardSqlCondition('er.returned_id');
         $r = $db->query(
-            "SELECT er.returned_id, er.obj_id, er.ass_id, od.owner, er.user_id, er.team_id FROM exc_returned er JOIN object_data od ON er.obj_id = od.obj_id WHERE er.rid IS NULL" . $shard . " LIMIT 1;"
+            "SELECT er.returned_id, er.obj_id, er.ass_id, od.owner, er.user_id, er.team_id FROM exc_returned er JOIN object_data od ON er.obj_id = od.obj_id WHERE er.rid IS NULL LIMIT 1;"
         );
         $d = $this->helper->getDatabase()->fetchObject($r);
         $exec_id = (int) $d->obj_id;
@@ -88,10 +86,8 @@ class ilExerciseSubmissionMigration implements Migration
 
     public function getRemainingAmountOfSteps(): int
     {
-        // HSLU
-        $shard = \ilResourceStorageMigrationHelper::shardSqlCondition('er.returned_id');
         $r = $this->helper->getDatabase()->query(
-            "SELECT count(er.returned_id) as amount FROM exc_returned er JOIN object_data od ON er.obj_id = od.obj_id WHERE er.rid IS NULL" . $shard . ";"
+            "SELECT count(er.returned_id) as amount FROM exc_returned er JOIN object_data od ON er.obj_id = od.obj_id WHERE er.rid IS NULL;"
         );
         $d = $this->helper->getDatabase()->fetchObject($r);
 

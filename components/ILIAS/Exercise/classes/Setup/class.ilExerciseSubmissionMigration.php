@@ -20,10 +20,12 @@ declare(strict_types=1);
 
 use ILIAS\Setup\Environment;
 use ILIAS\Setup\Migration;
+use ILIAS\Setup\CLI\IOWrapper;
 
 class ilExerciseSubmissionMigration implements Migration
 {
     protected \ilResourceStorageMigrationHelper $helper;
+    protected ?IOWrapper $io = null;
 
     public function getLabel(): string
     {
@@ -46,6 +48,10 @@ class ilExerciseSubmissionMigration implements Migration
             new \ilExcSubmissionStakeholder(),
             $environment
         );
+        $io = $environment->getResource(Environment::RESOURCE_ADMIN_INTERACTION);
+        if ($io instanceof IOWrapper) {
+            $this->io = $io;
+        }
     }
 
     public function step(Environment $environment): void
@@ -73,19 +79,25 @@ class ilExerciseSubmissionMigration implements Migration
         // and the pre-9 ones, which simply do not exist under $base_path).
         $rid = "";
         $file_name = basename((string) $d->filename);
-        $path = $base_path . '/' . $file_name;
-        if ($file_name !== '' && is_file($path)) {
-            $rid = $this->helper->movePathToStorage($path, $resource_owner_id);
-            // HSLU: an empty rid means "migrated, this submission has no file" and is
-            // never revisited, because only rid IS NULL rows are picked up. Writing it
-            // for a file we merely failed to move (exhausted file descriptors, denied
-            // permission) drops the submission silently and for good. Fail loudly
-            // instead and leave rid = NULL for the next run.
-            if ($rid === null) {
-                throw new RuntimeException(
-                    "Could not move '$path' for exc_returned.returned_id $returned_id"
-                    . ' - refusing to mark the submission as migrated.'
-                );
+        if ($file_name === "") {
+            $this->logError("No file name found for exc_returned.returned_id $returned_id");
+        } else {
+            $path = $base_path . '/' . $file_name;
+            if (!is_file($path)) {
+                $this->logError("File not found for exc_returned.returned_id " . $returned_id . ": " . $path);
+            } else {
+                $rid = $this->helper->movePathToStorage($path, $resource_owner_id);
+                // HSLU: an empty rid means "migrated, this submission has no file" and is
+                // never revisited, because only rid IS NULL rows are picked up. Writing it
+                // for a file we merely failed to move (exhausted file descriptors, denied
+                // permission) drops the submission silently and for good. Fail loudly
+                // instead and leave rid = NULL for the next run.
+                if ($rid === null) {
+                    throw new RuntimeException(
+                        "Could not move '$path' for exc_returned.returned_id $returned_id"
+                        . ' - refusing to mark the submission as migrated.'
+                    );
+                }
             }
         }
 
@@ -123,5 +135,13 @@ class ilExerciseSubmissionMigration implements Migration
                 $exec_id,
                 "exc"
             ) . "/subm_$assignment_id/" . $user_id;
+    }
+
+    protected function logError(string $text): void
+    {
+        if ($this->io === null) {
+            return;
+        }
+        $this->io->error($text);
     }
 }

@@ -10635,6 +10635,8 @@ iass#:#iass_sort_changetime_asc#:#Last Change ascending
 iass#:#iass_sort_changetime_desc#:#Last Change descending
 iass#:#iass_sort_examiner_login_asc#:#Examiner ascending
 iass#:#iass_sort_examiner_login_desc#:#Examiner descending
+iass#:#iass_sort_lastname_asc#:#Last Name ascending
+iass#:#iass_sort_lastname_desc#:#Last Name descending
 iass#:#iass_sort_name_asc#:#Username ascending
 iass#:#iass_sort_name_desc#:#Username descending
 iass#:#iass_status_completed#:#Completed

@@ -220,6 +220,8 @@ class ilIndividualAssessmentMembersStorageDB implements ilIndividualAssessmentMe
             . "iassme.changer_id,"
             . "iassme.change_time,"
             . "usr.login AS user_login,"
+            . "usr.lastname AS user_lastname,"
+            . "usr.firstname AS user_firstname,"
             . "ex.login AS examiner_login"
             . " FROM " . self::MEMBERS_TABLE . " iassme\n"
             . "	JOIN usr_data usr ON iassme.usr_id = usr.usr_id\n"
@@ -391,6 +393,10 @@ class ilIndividualAssessmentMembersStorageDB implements ilIndividualAssessmentMe
     protected function getOrderByFromSort(string $sort): string
     {
         $vals = explode(":", $sort);
+
+        if ($vals[0] === "user_lastname") {
+            return " ORDER BY user_lastname " . $vals[1] . ", user_firstname " . $vals[1];
+        }
 
         return " ORDER BY " . $vals[0] . " " . $vals[1];
     }

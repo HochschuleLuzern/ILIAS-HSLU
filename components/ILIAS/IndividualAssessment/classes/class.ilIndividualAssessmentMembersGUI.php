@@ -36,6 +36,8 @@ class ilIndividualAssessmentMembersGUI
 
     public const S_NAME_ASC = "user_login:asc";
     public const S_NAME_DESC = "user_login:desc";
+    public const S_LASTNAME_ASC = "user_lastname:asc";
+    public const S_LASTNAME_DESC = "user_lastname:desc";
     public const S_EXAMINER_ASC = "examiner_login:asc";
     public const S_EXAMINER_DESC = "examiner_login:desc";
     public const S_CHANGETIME_ASC = "change_time:asc";
@@ -412,6 +414,8 @@ class ilIndividualAssessmentMembersGUI
         return [
             self::S_NAME_ASC => $this->txt("iass_sort_name_asc"),
             self::S_NAME_DESC => $this->txt("iass_sort_name_desc"),
+            self::S_LASTNAME_ASC => $this->txt("iass_sort_lastname_asc"),
+            self::S_LASTNAME_DESC => $this->txt("iass_sort_lastname_desc"),
             self::S_EXAMINER_ASC => $this->txt("iass_sort_examiner_login_asc"),
             self::S_EXAMINER_DESC => $this->txt("iass_sort_examiner_login_desc"),
             self::S_CHANGETIME_ASC => $this->txt("iass_sort_changetime_asc"),
@@ -429,6 +433,8 @@ class ilIndividualAssessmentMembersGUI
                 [
                     self::S_NAME_ASC,
                     self::S_NAME_DESC,
+                    self::S_LASTNAME_ASC,
+                    self::S_LASTNAME_DESC,
                     self::S_EXAMINER_ASC,
                     self::S_EXAMINER_DESC,
                     self::S_CHANGETIME_ASC,

@@ -10636,6 +10636,8 @@ iass#:#iass_sort_changetime_asc#:#Letzte Änderung → aufsteigend
 iass#:#iass_sort_changetime_desc#:#Letzte Änderung → absteigend
 iass#:#iass_sort_examiner_login_asc#:#Bewertet von → aufsteigend
 iass#:#iass_sort_examiner_login_desc#:#Bewertet von → absteigend
+iass#:#iass_sort_lastname_asc#:#Nachname → aufsteigend
+iass#:#iass_sort_lastname_desc#:#Nachname → absteigend
 iass#:#iass_sort_name_asc#:#Anmeldename → aufsteigend
 iass#:#iass_sort_name_desc#:#Anmeldename → absteigend
 iass#:#iass_status_completed#:#Bestanden

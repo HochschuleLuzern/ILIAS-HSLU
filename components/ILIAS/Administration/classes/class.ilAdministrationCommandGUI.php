@@ -19,6 +19,7 @@
 declare(strict_types=1);
 
 use ILIAS\Administration\AdminGUIRequest;
+use ILIAS\Repository\Service AS RepositoryService;
 
 /**
  * Handles Administration commands (cut, delete paste)
@@ -36,6 +37,7 @@ class ilAdministrationCommandGUI
     protected ?ilLanguage $lng = null;
     private ilAdministrationCommandHandling $container;
     protected AdminGUIRequest $request;
+    private RepositoryService $repository;
 
     public function __construct(ilAdministrationCommandHandling $a_container)
     {
@@ -53,6 +55,7 @@ class ilAdministrationCommandGUI
         $this->container = $a_container;
         $this->ctrl = $ilCtrl;
         $this->lng = $lng;
+        $this->repository = $DIC->repository();
 
         $this->request = new AdminGUIRequest(
             $DIC->http(),
@@ -81,7 +84,7 @@ class ilAdministrationCommandGUI
 
         $confirm = new ilConfirmationGUI();
         $confirm->setFormAction($this->ctrl->getFormActionByClass(get_class($this->getContainer()), 'cancel'));
-        $confirm->setHeaderText('');
+        $confirm->setHeaderText($this->lng->txt('info_delete_sure')); // PATCH HSLU ZEL: fixed bug that broke deletion through search
         $confirm->setCancel($this->lng->txt('cancel'), 'cancelDelete');
         $confirm->setConfirm($this->lng->txt('delete'), 'performDelete');
 
@@ -109,12 +112,14 @@ class ilAdministrationCommandGUI
 
     public function performDelete(): void
     {
-        $this->ctrl->setReturnByClass(get_class($this->getContainer()), '');
-
-        ilSession::set("saved_post", $this->request->getSelectedIds());
-
-        $object = new ilObjectGUI(array(), 0, false, false);
-        $object->confirmedDeleteObject();
+        // PATCH HSLU ZEL: made non-functioning deletion of objects found by search work.
+        $ref_ids_for_deletion = $this->request->getSelectedIds();
+        if (count($ref_ids_for_deletion) === 0) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('no_checkbox'), true);
+            $this->ctrl->returnToParent($this);
+        }
+        $this->repository->internal()->domain()->deletion()->deleteObjectsByRefIds($ref_ids_for_deletion);
+        $this->tpl->setOnScreenMessage('success', $this->lng->txt('info_deleted'), true);
     }
 
     public function cut(): void

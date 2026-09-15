@@ -398,6 +398,10 @@ class ilIndividualAssessmentMembersStorageDB implements ilIndividualAssessmentMe
             return " ORDER BY user_lastname " . $vals[1] . ", user_firstname " . $vals[1];
         }
 
+        if ($vals[0] === "user_firstname") {
+            return " ORDER BY user_firstname " . $vals[1] . ", user_lastname " . $vals[1];
+        }
+
         return " ORDER BY " . $vals[0] . " " . $vals[1];
     }
 }

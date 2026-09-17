@@ -19,7 +19,7 @@
 declare(strict_types=1);
 
 use ILIAS\Administration\AdminGUIRequest;
-use ILIAS\Repository\Service AS RepositoryService;
+use ILIAS\Repository\Deletion\Deletion;
 
 /**
  * Handles Administration commands (cut, delete paste)
@@ -37,7 +37,7 @@ class ilAdministrationCommandGUI
     protected ?ilLanguage $lng = null;
     private ilAdministrationCommandHandling $container;
     protected AdminGUIRequest $request;
-    private RepositoryService $repository;
+    private Deletion $deletion;
 
     public function __construct(ilAdministrationCommandHandling $a_container)
     {
@@ -55,7 +55,7 @@ class ilAdministrationCommandGUI
         $this->container = $a_container;
         $this->ctrl = $ilCtrl;
         $this->lng = $lng;
-        $this->repository = $DIC->repository();
+        $this->deletion = $DIC->repository()->internal()->domain()->deletion();
 
         $this->request = new AdminGUIRequest(
             $DIC->http(),
@@ -113,13 +113,24 @@ class ilAdministrationCommandGUI
     public function performDelete(): void
     {
         // PATCH HSLU ZEL: made non-functioning deletion of objects found by search work.
-        $ref_ids_for_deletion = $this->request->getSelectedIds();
-        if (count($ref_ids_for_deletion) === 0) {
+        $return_class = get_class($this->getContainer());
+        $ref_ids = $this->request->getSelectedIds();
+        if ($ref_ids === []) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('no_checkbox'), true);
-            $this->ctrl->returnToParent($this);
+            $this->ctrl->redirectByClass($return_class, '');
         }
-        $this->repository->internal()->domain()->deletion()->deleteObjectsByRefIds($ref_ids_for_deletion);
-        $this->tpl->setOnScreenMessage('success', $this->lng->txt('info_deleted'), true);
+        try {
+            $this->deletion->deleteObjectsByRefIds($ref_ids);
+            $this->tpl->setOnScreenMessage(
+                'success',
+                $this->lng->txt($this->settings->get('enable_trash') ? 'info_deleted' : 'msg_removed'),
+                true
+            );
+        } catch (ilException $e) {
+            $this->tpl->setOnScreenMessage('failure', $e->getMessage(), true);
+        }
+        $this->ctrl->redirectByClass($return_class, '');
+        // END PATCH HSLU
     }
 
     public function cut(): void

@@ -418,6 +418,8 @@ class ilIndividualAssessmentMembersGUI
             self::S_NAME_DESC => $this->txt("iass_sort_name_desc"),
             self::S_LASTNAME_ASC => $this->txt("iass_sort_lastname_asc"),
             self::S_LASTNAME_DESC => $this->txt("iass_sort_lastname_desc"),
+            self::S_FIRSTNAME_ASC => $this->txt("iass_sort_firstname_asc"),
+            self::S_FIRSTNAME_DESC => $this->txt("iass_sort_firstname_desc"),
             self::S_EXAMINER_ASC => $this->txt("iass_sort_examiner_login_asc"),
             self::S_EXAMINER_DESC => $this->txt("iass_sort_examiner_login_desc"),
             self::S_CHANGETIME_ASC => $this->txt("iass_sort_changetime_asc"),

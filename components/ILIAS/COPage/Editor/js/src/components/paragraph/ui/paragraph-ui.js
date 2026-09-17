@@ -507,8 +507,13 @@ export default class ParagraphUI {
     );
     this.log(fc);
     if (fc) {
-      fc.firstChild.textContent = `${ddbtn.textContent} `;
-      fc.ariaLabel = `${il.Language.txt('copg_par_format_selection')}: ${ddbtn.textContent}`;
+      // HSLU: the characteristic may not be part of the selector (e.g. hidden/outdated
+      // in the content style), do not break editing in this case, see tiny init
+      const label = ddbtn ? ddbtn.textContent : i;
+      if (fc.firstChild) {
+        fc.firstChild.textContent = `${label} `;
+      }
+      fc.ariaLabel = `${il.Language.txt('copg_par_format_selection')}: ${label}`;
     }
     this.tinyWrapper.setParagraphClass(i);
   }

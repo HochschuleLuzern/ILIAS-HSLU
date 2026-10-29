@@ -187,6 +187,6 @@ class ResultsDetailsPrintViewProviderGUI extends Export\AbstractPrintViewProvide
 
     public function autoPageBreak(): bool
     {
-        return false;
+        return true; //HSLU PATCH ZEL: create breaks between questions in survey detail view pdf prints
     }
 }

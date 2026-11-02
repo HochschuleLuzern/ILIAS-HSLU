@@ -108,8 +108,8 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
             Metadata $a,
             Metadata $b
         ): int => strlen($a->getPath()) - strlen($b->getPath()));
-        $folders = $folders->reverseSorting();
-        $folders = $folders->getIterator();
+        $folder_finder = $folders->reverseSorting();
+        $folders = $folder_finder->getIterator();
 
         // chmod to reset permssions on folders preventing deletion of files
         $folders->rewind();
@@ -157,6 +157,8 @@ class ilFileSystemCleanTempDirCron extends ilCronJob
 
         $deleted_folders = [];
 
+        // the iterator is a generator which cannot be rewound after the chmod loop above, so a new one is needed
+        $folders = $folder_finder->getIterator();
         $folders->rewind();
         while ($folders->valid()) {
             try {

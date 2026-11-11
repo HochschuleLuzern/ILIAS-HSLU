@@ -160,7 +160,7 @@ class ilSystemCheckTrash
 
                     $ref_obj->delete();
                     ilTree::_removeEntry((int) ($subnode_info['tree'] ?? 0), (int) ($subnode_info['child'] ?? 0));
-                } catch (Exception $e) {
+                } catch (\Throwable $e) {
                     $this->logger->error("Deleting {$subnode_info['child']} failed with exception: " . $e->getMessage());
                 }
                 ++$total_deleted;

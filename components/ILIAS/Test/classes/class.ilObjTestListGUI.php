@@ -151,6 +151,12 @@ class ilObjTestListGUI extends ilObjectListGUI
         $params = array_merge(['ref_id' => $this->ref_id], $this->command_link_params);
 
         foreach ($params as $param => $value) {
+            // START HSLU FIX ZEL: the command link erroneously also contains the ref_id of the previous test list item, therefore retrieve it and replace it with the correct one.
+            if (str_contains($cmd_link, $param) && $param === 'ref_id') {
+                $cmd_link = preg_replace('/([?&]ref_id=)\d+/', '${1}' . $value, $cmd_link);
+                continue;
+            }
+            // END HSLU FIX ZEL
             $cmd_link = ilUtil::appendUrlParameterString($cmd_link, "$param=$value", true);
         }
 

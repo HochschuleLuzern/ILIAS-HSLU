@@ -224,6 +224,12 @@ class EvaluationManager
             $this->survey->getSelfEvaluationResults() === \ilObjSurvey::RESULTS_SELF_EVAL_ALL) {
                 $filter = false;
             }
+            // HSLU: tutors must see all runs in self evaluation mode, since
+            // there is no appraisee selection (regression of #44755)
+            if ($this->survey->getMode() === \ilObjSurvey::MODE_SELF_EVAL &&
+                $this->access->canEditSettings()) {
+                $filter = false;
+            }
             // see #36336, #36378
             if ($this->survey->getMode() !== \ilObjSurvey::MODE_IND_FEEDB &&
                 $this->access->canEditSettings()) {

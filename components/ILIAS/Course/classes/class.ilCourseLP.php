@@ -124,6 +124,41 @@ class ilCourseLP extends ilObjectLP
         return true;
     }
 
+    /**
+     * HSLU
+     * Get all courses in which the user is an LP-relevant member.
+     * Copy of isLPMember() without the object id restriction, keep both in sync.
+     * @return int[]
+     */
+    public static function getLPMemberObjIds(int $a_usr_id): array
+    {
+        global $DIC;
+
+        $ilDB = $DIC->database();
+
+        // will only find objects with roles for user!
+        // see ilParticipants::_getMembershipByType()
+        $query = " SELECT DISTINCT obd.obj_id, obd.type, obd2.title" .
+            " FROM rbac_ua ua" .
+            " JOIN rbac_fa fa ON (ua.rol_id = fa.rol_id)" .
+            " JOIN object_reference obr ON (fa.parent = obr.ref_id)" .
+            " JOIN object_data obd ON (obr.obj_id = obd.obj_id)" .
+            " JOIN object_data obd2 ON (ua.rol_id = obd2.obj_id)" .
+            " WHERE obd.type = " . $ilDB->quote("crs", "text") .
+            " AND fa.assign = " . $ilDB->quote("y", "text") .
+            " AND ua.usr_id = " . $ilDB->quote($a_usr_id, "integer");
+        $set = $ilDB->query($query);
+        $obj_ids = [];
+        while ($row = $ilDB->fetchAssoc($set)) {
+            $role = $row["title"];
+            if (!stristr($role, "il_" . $row["type"] . "_admin_") &&
+                !stristr($role, "il_" . $row["type"] . "_tutor_")) {
+                $obj_ids[(int) $row["obj_id"]] = (int) $row["obj_id"];
+            }
+        }
+        return array_values($obj_ids);
+    }
+
     public function getMailTemplateId(): string
     {
         return ilCourseMailTemplateTutorContext::ID;

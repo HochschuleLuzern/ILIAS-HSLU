@@ -193,9 +193,17 @@ class ilLPProgressTableGUI extends ilLPTableBaseGUI
                     break;
 
                 default:
+                    // HSLU: Only courses are listed here, so start from the user's memberships
+                    // instead of running the per-object checks for every course.
+                    $member_obj_ids = ilCourseLP::getLPMemberObjIds($this->tracked_user->getId());
+                    if ($member_obj_ids === []) {
+                        break;
+                    }
+
                     $obj_ids = $this->searchObjects(
                         $filter,
-                        "read"
+                        "read",
+                        $member_obj_ids
                     );
 
                     // check for LP relevance

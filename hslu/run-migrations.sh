@@ -135,7 +135,8 @@ is_selected() {
 }
 
 # --- main loop ---
-declare -A session_failed
+# =(): without it, the array counts as unset for 'set -u' until the first failure
+declare -A session_failed=()
 
 while true; do
     if ! pending_output=$(parse_pending_migrations); then
@@ -235,6 +236,19 @@ while true; do
         fi
     done
 done
+
+# Failed migrations don't make the script fail (most of them can be run later,
+# while ILIAS is live), so make sure they are not overlooked
+if [[ ${#session_failed[@]} -gt 0 ]]; then
+    echo
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!! WARNING: ${#session_failed[@]} migration(s) FAILED, still pending:"
+    printf '!!!   %s\n' "${!session_failed[@]}"
+    echo "!!! Re-run them later from the ILIAS root directory with:"
+    echo "!!!   ./hslu/run-migrations.sh <migration>..."
+    echo "!!! Details: $MIGRATIONS_CSV and $RUNS_CSV"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+fi
 
 if [[ "$PAUSE_AT_END" == yes ]]; then
     unset TMOUT
